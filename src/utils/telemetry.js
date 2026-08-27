@@ -53,7 +53,7 @@ export function trackVisitorArrival(pathname = window.location.pathname) {
     const country = inferCountryFromTimezone();
     const language = navigator.language ? navigator.language.split('-')[0].toUpperCase() : 'EN';
 
-    const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5001';
+    const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://ss0088-production.up.railway.app';
 
     fetch(`${backendUrl}/api/analytics/event`, {
       method: 'POST',
