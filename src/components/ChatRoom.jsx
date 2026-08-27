@@ -68,23 +68,26 @@ export default function ChatRoom({
   const [isStrangerTyping, setIsStrangerTyping] = useState(false);
   const [callDuration, setCallDuration] = useState(0);
   const [connectionStatus, setConnectionStatus] = useState('Connecting');
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  
+  // Default sidebar closed on mobile (<1024px) so video call is immediately visible!
+  const [sidebarOpen, setSidebarOpen] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth >= 1024;
+    }
+    return false;
+  });
+
   const [unreadCount, setUnreadCount] = useState(0);
   const [isLocalSpeaking, setIsLocalSpeaking] = useState(false);
   const [isRemoteSpeaking, setIsRemoteSpeaking] = useState(false);
-  
-  // Real-time network statistics
-  const [networkStats, setNetworkStats] = useState({
-    rtt: null,
-    routeType: null, // 'P2P Direct' | 'Cloudflare Relay' | 'Gathering'
-    isRelay: false
-  });
+  const [permissionError, setPermissionError] = useState(null);
   
   const pcRef = useRef(null);
   const localStreamRef = useRef(null);
   const screenStreamRef = useRef(null);
+  const localMediaPromiseRef = useRef(null);
+  const pendingCandidatesRef = useRef([]);
   const typingTimeoutRef = useRef(null);
-  const statsIntervalRef = useRef(null);
   const audioContextRef = useRef(null);
   
   const localVideoRef = useRef(null);
@@ -119,7 +122,7 @@ export default function ChatRoom({
       }
       const ctx = audioContextRef.current;
       if (ctx.state === 'suspended') {
-        ctx.resume();
+        ctx.resume().catch(() => {});
       }
 
       const audioTrack = stream.getAudioTracks()[0];
@@ -142,7 +145,7 @@ export default function ChatRoom({
           sum += dataArray[i];
         }
         const avg = sum / bufferLength;
-        const isSpeaking = avg > 18; // Voice activity threshold
+        const isSpeaking = avg > 18;
 
         if (isLocal) {
           setIsLocalSpeaking(isSpeaking);
@@ -164,11 +167,63 @@ export default function ChatRoom({
     }
   }, []);
 
-  // 3. WebRTC Peer Connection & Media Access
+  // 3. Pre-acquire Media Stream Helper with Retries
+  const acquireLocalMedia = useCallback(async () => {
+    if (localStreamRef.current) {
+      return localStreamRef.current;
+    }
+
+    try {
+      let stream;
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            width: { ideal: 1280, min: 640 },
+            height: { ideal: 720, min: 480 },
+            frameRate: { ideal: 30, max: 60 },
+            facingMode: 'user'
+          },
+          audio: {
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl: true
+          }
+        });
+      } catch (hdErr) {
+        console.warn("Fallback to baseline getUserMedia constraints:", hdErr.message);
+        stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      }
+
+      localStreamRef.current = stream;
+      setPermissionError(null);
+
+      if (localVideoRef.current) {
+        localVideoRef.current.srcObject = stream;
+        localVideoRef.current.play().catch(() => {});
+      }
+
+      return stream;
+    } catch (err) {
+      console.error("Camera/Mic Permission Error:", err);
+      setPermissionError(err.message || 'Permission Denied');
+      return null;
+    }
+  }, []);
+
+  // 4. WebRTC Peer Connection & Media Access
   useEffect(() => {
     let active = true;
     let localAnalyserCleanup = null;
     let remoteAnalyserCleanup = null;
+    pendingCandidatesRef.current = [];
+
+    // Begin acquiring local media immediately
+    localMediaPromiseRef.current = acquireLocalMedia().then(stream => {
+      if (stream && active) {
+        localAnalyserCleanup = setupAudioAnalyser(stream, true);
+      }
+      return stream;
+    });
 
     async function initWebRTC() {
       if (chatMode !== 'video') {
@@ -181,35 +236,16 @@ export default function ChatRoom({
       const pc = new RTCPeerConnection(rtcConfig);
       pcRef.current = pc;
 
-      // Realtime Network Quality Monitor
-      const inspectStats = async () => {
-        if (!pc || pc.connectionState === 'closed') return;
-        try {
-          const stats = await pc.getStats();
-          let selectedPair = null;
-
-          stats.forEach(report => {
-            if (report.type === 'transport' && report.selectedCandidatePairId) {
-              selectedPair = stats.get(report.selectedCandidatePairId);
-            } else if (report.type === 'candidate-pair' && (report.selected || report.nominated)) {
-              selectedPair = report;
-            }
-          });
-
-          if (selectedPair) {
-            const localCandidate = stats.get(selectedPair.localCandidateId);
-            const remoteCandidate = stats.get(selectedPair.remoteCandidateId);
-            const isRelay = localCandidate?.candidateType === 'relay' || remoteCandidate?.candidateType === 'relay';
-            const rttMs = Math.round((selectedPair.currentRoundTripTime || 0) * 1000);
-
-            setNetworkStats({
-              rtt: rttMs > 0 ? rttMs : null,
-              routeType: isRelay ? 'Cloudflare Relay' : 'P2P Direct',
-              isRelay
-            });
+      // Flush buffered remote ICE candidates once remote description is set
+      const flushPendingCandidates = async () => {
+        if (!pc || !pc.remoteDescription) return;
+        while (pendingCandidatesRef.current.length > 0) {
+          const candidate = pendingCandidatesRef.current.shift();
+          try {
+            await pc.addIceCandidate(new RTCIceCandidate(candidate));
+          } catch (e) {
+            console.debug("Buffered candidate addition notice:", e.message);
           }
-        } catch (e) {
-          // Ignore stats errors during renegotiation
         }
       };
 
@@ -220,25 +256,26 @@ export default function ChatRoom({
 
         if (iceState === 'connected' || iceState === 'completed' || connState === 'connected') {
           setConnectionStatus('Connected');
-          inspectStats();
-          if (!statsIntervalRef.current) {
-            statsIntervalRef.current = setInterval(inspectStats, 2500);
-          }
         } else if (iceState === 'disconnected' || iceState === 'failed' || connState === 'failed') {
           setConnectionStatus('Disconnected');
         }
       };
 
+      // Remote Track Handler
       pc.ontrack = (event) => {
-        if (remoteVideoRef.current && event.streams[0]) {
-          const remoteStream = event.streams[0];
-          remoteVideoRef.current.srcObject = remoteStream;
+        if (remoteVideoRef.current) {
+          let stream = event.streams && event.streams[0];
+          if (!stream) {
+            stream = remoteVideoRef.current.srcObject || new MediaStream();
+            stream.addTrack(event.track);
+          }
+          remoteVideoRef.current.srcObject = stream;
           remoteVideoRef.current.play().catch(() => {});
           setConnectionStatus('Connected');
           playAudioCue('connect');
 
           if (remoteAnalyserCleanup) remoteAnalyserCleanup();
-          remoteAnalyserCleanup = setupAudioAnalyser(remoteStream, false);
+          remoteAnalyserCleanup = setupAudioAnalyser(stream, false);
         }
       };
 
@@ -252,85 +289,86 @@ export default function ChatRoom({
       };
 
       pc.onicecandidate = (event) => {
-        if (event.candidate) {
-          const candidateType = event.candidate.type || 'unknown';
-          const protocol = event.candidate.protocol || '';
-          console.debug(`📡 [ICE Candidate Gathered] Type: ${candidateType} (${protocol.toUpperCase()})`);
-          
-          if (socket && partnerId) {
-            socket.emit('signal', { to: partnerId, type: 'candidate', candidate: event.candidate });
-          }
+        if (event.candidate && socket && partnerId) {
+          socket.emit('signal', { to: partnerId, type: 'candidate', candidate: event.candidate });
         }
       };
 
-      // 4. Capture Local Media with HD & Echo Cancellation constraints
-      try {
-        let stream;
-        try {
-          // Optimized high-definition audio & video constraints
-          stream = await navigator.mediaDevices.getUserMedia({
-            video: {
-              width: { ideal: 1280, min: 640 },
-              height: { ideal: 720, min: 480 },
-              frameRate: { ideal: 30, max: 60 },
-              facingMode: 'user'
-            },
-            audio: {
-              echoCancellation: true,
-              noiseSuppression: true,
-              autoGainControl: true
-            }
-          });
-        } catch (initialErr) {
-          // Fallback to standard definition if high-spec constraint rejected
-          console.warn("Retrying media with baseline constraints:", initialErr.message);
-          stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        }
-
-        localStreamRef.current = stream;
-        if (localVideoRef.current) {
-          localVideoRef.current.srcObject = stream;
-          localVideoRef.current.play().catch(() => {});
-        }
-
-        stream.getTracks().forEach((track) => pc.addTrack(track, stream));
-
-        // Start local speaking visualizer
-        localAnalyserCleanup = setupAudioAnalyser(stream, true);
-      } catch (err) {
-        console.error("Error accessing camera/mic:", err);
-        setMessages(prev => [...prev, { text: `Media Notice: ${err.message}. Running in text-only mode.`, isSystem: true, timestamp: Date.now() }]);
-        setConnectionStatus('Connected');
+      // Await local media to ensure local tracks are attached before initial offer
+      const localStream = await localMediaPromiseRef.current;
+      if (localStream && pc.signalingState !== 'closed') {
+        localStream.getTracks().forEach((track) => {
+          pc.addTrack(track, localStream);
+        });
       }
 
+      // If designated as initiator, create and dispatch the offer
       if (initiator) {
         try {
-          const offer = await pc.createOffer();
+          const offer = await pc.createOffer({
+            offerToReceiveAudio: true,
+            offerToReceiveVideo: true
+          });
           await pc.setLocalDescription(offer);
           socket.emit('signal', { to: partnerId, type: 'offer', sdp: offer });
         } catch (err) { 
-          console.error("Error creating offer:", err); 
+          console.error("Error creating initial offer:", err); 
         }
       }
     }
 
     initWebRTC();
 
+    // Signal Reception Handler
     const handleSignal = async (data) => {
       const { from, type, sdp, candidate } = data;
       if (from !== partnerId) return;
       const pc = pcRef.current;
-      if (!pc) return;
+      if (!pc || pc.signalingState === 'closed') return;
+
       try {
         if (type === 'offer') {
+          // Ensure local media tracks are attached before generating answer
+          const localStream = await localMediaPromiseRef.current;
+          if (localStream && pc.signalingState !== 'closed') {
+            const senders = pc.getSenders();
+            localStream.getTracks().forEach((track) => {
+              const alreadyAdded = senders.some(s => s.track && s.track.kind === track.kind);
+              if (!alreadyAdded) {
+                pc.addTrack(track, localStream);
+              }
+            });
+          }
+
           await pc.setRemoteDescription(new RTCSessionDescription(sdp));
+          
+          // Flush any buffered candidates
+          while (pendingCandidatesRef.current.length > 0) {
+            const pending = pendingCandidatesRef.current.shift();
+            try {
+              await pc.addIceCandidate(new RTCIceCandidate(pending));
+            } catch (e) {}
+          }
+
           const answer = await pc.createAnswer();
           await pc.setLocalDescription(answer);
           socket.emit('signal', { to: partnerId, type: 'answer', sdp: answer });
         } else if (type === 'answer') {
           await pc.setRemoteDescription(new RTCSessionDescription(sdp));
+          
+          // Flush any buffered candidates
+          while (pendingCandidatesRef.current.length > 0) {
+            const pending = pendingCandidatesRef.current.shift();
+            try {
+              await pc.addIceCandidate(new RTCIceCandidate(pending));
+            } catch (e) {}
+          }
         } else if (type === 'candidate') {
-          await pc.addIceCandidate(new RTCIceCandidate(candidate));
+          if (pc.remoteDescription && pc.remoteDescription.type) {
+            await pc.addIceCandidate(new RTCIceCandidate(candidate));
+          } else {
+            pendingCandidatesRef.current.push(candidate);
+          }
         }
       } catch (err) { 
         console.error("Signal error:", err); 
@@ -366,10 +404,6 @@ export default function ChatRoom({
       socket.off('typing', handleTyping);
       socket.off('partner-left', handlePartnerLeft);
 
-      if (statsIntervalRef.current) {
-        clearInterval(statsIntervalRef.current);
-        statsIntervalRef.current = null;
-      }
       if (localAnalyserCleanup) localAnalyserCleanup();
       if (remoteAnalyserCleanup) remoteAnalyserCleanup();
       if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
@@ -391,7 +425,7 @@ export default function ChatRoom({
         audioContextRef.current = null;
       }
     };
-  }, [partnerId, initiator, chatMode, socket, iceServers, onNext, setupAudioAnalyser, sidebarOpen]);
+  }, [partnerId, initiator, chatMode, socket, iceServers, onNext, acquireLocalMedia, setupAudioAnalyser, sidebarOpen]);
 
   // 5. Auto Scroll Messages
   useEffect(() => { 
@@ -446,10 +480,9 @@ export default function ChatRoom({
     }
   }, [isSharing]);
 
-  // 7. Keyboard Shortcuts (M: Mute, V: Cam, S: Screen, Esc: Sidebar/Exit)
+  // 7. Keyboard Shortcuts (M: Mute, V: Cam, S: Screen, Esc: Sidebar)
   useEffect(() => {
     const handleKeyDown = (e) => {
-      // Avoid triggering hotkeys while actively typing in input
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
         if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
           e.preventDefault();
@@ -468,7 +501,7 @@ export default function ChatRoom({
         e.preventDefault();
         toggleScreenShare();
       } else if (e.key === 'Escape') {
-        setSidebarOpen(prev => !prev);
+        setSidebarOpen(false);
       }
     };
 
@@ -476,7 +509,7 @@ export default function ChatRoom({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [toggleMute, toggleCam, toggleScreenShare, onNext]);
 
-  // 8. Message Handling with Typing Debouncing
+  // 8. Message Handling with Debouncing
   const handleSendMessage = (e) => {
     e?.preventDefault();
     if (!inputText.trim()) return;
@@ -565,7 +598,7 @@ export default function ChatRoom({
               <button 
                 onClick={onEnd}
                 className="btn-outline h-9 px-4 rounded-xl text-red-400 border border-red-500/20 hover:bg-red-500/10 flex items-center gap-1.5 text-xs font-semibold"
-                title="End Conversation (Esc)"
+                title="End Conversation"
               >
                 <span className="material-symbols-outlined text-[16px]">call_end</span>
                 Exit
@@ -673,33 +706,18 @@ export default function ChatRoom({
     <div className="bg-[#060606] text-white h-screen w-full flex overflow-hidden font-body-md relative selection:bg-violet-500/30 noise-overlay">
 
       {/* Top App Bar */}
-      <header className="fixed top-0 w-full z-50 bg-gradient-to-b from-black/90 via-black/50 to-transparent flex justify-between items-center px-4 md:px-10 py-3.5 pointer-events-none">
+      <header className="fixed top-0 w-full z-40 bg-gradient-to-b from-black/90 via-black/50 to-transparent flex justify-between items-center px-4 md:px-10 py-3.5 pointer-events-none">
         <div className="font-bold text-lg text-white/80 tracking-tight pointer-events-auto cursor-pointer hover:text-white transition-colors flex items-center gap-2" onClick={onEnd}>
           <span>Mingzy</span>
         </div>
         
-        {/* Status & Network Quality Pill */}
+        {/* Clean Status & Call Duration Pill */}
         <div className="absolute left-1/2 -translate-x-1/2 top-3.5 pointer-events-auto flex items-center gap-2">
-          <div className="glass-panel px-3.5 py-1.5 rounded-full flex items-center gap-2 border border-white/10 shadow-lg">
+          <div className="glass-panel px-4 py-1.5 rounded-full flex items-center gap-2.5 border border-white/10 shadow-lg">
             <span className={`w-2 h-2 rounded-full ${statusColor} animate-pulse ${statusGlow}`}></span>
             <span className="text-[11px] text-white/70 font-medium">{connectionStatus}</span>
             <span className="w-px h-3 bg-white/10"></span>
             <span className="text-[11px] text-white/40 font-mono">{formatTime(callDuration)}</span>
-
-            {/* Live WebRTC Relay / RTT Diagnostics */}
-            {networkStats.routeType && connectionStatus === 'Connected' && (
-              <>
-                <span className="w-px h-3 bg-white/10 hidden sm:inline-block"></span>
-                <span className={`text-[10px] font-mono px-2 py-0.5 rounded-md hidden sm:inline-flex items-center gap-1 ${
-                  networkStats.isRelay ? 'bg-amber-500/10 text-amber-300 border border-amber-500/20' : 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/20'
-                }`}>
-                  <span className="material-symbols-outlined text-[12px]">
-                    {networkStats.isRelay ? 'cloud_sync' : 'bolt'}
-                  </span>
-                  {networkStats.rtt ? `${networkStats.rtt}ms • ` : ''}{networkStats.routeType}
-                </span>
-              </>
-            )}
           </div>
         </div>
 
@@ -727,10 +745,10 @@ export default function ChatRoom({
       </header>
 
       {/* Main Video Canvas */}
-      <main className={`flex-1 flex flex-col h-full relative p-3 pb-[100px] pt-[68px] transition-all duration-300 ${sidebarOpen ? 'md:pr-[356px]' : ''}`}>
+      <main className={`flex-1 flex flex-col h-full relative p-2 sm:p-3 pb-[100px] pt-[64px] transition-all duration-300 ${sidebarOpen ? 'lg:pr-[356px]' : ''}`}>
         
-        {/* Video Grid */}
-        <div className="flex-1 w-full max-w-[1280px] mx-auto flex flex-col md:flex-row gap-3 relative h-full">
+        {/* Video Grid: Stacked 50/50 on Mobile, Side-by-Side on Desktop */}
+        <div className="flex-1 w-full max-w-[1280px] mx-auto flex flex-col md:flex-row gap-2 sm:gap-3 relative h-full">
           
           {/* Local User Panel */}
           <div className={`flex-1 relative rounded-2xl overflow-hidden bg-[#0E0E0E] border transition-all duration-200 flex items-center justify-center group ${
@@ -748,6 +766,19 @@ export default function ChatRoom({
               <div className="absolute inset-0 bg-[#0A0A0A] flex flex-col items-center justify-center z-20">
                 <span className="material-symbols-outlined text-3xl text-white/20 mb-2">videocam_off</span>
                 <span className="text-[10px] text-white/30 uppercase tracking-wider">Camera Off</span>
+              </div>
+            )}
+
+            {permissionError && (
+              <div className="absolute inset-0 bg-[#0A0A0A]/90 p-4 flex flex-col items-center justify-center text-center z-25">
+                <span className="material-symbols-outlined text-3xl text-amber-400 mb-2">videocam_off</span>
+                <p className="text-xs text-white/70 max-w-[200px]">Camera/Microphone access blocked in browser.</p>
+                <button 
+                  onClick={acquireLocalMedia}
+                  className="mt-3 px-3 py-1.5 rounded-lg bg-violet-600/30 text-violet-200 text-[11px] border border-violet-500/30"
+                >
+                  Retry Permission
+                </button>
               </div>
             )}
             
@@ -818,7 +849,7 @@ export default function ChatRoom({
       </main>
 
       {/* Bottom Floating Control Dock */}
-      <nav className="fixed bottom-5 left-1/2 -translate-x-1/2 rounded-2xl w-fit glass-panel-strong flex gap-1 p-1.5 items-center z-50 glow-white-soft border border-white/10">
+      <nav className="fixed bottom-5 left-1/2 -translate-x-1/2 rounded-2xl w-fit glass-panel-strong flex gap-1 p-1.5 items-center z-40 glow-white-soft border border-white/10">
         
         {/* Mic Toggle (Hotkey: M) */}
         <button 
@@ -910,7 +941,15 @@ export default function ChatRoom({
         </button>
       </nav>
 
-      {/* Slide-out Chat Sidebar (Desktop: right dock, Mobile: full-screen drawer) */}
+      {/* Backdrop overlay on mobile when chat drawer is open */}
+      {sidebarOpen && (
+        <div 
+          onClick={() => setSidebarOpen(false)}
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 lg:hidden"
+        />
+      )}
+
+      {/* Slide-out Chat Sidebar (Desktop: right dock, Mobile: full-screen slide-in drawer) */}
       <aside className={`fixed right-0 top-0 h-full w-full sm:w-[360px] z-[60] bg-[#0A0A0A]/95 backdrop-blur-2xl border-l border-white/[0.08] shadow-2xl transition-transform duration-300 ease-out flex flex-col ${
         sidebarOpen ? 'translate-x-0' : 'translate-x-full'
       }`}>

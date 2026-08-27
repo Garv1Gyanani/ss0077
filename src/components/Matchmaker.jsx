@@ -31,6 +31,20 @@ export default function Matchmaker({
     return () => clearInterval(timer);
   }, []);
 
+  // Pre-warm camera & mic permissions during matchmaking so connection is instantaneous
+  useEffect(() => {
+    if (chatMode === 'video' && navigator?.mediaDevices?.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then(stream => {
+          // Release initial probe stream tracks cleanly
+          stream.getTracks().forEach(t => t.stop());
+        })
+        .catch(err => {
+          console.debug("Pre-flight permission request:", err.message);
+        });
+    }
+  }, [chatMode]);
+
   const formatTime = (s) => `${Math.floor(s / 60).toString().padStart(2, '0')}:${(s % 60).toString().padStart(2, '0')}`;
 
   return (
