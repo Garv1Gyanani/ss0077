@@ -20,7 +20,7 @@ export default function ChatRoom({
   theme,
   toggleTheme
 }) {
-  const [messages, setMessages] = useState([
+  const [messages, setMessages] = useState(() => [
     { text: "You are now connected with a stranger.", isSystem: true, timestamp: Date.now() }
   ]);
   const [inputText, setInputText] = useState('');

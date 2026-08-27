@@ -1,0 +1,22 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+Allow: /random-video-chat
+Allow: /talk-to-strangers
+Allow: /anonymous-video-chat
+Allow: /random-text-chat
+Allow: /meet-new-people
+Allow: /stranger-chat
+Allow: /alternatives/
+Allow: /languages/
+Allow: /countries/
+Allow: /features/
+Allow: /safety/
+Allow: /safety
+Allow: /community-guidelines
+Allow: /privacy
+Allow: /terms
+Allow: /guides/
+
+# Sitemap Location
+Sitemap: https://mingzy.space/sitemap.xml

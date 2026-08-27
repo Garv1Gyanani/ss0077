@@ -1,7 +1,23 @@
 import React, { useEffect, useRef } from 'react';
 import { auth, signOut } from '../firebase';
+import SEOHead from './seo/SEOHead';
 
-export default function LandingPage({ user, onStartChat, onOpenAuth, theme, toggleTheme }) {
+const HOMEPAGE_SEO = {
+  path: '/',
+  primaryKeyword: 'random video chat + talk to strangers',
+  metaTitle: 'Mingzy – Random Video & Text Chat with Strangers',
+  metaDescription: 'Free random video and text chat with real people worldwide. Language matching, region filters, instant skip. Safe, no signup required.',
+  h1: 'Talk to Strangers Instantly',
+  breadcrumbs: [{ label: 'Home', path: '/' }],
+  schemaType: 'SoftwareApplication',
+  faqs: [
+    { question: 'What is Mingzy?', answer: 'Mingzy is a modern random video and text chat platform where you can instantly connect with strangers worldwide with language and region filters.' },
+    { question: 'Is Mingzy free?', answer: 'Yes! Mingzy is 100% free with unlimited calls, text messages, and instant skips.' },
+    { question: 'How do I start chatting?', answer: 'Simply select Video Chat or Text Chat above. No registration or software downloads are required.' }
+  ]
+};
+
+export default function LandingPage({ user, onStartChat, onOpenAuth, onNavigate, theme, toggleTheme }) {
   const heroRef = useRef(null);
   const bentoRef = useRef(null);
 
@@ -25,9 +41,20 @@ export default function LandingPage({ user, onStartChat, onOpenAuth, theme, togg
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
+  const navigateTo = (path) => {
+    if (onNavigate) {
+      onNavigate(path);
+    } else {
+      window.location.pathname = path;
+    }
+  };
+
   return (
-    <div className="w-full min-h-screen flex flex-col bg-ambient-gradient noise-overlay relative overflow-x-hidden">
+    <div className="w-full min-h-screen flex flex-col bg-ambient-gradient noise-overlay relative overflow-x-hidden text-white">
       
+      {/* 1. SEO Head & Structured Data Schema */}
+      <SEOHead pageData={HOMEPAGE_SEO} />
+
       {/* Floating Background Particles & Premium Blobs */}
       <div className="particles-container">
         <div className="glow-blob-1"></div>
@@ -52,7 +79,7 @@ export default function LandingPage({ user, onStartChat, onOpenAuth, theme, togg
       {/* TopNavBar */}
       <header className="glass-panel-strong sticky top-0 z-50">
         <div className="flex justify-between items-center w-full px-5 md:px-10 h-[72px] max-w-[1280px] mx-auto">
-          <div className="flex items-center gap-3 cursor-pointer group" onClick={() => window.location.reload()}>
+          <div className="flex items-center gap-3 cursor-pointer group" onClick={() => navigateTo('/')}>
             <div className="relative">
               <img 
                 alt="Mingzy Logo" 
@@ -67,15 +94,22 @@ export default function LandingPage({ user, onStartChat, onOpenAuth, theme, togg
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1">
-            {['How it works', 'Features', 'Safety'].map((label, i) => (
-              <a
-                key={label}
-                href={`#${label.toLowerCase().replace(/ /g, '-')}`}
-                className="px-4 py-2 text-sm text-white/50 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
+          <nav className="hidden lg:flex items-center gap-1">
+            {[
+              { label: 'Video Chat', path: '/random-video-chat' },
+              { label: 'Text Chat', path: '/random-text-chat' },
+              { label: 'Languages', path: '/languages/english' },
+              { label: 'Countries', path: '/countries/usa' },
+              { label: 'Alternatives', path: '/alternatives/omegle-alternative' },
+              { label: 'Safety', path: '/safety' }
+            ].map((item) => (
+              <button
+                key={item.path}
+                onClick={() => navigateTo(item.path)}
+                className="px-3.5 py-2 text-xs text-white/50 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
               >
-                {label}
-              </a>
+                {item.label}
+              </button>
             ))}
           </nav>
 
@@ -104,12 +138,23 @@ export default function LandingPage({ user, onStartChat, onOpenAuth, theme, togg
             ) : (
               <button 
                 onClick={onOpenAuth} 
-                className="hidden md:block text-sm text-white/60 hover:text-white transition-colors px-3 py-1.5"
+                className="hidden md:block text-xs text-white/60 hover:text-white transition-colors px-3 py-1.5"
               >
                 Sign In
               </button>
             )}
-            
+
+            {/* Download Android APK Button */}
+            <a 
+              href="https://www.dropbox.com/scl/fi/5q3hmh674wtdf3yxlogbu/app-release.apk?rlkey=174k5u1sinqnuguxvybxraeve&st=6e7b325k&dl=1"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 transition-all mr-1"
+            >
+              <span className="material-symbols-outlined text-[16px]">android</span>
+              Get App
+            </a>
+
             {/* Theme Toggle Button */}
             <button 
               onClick={toggleTheme}
@@ -123,9 +168,9 @@ export default function LandingPage({ user, onStartChat, onOpenAuth, theme, togg
 
             <button 
               onClick={() => onStartChat('video')}
-              className="btn-primary px-5 py-2.5 rounded-xl text-sm font-semibold relative z-10"
+              className="btn-primary px-5 py-2.5 rounded-xl text-xs font-semibold relative z-10"
             >
-              <span className="relative z-10 flex items-center gap-2">
+              <span className="relative z-10 flex items-center gap-1.5">
                 <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>videocam</span>
                 Start Chat
               </span>
@@ -143,7 +188,7 @@ export default function LandingPage({ user, onStartChat, onOpenAuth, theme, togg
           {/* Tiny Badge */}
           <div className="animate-fade-in-up opacity-0 mb-8 inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel text-xs text-white/60 font-medium">
             <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></div>
-            <span>4,281 people chatting right now</span>
+            <span>Fast Matching • 100% Free • No Account</span>
           </div>
 
           <h1 
@@ -156,7 +201,7 @@ export default function LandingPage({ user, onStartChat, onOpenAuth, theme, togg
           </h1>
           
           <p className="animate-fade-in-up opacity-0 delay-200 text-base md:text-lg text-white/40 mb-12 max-w-lg leading-relaxed font-light">
-            Instantly connect with people around the world through anonymous video & text chat. Free, private, no downloads.
+            Instantly connect with people around the world through anonymous video & text chat. Free, private, available on Web & Android.
           </p>
 
           <div className="animate-fade-in-up opacity-0 delay-300 flex flex-col sm:flex-row items-center gap-3 mb-6 w-full justify-center">
@@ -176,6 +221,15 @@ export default function LandingPage({ user, onStartChat, onOpenAuth, theme, togg
               <span className="material-symbols-outlined text-[22px]">chat</span>
               Text Chat
             </button>
+            <a 
+              href="https://www.dropbox.com/scl/fi/5q3hmh674wtdf3yxlogbu/app-release.apk?rlkey=174k5u1sinqnuguxvybxraeve&st=6e7b325k&dl=1"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-outline w-full sm:w-auto px-6 py-4 rounded-2xl font-semibold text-sm text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/10 flex items-center justify-center gap-2"
+            >
+              <span className="material-symbols-outlined text-[20px] text-emerald-400">android</span>
+              Download APK
+            </a>
           </div>
 
           <div className="animate-fade-in-up opacity-0 delay-400 flex items-center justify-center gap-4 text-white/30 text-xs mb-16">
@@ -190,47 +244,54 @@ export default function LandingPage({ user, onStartChat, onOpenAuth, theme, togg
           </div>
         </section>
 
-        {/* Hero Visual Mockup */}
-        <section className="animate-fade-in-up opacity-0 delay-500 w-full relative rounded-3xl overflow-hidden mb-32 max-w-5xl group hero-image-overlay">
-          <div className="absolute inset-0 rounded-3xl border border-white/[0.06] z-30 pointer-events-none"></div>
-          
+        {/* Official Hero Banner */}
+        <section 
+          onClick={() => onStartChat('video')}
+          className="animate-fade-in-up opacity-0 delay-500 w-full relative rounded-3xl overflow-hidden mb-24 max-w-5xl group cursor-pointer border border-white/10 hover:border-violet-500/40 transition-all duration-500 shadow-2xl hover:shadow-violet-600/20"
+        >
           {/* Glow behind image */}
-          <div className="absolute -inset-4 bg-gradient-to-r from-violet-600/10 via-transparent to-indigo-600/10 rounded-[2.5rem] blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-0"></div>
+          <div className="absolute -inset-4 bg-gradient-to-r from-violet-600/20 via-fuchsia-600/10 to-indigo-600/20 rounded-[2.5rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-0"></div>
           
-          <div className="relative bg-[#0E0E0E] aspect-video rounded-3xl overflow-hidden">
-            <div className="absolute inset-0 z-0 flex items-center justify-center">
-              <div className="w-12 h-12 border-2 border-white/10 border-t-violet-500 rounded-full animate-spin"></div>
-            </div>
+          <div className="relative rounded-3xl overflow-hidden bg-[#0A0A0E]">
             <img 
-              alt="Mingzy Video Chat Interface" 
-              className="absolute inset-0 w-full h-full object-cover z-10 transition-transform duration-1000 group-hover:scale-[1.03] opacity-80 group-hover:opacity-90" 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDM75rsK_nvOkTlpsfSOO2V_dm5uo7nm_Y8c6q6GklQWCPD1qbm4sDNVE9qf8k-WnOxybcsE7j1JAHj0NMDEcpwhn98iSEHTbRfroljAb_KKGDzpDTf22Dj0dBxfsn5q0GZrrYwoAh2nSGdMtC5vleCmG6scsBjOGe_kSHW7jvMFWE84g0nY7aIk7ha06t6QpM-XS0R1Woe4mQFHWpm5hsa_i6oyzQ6vOoemd3JJ5H63WzD6x1Eu9uJ"
+              alt="Mingzy Random Video Chat Banner" 
+              className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-[1.01]" 
+              src="/images/mingzy-hero-banner.png"
             />
-            
-            {/* Simulated UI Overlay */}
-            <div className="absolute bottom-5 left-5 right-5 z-30 flex justify-between items-end">
-              <div className="flex gap-2">
-                <div className="glass-panel px-3.5 py-1.5 rounded-full flex items-center gap-2 text-xs text-white/80 font-medium">
-                  <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_6px_rgba(52,211,153,0.5)]"></div>
-                  Live
-                </div>
-                <div className="glass-panel px-3.5 py-1.5 rounded-full flex items-center gap-1.5 text-xs text-white/60">
-                  <span className="material-symbols-outlined text-[14px]">schedule</span>
-                  02:34
+            {/* Subtle interactive hover highlight */}
+            <div className="absolute inset-0 bg-white/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+          </div>
+        </section>
+
+        {/* Visual App Showcase Cards */}
+        <section className="w-full max-w-5xl mb-32">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-3 tracking-tight">The Modern Stranger Chat Experience</h2>
+            <p className="text-white/35 text-sm max-w-md mx-auto">Designed for crystal-clear video, instant matching, and absolute privacy.</p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { title: 'Live Video Streams', desc: 'Crystal-clear HD video calls', img: '/images/showcase-1.png' },
+              { title: 'Smart Matchmaking', desc: 'Instant matching algorithm', img: '/images/showcase-2.png' },
+              { title: 'Rich Text Chat', desc: 'Instant messaging with typing signals', img: '/images/showcase-3.png' },
+              { title: 'Global Discovery', desc: 'Filter by languages and regions', img: '/images/showcase-4.png' }
+            ].map((card, idx) => (
+              <div key={idx} className="group glass-panel rounded-2xl p-3 border border-white/10 hover:border-violet-500/30 transition-all flex flex-col">
+                <div className="relative aspect-[9/16] rounded-xl overflow-hidden mb-3 bg-[#0a0a0a]">
+                  <img 
+                    src={card.img} 
+                    alt={card.title} 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                  <div className="absolute bottom-2 left-2 right-2 text-left">
+                    <span className="text-xs font-bold text-white block">{card.title}</span>
+                    <span className="text-[10px] text-white/60 block">{card.desc}</span>
+                  </div>
                 </div>
               </div>
-              <div className="glass-panel px-2 py-1.5 rounded-full flex items-center gap-1">
-                <button className="w-8 h-8 flex items-center justify-center rounded-full text-white/70 hover:text-white hover:bg-white/10 transition-all">
-                  <span className="material-symbols-outlined text-[18px]">mic</span>
-                </button>
-                <button className="w-8 h-8 flex items-center justify-center rounded-full text-white/70 hover:text-white hover:bg-white/10 transition-all">
-                  <span className="material-symbols-outlined text-[18px]">videocam</span>
-                </button>
-                <button className="bg-red-500/80 hover:bg-red-500 text-white px-3 py-1 rounded-full text-xs font-semibold ml-1 transition-colors">
-                  End
-                </button>
-              </div>
-            </div>
+            ))}
           </div>
         </section>
 
@@ -247,31 +308,39 @@ export default function LandingPage({ user, onStartChat, onOpenAuth, theme, togg
                 icon: 'bolt',
                 title: 'Instant Matching',
                 desc: 'Get paired with someone in seconds. Our smart queue finds the perfect match from thousands of people online worldwide.',
-                gradient: 'from-amber-500/10 to-orange-500/5'
+                gradient: 'from-amber-500/10 to-orange-500/5',
+                link: '/features/instant-matching'
               },
               {
                 icon: 'forum',
                 title: 'Video + Text',
                 desc: 'Talk however you want. Switch seamlessly between high-quality video streams and instant text messages in real-time.',
-                gradient: 'from-violet-500/10 to-indigo-500/5'
+                gradient: 'from-violet-500/10 to-indigo-500/5',
+                link: '/features/video-chat'
               },
               {
                 icon: 'shield',
                 title: 'Safety First',
                 desc: 'Report, block, and skip anytime. End-to-end connection management puts you in full control of every interaction.',
-                gradient: 'from-emerald-500/10 to-teal-500/5'
+                gradient: 'from-emerald-500/10 to-teal-500/5',
+                link: '/safety'
               }
             ].map((feature, i) => (
               <div 
                 key={feature.title}
-                className={`bento-card rounded-2xl p-7 flex flex-col items-start animate-fade-in-up opacity-0`}
+                onClick={() => navigateTo(feature.link)}
+                className={`bento-card rounded-2xl p-7 flex flex-col items-start animate-fade-in-up opacity-0 cursor-pointer hover:border-violet-500/30 transition-all`}
                 style={{ animationDelay: `${i * 100 + 100}ms` }}
               >
                 <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-5 ring-1 ring-white/5`}>
                   <span className="material-symbols-outlined text-[20px] text-white/80">{feature.icon}</span>
                 </div>
                 <h3 className="text-lg font-semibold text-white mb-2 tracking-tight">{feature.title}</h3>
-                <p className="text-sm text-white/35 leading-relaxed">{feature.desc}</p>
+                <p className="text-sm text-white/35 leading-relaxed mb-4">{feature.desc}</p>
+                <span className="text-xs text-violet-400 flex items-center gap-1 font-medium mt-auto">
+                  Learn more
+                  <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+                </span>
               </div>
             ))}
           </div>
@@ -285,7 +354,7 @@ export default function LandingPage({ user, onStartChat, onOpenAuth, theme, togg
               { value: '180+', label: 'Countries', icon: 'public' },
               { value: '99.9%', label: 'Uptime', icon: 'speed' },
               { value: '<2s', label: 'Avg. Match Time', icon: 'timer' },
-            ].map((stat, i) => (
+            ].map((stat) => (
               <div key={stat.label} className="flex flex-col items-center text-center flex-1">
                 <span className="material-symbols-outlined text-violet-400/60 text-[20px] mb-2">{stat.icon}</span>
                 <span className="text-2xl md:text-3xl font-bold text-white tracking-tight">{stat.value}</span>
@@ -333,7 +402,6 @@ export default function LandingPage({ user, onStartChat, onOpenAuth, theme, togg
         {/* Safety Section */}
         <section id="safety" className="w-full max-w-4xl mb-32">
           <div className="bento-card rounded-2xl p-8 md:p-12 relative overflow-hidden">
-            {/* Background glow accent */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/5 rounded-full blur-3xl pointer-events-none"></div>
             
             <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
@@ -345,7 +413,7 @@ export default function LandingPage({ user, onStartChat, onOpenAuth, theme, togg
                 <p className="text-white/35 text-sm leading-relaxed mb-5">
                   We are committed to a safe community. Never share personal information, social handles, or location. Report malicious behaviour instantly — every report is reviewed.
                 </p>
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-3 mb-4">
                   <span className="inline-flex items-center gap-1.5 text-xs text-white/40 bg-white/5 px-3 py-1.5 rounded-lg">
                     <span className="material-symbols-outlined text-[14px] text-emerald-400/70">check_circle</span>
                     One-click reporting
@@ -359,7 +427,50 @@ export default function LandingPage({ user, onStartChat, onOpenAuth, theme, togg
                     Anonymous by default
                   </span>
                 </div>
+                <button 
+                  onClick={() => navigateTo('/safety')}
+                  className="text-xs text-violet-400 hover:text-violet-300 font-semibold flex items-center gap-1"
+                >
+                  Visit Safety Center
+                  <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+                </button>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Mobile App Download Showcase Section */}
+        <section className="w-full max-w-5xl mb-32">
+          <div className="glass-panel rounded-3xl p-8 md:p-12 border border-white/10 flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden bg-gradient-to-r from-violet-950/20 via-black to-emerald-950/20">
+            <div className="flex-1 text-left">
+              <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 mb-4">
+                <span className="material-symbols-outlined text-[16px]">android</span>
+                Official Android App Available
+              </span>
+              <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4 tracking-tight">
+                Take Mingzy With You Everywhere
+              </h2>
+              <p className="text-white/60 text-sm md:text-base leading-relaxed mb-6 max-w-lg">
+                Enjoy 60fps HD video calls, background notifications, and instant language matching right in your pocket. Free direct APK download (no wait).
+              </p>
+              <div className="flex flex-wrap items-center gap-4">
+                <a 
+                  href="https://www.dropbox.com/scl/fi/5q3hmh674wtdf3yxlogbu/app-release.apk?rlkey=174k5u1sinqnuguxvybxraeve&st=6e7b325k&dl=1"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-primary px-8 py-4 rounded-2xl font-semibold text-sm flex items-center gap-3 shadow-lg shadow-violet-600/30"
+                >
+                  <span className="material-symbols-outlined text-[22px]">download</span>
+                  Download Android APK (82 MB)
+                </a>
+                <span className="text-xs text-white/40 flex items-center gap-1">
+                  <span className="material-symbols-outlined text-[16px] text-emerald-400">verified</span>
+                  Direct Cloud Download • v1.0
+                </span>
+              </div>
+            </div>
+            <div className="w-full md:w-64 aspect-[9/16] rounded-2xl overflow-hidden shadow-2xl border border-white/10 relative">
+              <img src="/images/showcase-1.png" alt="Mingzy Mobile App" className="w-full h-full object-cover" />
             </div>
           </div>
         </section>
@@ -386,21 +497,150 @@ export default function LandingPage({ user, onStartChat, onOpenAuth, theme, togg
 
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-white/[0.04] mt-auto relative z-10">
-        <div className="flex flex-col md:flex-row justify-between items-center w-full px-5 md:px-10 py-10 max-w-[1280px] mx-auto gap-6 md:gap-0">
-          <div className="flex items-center gap-2 cursor-pointer group" onClick={() => window.location.reload()}>
-            <span className="text-lg font-bold text-white/60 group-hover:text-white transition-colors">Mingzy</span>
+      {/* Global Comprehensive Footer */}
+      <footer className="border-t border-white/[0.04] mt-auto relative z-10 bg-[#080808]/80">
+        <div className="w-full px-5 md:px-10 py-12 max-w-[1280px] mx-auto flex flex-col gap-10">
+          
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 lg:grid-cols-8 gap-6 text-left">
+            
+            {/* Col 1: Core */}
+            <div>
+              <h4 className="text-xs font-semibold text-white/70 uppercase tracking-wider mb-3">Core Chat</h4>
+              <ul className="space-y-2 text-xs text-white/40">
+                <li><button onClick={() => navigateTo('/random-video-chat')} className="hover:text-white transition-colors">Random Video</button></li>
+                <li><button onClick={() => navigateTo('/talk-to-strangers')} className="hover:text-white transition-colors">Talk to Strangers</button></li>
+                <li><button onClick={() => navigateTo('/anonymous-video-chat')} className="hover:text-white transition-colors">Anonymous Video</button></li>
+                <li><button onClick={() => navigateTo('/random-text-chat')} className="hover:text-white transition-colors">Random Text</button></li>
+                <li><button onClick={() => navigateTo('/meet-new-people')} className="hover:text-white transition-colors">Meet People</button></li>
+                <li><button onClick={() => navigateTo('/stranger-chat')} className="hover:text-white transition-colors">Stranger Chat</button></li>
+              </ul>
+            </div>
+
+            {/* Col 2: Alternatives */}
+            <div>
+              <h4 className="text-xs font-semibold text-white/70 uppercase tracking-wider mb-3">Alternatives</h4>
+              <ul className="space-y-2 text-xs text-white/40">
+                <li><button onClick={() => navigateTo('/alternatives/omegle-alternative')} className="hover:text-white transition-colors">Omegle Alt</button></li>
+                <li><button onClick={() => navigateTo('/alternatives/ome-tv-alternative')} className="hover:text-white transition-colors">OmeTV Alt</button></li>
+                <li><button onClick={() => navigateTo('/alternatives/chatroulette-alternative')} className="hover:text-white transition-colors">Chatroulette Alt</button></li>
+                <li><button onClick={() => navigateTo('/alternatives/monkey-alternative')} className="hover:text-white transition-colors">Monkey Alt</button></li>
+                <li><button onClick={() => navigateTo('/alternatives/emerald-chat-alternative')} className="hover:text-white transition-colors">Emerald Chat Alt</button></li>
+                <li><button onClick={() => navigateTo('/alternatives/chatrandom-alternative')} className="hover:text-white transition-colors">Chatrandom Alt</button></li>
+                <li><button onClick={() => navigateTo('/alternatives/camsurf-alternative')} className="hover:text-white transition-colors">Camsurf Alt</button></li>
+                <li><button onClick={() => navigateTo('/alternatives/coomeet-alternative')} className="hover:text-white transition-colors">CooMeet Alt</button></li>
+                <li><button onClick={() => navigateTo('/alternatives/shagle-alternative')} className="hover:text-white transition-colors">Shagle Alt</button></li>
+                <li><button onClick={() => navigateTo('/alternatives/tinychat-alternative')} className="hover:text-white transition-colors">TinyChat Alt</button></li>
+                <li><button onClick={() => navigateTo('/alternatives/bazoocam-alternative')} className="hover:text-white transition-colors">Bazoocam Alt</button></li>
+              </ul>
+            </div>
+
+            {/* Col 3: Languages */}
+            <div>
+              <h4 className="text-xs font-semibold text-white/70 uppercase tracking-wider mb-3">Languages</h4>
+              <ul className="space-y-2 text-xs text-white/40">
+                <li><button onClick={() => navigateTo('/languages/english')} className="hover:text-white transition-colors">English Chat</button></li>
+                <li><button onClick={() => navigateTo('/languages/hindi')} className="hover:text-white transition-colors">Hindi Chat</button></li>
+                <li><button onClick={() => navigateTo('/languages/spanish')} className="hover:text-white transition-colors">Spanish Chat</button></li>
+                <li><button onClick={() => navigateTo('/languages/french')} className="hover:text-white transition-colors">French Chat</button></li>
+                <li><button onClick={() => navigateTo('/languages/german')} className="hover:text-white transition-colors">German Chat</button></li>
+                <li><button onClick={() => navigateTo('/languages/portuguese')} className="hover:text-white transition-colors">Portuguese Chat</button></li>
+                <li><button onClick={() => navigateTo('/languages/japanese')} className="hover:text-white transition-colors">Japanese Chat</button></li>
+                <li><button onClick={() => navigateTo('/languages/arabic')} className="hover:text-white transition-colors">Arabic Chat</button></li>
+                <li><button onClick={() => navigateTo('/languages/italian')} className="hover:text-white transition-colors">Italian Chat</button></li>
+                <li><button onClick={() => navigateTo('/languages/korean')} className="hover:text-white transition-colors">Korean Chat</button></li>
+                <li><button onClick={() => navigateTo('/languages/turkish')} className="hover:text-white transition-colors">Turkish Chat</button></li>
+              </ul>
+            </div>
+
+            {/* Col 4: Countries */}
+            <div>
+              <h4 className="text-xs font-semibold text-white/70 uppercase tracking-wider mb-3">Countries</h4>
+              <ul className="space-y-2 text-xs text-white/40">
+                <li><button onClick={() => navigateTo('/countries/usa')} className="hover:text-white transition-colors">USA</button></li>
+                <li><button onClick={() => navigateTo('/countries/india')} className="hover:text-white transition-colors">India</button></li>
+                <li><button onClick={() => navigateTo('/countries/uk')} className="hover:text-white transition-colors">UK</button></li>
+                <li><button onClick={() => navigateTo('/countries/canada')} className="hover:text-white transition-colors">Canada</button></li>
+                <li><button onClick={() => navigateTo('/countries/australia')} className="hover:text-white transition-colors">Australia</button></li>
+                <li><button onClick={() => navigateTo('/countries/germany')} className="hover:text-white transition-colors">Germany</button></li>
+                <li><button onClick={() => navigateTo('/countries/france')} className="hover:text-white transition-colors">France</button></li>
+                <li><button onClick={() => navigateTo('/countries/brazil')} className="hover:text-white transition-colors">Brazil</button></li>
+                <li><button onClick={() => navigateTo('/countries/japan')} className="hover:text-white transition-colors">Japan</button></li>
+                <li><button onClick={() => navigateTo('/countries/philippines')} className="hover:text-white transition-colors">Philippines</button></li>
+                <li><button onClick={() => navigateTo('/countries/mexico')} className="hover:text-white transition-colors">Mexico</button></li>
+                <li><button onClick={() => navigateTo('/countries/indonesia')} className="hover:text-white transition-colors">Indonesia</button></li>
+              </ul>
+            </div>
+
+            {/* Col 5: Cities */}
+            <div>
+              <h4 className="text-xs font-semibold text-white/70 uppercase tracking-wider mb-3">Cities</h4>
+              <ul className="space-y-2 text-xs text-white/40">
+                <li><button onClick={() => navigateTo('/cities/new-york')} className="hover:text-white transition-colors">New York</button></li>
+                <li><button onClick={() => navigateTo('/cities/london')} className="hover:text-white transition-colors">London</button></li>
+                <li><button onClick={() => navigateTo('/cities/tokyo')} className="hover:text-white transition-colors">Tokyo</button></li>
+              </ul>
+            </div>
+
+            {/* Col 6: Features */}
+            <div>
+              <h4 className="text-xs font-semibold text-white/70 uppercase tracking-wider mb-3">Features</h4>
+              <ul className="space-y-2 text-xs text-white/40">
+                <li><button onClick={() => navigateTo('/features/video-chat')} className="hover:text-white transition-colors">HD Video Chat</button></li>
+                <li><button onClick={() => navigateTo('/features/text-chat')} className="hover:text-white transition-colors">Live Text Chat</button></li>
+                <li><button onClick={() => navigateTo('/features/language-matching')} className="hover:text-white transition-colors">Language Match</button></li>
+                <li><button onClick={() => navigateTo('/features/instant-matching')} className="hover:text-white transition-colors">Instant Queue</button></li>
+                <li><button onClick={() => navigateTo('/features/global-chat')} className="hover:text-white transition-colors">Global Chat</button></li>
+                <li><button onClick={() => navigateTo('/features/skip-and-match')} className="hover:text-white transition-colors">Skip & Next</button></li>
+              </ul>
+            </div>
+
+            {/* Col 7: Safety & Legal */}
+            <div>
+              <h4 className="text-xs font-semibold text-white/70 uppercase tracking-wider mb-3">Trust & Safety</h4>
+              <ul className="space-y-2 text-xs text-white/40">
+                <li><button onClick={() => navigateTo('/safety')} className="hover:text-white transition-colors">Safety Center</button></li>
+                <li><button onClick={() => navigateTo('/safety/reporting')} className="hover:text-white transition-colors">Report Abuse</button></li>
+                <li><button onClick={() => navigateTo('/safety/blocking')} className="hover:text-white transition-colors">Instant Block</button></li>
+                <li><button onClick={() => navigateTo('/community-guidelines')} className="hover:text-white transition-colors">Guidelines</button></li>
+                <li><button onClick={() => navigateTo('/privacy')} className="hover:text-white transition-colors">Privacy Policy</button></li>
+                <li><button onClick={() => navigateTo('/terms')} className="hover:text-white transition-colors">Terms of Service</button></li>
+              </ul>
+            </div>
+
+            {/* Col 8: Guides */}
+            <div>
+              <h4 className="text-xs font-semibold text-white/70 uppercase tracking-wider mb-3">Guides</h4>
+              <ul className="space-y-2 text-xs text-white/40">
+                <li><button onClick={() => navigateTo('/guides/how-random-video-chat-works')} className="hover:text-white transition-colors">How Chat Works</button></li>
+                <li><button onClick={() => navigateTo('/guides/random-video-chat-safety-guide')} className="hover:text-white transition-colors">Safety Guide</button></li>
+                <li><button onClick={() => navigateTo('/guides/best-conversation-starters-stranger-chat')} className="hover:text-white transition-colors">50 Starters</button></li>
+                <li><button onClick={() => navigateTo('/guides/language-matching-explained')} className="hover:text-white transition-colors">Language Match</button></li>
+                <li><button onClick={() => navigateTo('/guides/overcoming-stranger-chat-anxiety')} className="hover:text-white transition-colors">Overcome Anxiety</button></li>
+                <li><button onClick={() => navigateTo('/guides/how-to-spot-scams-and-bots-on-video-chat')} className="hover:text-white transition-colors">Spot Scams</button></li>
+              </ul>
+            </div>
+
           </div>
-          <nav className="flex flex-wrap justify-center gap-5">
-            <a className="text-white/40 text-xs hover:text-white transition-colors" href="/privacy.html" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
-            <a className="text-white/40 text-xs hover:text-white transition-colors" href="/terms.html" target="_blank" rel="noopener noreferrer">Terms of Service</a>
-            <a className="text-white/40 text-xs hover:text-white transition-colors" href="#safety">Safety</a>
-            <a className="text-white/40 text-xs hover:text-white transition-colors" href="mailto:support@mingzy.app">Contact</a>
-          </nav>
-          <div className="text-white/20 text-xs">
-            © 2026 Mingzy
+
+          <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-white/[0.04] text-xs text-white/30 gap-4">
+            <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigateTo('/')}>
+              <span className="text-sm font-bold text-white/70 hover:text-white transition-colors">Mingzy</span>
+              <span>— Talk to strangers around the world.</span>
+            </div>
+            <div className="flex items-center gap-6">
+              <a 
+                href="https://www.dropbox.com/scl/fi/5q3hmh674wtdf3yxlogbu/app-release.apk?rlkey=174k5u1sinqnuguxvybxraeve&st=6e7b325k&dl=1"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-emerald-400 hover:text-emerald-300 font-semibold transition-colors"
+              >
+                <span className="material-symbols-outlined text-[16px]">android</span>
+                Download Android APK (v1.0)
+              </a>
+              <span>© 2026 Mingzy. All rights reserved.</span>
+            </div>
           </div>
+
         </div>
       </footer>
     </div>
