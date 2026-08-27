@@ -90,10 +90,18 @@ export default function ChatRoom({
   const typingTimeoutRef = useRef(null);
   const audioContextRef = useRef(null);
   
+  // Mirror refs: allow reading current values inside useEffect without adding them as dependencies
+  const sidebarOpenRef = useRef(sidebarOpen);
+  const onNextRef = useRef(onNext);
+  
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
   const messagesEndRef = useRef(null);
   const durationTimerRef = useRef(null);
+
+  // Keep mirror refs synced with state
+  useEffect(() => { sidebarOpenRef.current = sidebarOpen; }, [sidebarOpen]);
+  useEffect(() => { onNextRef.current = onNext; }, [onNext]);
 
   // 1. Call Duration Timer
   useEffect(() => {
@@ -378,7 +386,7 @@ export default function ChatRoom({
     const handleReceiveMessage = (msg) => {
       playAudioCue('message');
       setMessages(prev => [...prev, { text: msg.text, sender: 'stranger', timestamp: msg.timestamp }]);
-      if (!sidebarOpen && chatMode === 'video') {
+      if (!sidebarOpenRef.current && chatMode === 'video') {
         setUnreadCount(prev => prev + 1);
       }
     };
@@ -389,7 +397,7 @@ export default function ChatRoom({
       playAudioCue('leave');
       setConnectionStatus('Partner Left');
       setMessages(prev => [...prev, { text: "Stranger has disconnected. Finding next match...", isSystem: true, timestamp: Date.now() }]);
-      onNext();
+      onNextRef.current();
     };
 
     socket.on('signal', handleSignal);
@@ -425,7 +433,7 @@ export default function ChatRoom({
         audioContextRef.current = null;
       }
     };
-  }, [partnerId, initiator, chatMode, socket, iceServers, onNext, acquireLocalMedia, setupAudioAnalyser, sidebarOpen]);
+  }, [partnerId, initiator, chatMode, socket, iceServers, acquireLocalMedia, setupAudioAnalyser]);
 
   // 5. Auto Scroll Messages
   useEffect(() => { 
@@ -800,22 +808,24 @@ export default function ChatRoom({
           <div className={`flex-1 relative rounded-2xl overflow-hidden bg-[#0E0E0E] border transition-all duration-200 flex items-center justify-center group ${
             isRemoteSpeaking ? 'border-emerald-500/60 shadow-[0_0_24px_rgba(52,211,153,0.25)]' : 'border-white/[0.06]'
           }`}>
-            {connectionStatus === 'Connected' ? (
-              <video 
-                ref={remoteVideoRef} 
-                autoPlay 
-                playsInline 
-                className="absolute inset-0 w-full h-full object-cover" 
-              />
-            ) : (
-              <div className="absolute inset-0 bg-[#0A0A0A] flex flex-col items-center justify-center">
+            {/* ALWAYS mount the video element so ontrack can attach the remote stream at any time */}
+            <video 
+              ref={remoteVideoRef} 
+              autoPlay 
+              playsInline 
+              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
+                connectionStatus === 'Connected' ? 'opacity-100 z-10' : 'opacity-0 z-0'
+              }`}
+            />
+
+            {/* Placeholder overlay shown until connected */}
+            {connectionStatus !== 'Connected' && (
+              <div className="absolute inset-0 bg-[#0A0A0A] flex flex-col items-center justify-center z-20">
                 <div className="w-16 h-16 rounded-2xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center mb-3 animate-breathing-glow">
                   <span className="material-symbols-outlined text-[28px] text-white/20">question_mark</span>
                 </div>
                 <span className="text-[11px] text-white/30 uppercase tracking-[0.15em]">{partnerProfile?.name || 'Stranger'}</span>
-                {connectionStatus !== 'Connected' && (
-                  <span className="text-[10px] text-violet-400/70 animate-pulse mt-2">{connectionStatus}...</span>
-                )}
+                <span className="text-[10px] text-violet-400/70 animate-pulse mt-2">{connectionStatus}...</span>
               </div>
             )}
 
