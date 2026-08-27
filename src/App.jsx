@@ -257,6 +257,7 @@ export default function App() {
           partnerId={matchDetails.partnerId}
           initiator={matchDetails.initiator}
           partnerProfile={matchDetails.partnerProfile}
+          iceServers={matchDetails.iceServers}
           onNext={handleNext}
           onEnd={handleEnd}
           theme={theme}

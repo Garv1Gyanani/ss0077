@@ -1,13 +1,50 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { resolveRTCConfiguration } from '../services/iceService';
 
-const ICE_SERVERS = {
-  iceServers: [
-    { urls: 'stun:stun.l.google.com:19302' },
-    { urls: 'stun:stun1.l.google.com:19302' },
-    { urls: 'stun:stun2.l.google.com:19302' },
-    { urls: 'stun:stun.services.mozilla.com' }
-  ]
-};
+// Audio feedback synthesizer for subtle tactile cues
+function playAudioCue(type = 'connect') {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    if (ctx.state === 'suspended') {
+      ctx.resume();
+    }
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    if (type === 'connect') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+      osc.frequency.exponentialRampToValueAtTime(659.25, ctx.currentTime + 0.08); // E5
+      osc.frequency.exponentialRampToValueAtTime(783.99, ctx.currentTime + 0.16); // G5
+      gain.gain.setValueAtTime(0.05, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.3);
+    } else if (type === 'message') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+      osc.frequency.exponentialRampToValueAtTime(880.00, ctx.currentTime + 0.06); // A5
+      gain.gain.setValueAtTime(0.04, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.15);
+    } else if (type === 'leave') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(659.25, ctx.currentTime); // E5
+      osc.frequency.exponentialRampToValueAtTime(440.00, ctx.currentTime + 0.12); // A4
+      gain.gain.setValueAtTime(0.04, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.2);
+    }
+  } catch (e) {
+    // Gracefully handle browser autoplay policies
+  }
+}
 
 export default function ChatRoom({ 
   chatMode, 
@@ -15,6 +52,7 @@ export default function ChatRoom({
   partnerId, 
   initiator, 
   partnerProfile,
+  iceServers,
   onNext, 
   onEnd,
   theme,
@@ -31,10 +69,23 @@ export default function ChatRoom({
   const [callDuration, setCallDuration] = useState(0);
   const [connectionStatus, setConnectionStatus] = useState('Connecting');
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [isLocalSpeaking, setIsLocalSpeaking] = useState(false);
+  const [isRemoteSpeaking, setIsRemoteSpeaking] = useState(false);
+  
+  // Real-time network statistics
+  const [networkStats, setNetworkStats] = useState({
+    rtt: null,
+    routeType: null, // 'P2P Direct' | 'Cloudflare Relay' | 'Gathering'
+    isRelay: false
+  });
   
   const pcRef = useRef(null);
   const localStreamRef = useRef(null);
   const screenStreamRef = useRef(null);
+  const typingTimeoutRef = useRef(null);
+  const statsIntervalRef = useRef(null);
+  const audioContextRef = useRef(null);
   
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
@@ -46,7 +97,9 @@ export default function ChatRoom({
     durationTimerRef.current = setInterval(() => {
       setCallDuration(prev => prev + 1);
     }, 1000);
-    return () => { if (durationTimerRef.current) clearInterval(durationTimerRef.current); };
+    return () => { 
+      if (durationTimerRef.current) clearInterval(durationTimerRef.current); 
+    };
   }, []);
 
   const formatTime = (totalSeconds) => {
@@ -55,25 +108,122 @@ export default function ChatRoom({
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  // 2. WebRTC Peer Connection & Media Access
+  // 2. Setup Speaking Activity Visualizer
+  const setupAudioAnalyser = useCallback((stream, isLocal) => {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return null;
+
+      if (!audioContextRef.current) {
+        audioContextRef.current = new AudioCtx();
+      }
+      const ctx = audioContextRef.current;
+      if (ctx.state === 'suspended') {
+        ctx.resume();
+      }
+
+      const audioTrack = stream.getAudioTracks()[0];
+      if (!audioTrack) return null;
+
+      const source = ctx.createMediaStreamSource(new MediaStream([audioTrack]));
+      const analyser = ctx.createAnalyser();
+      analyser.fftSize = 256;
+      analyser.smoothingTimeConstant = 0.5;
+      source.connect(analyser);
+
+      const bufferLength = analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
+
+      let animId;
+      const checkVolume = () => {
+        analyser.getByteFrequencyData(dataArray);
+        let sum = 0;
+        for (let i = 0; i < bufferLength; i++) {
+          sum += dataArray[i];
+        }
+        const avg = sum / bufferLength;
+        const isSpeaking = avg > 18; // Voice activity threshold
+
+        if (isLocal) {
+          setIsLocalSpeaking(isSpeaking);
+        } else {
+          setIsRemoteSpeaking(isSpeaking);
+        }
+
+        animId = requestAnimationFrame(checkVolume);
+      };
+
+      animId = requestAnimationFrame(checkVolume);
+
+      return () => {
+        if (animId) cancelAnimationFrame(animId);
+        source.disconnect();
+      };
+    } catch (e) {
+      return null;
+    }
+  }, []);
+
+  // 3. WebRTC Peer Connection & Media Access
   useEffect(() => {
     let active = true;
+    let localAnalyserCleanup = null;
+    let remoteAnalyserCleanup = null;
 
     async function initWebRTC() {
       if (chatMode !== 'video') {
         setConnectionStatus('Connected');
+        playAudioCue('connect');
         return;
       }
 
-      const pc = new RTCPeerConnection(ICE_SERVERS);
+      const rtcConfig = resolveRTCConfiguration(iceServers);
+      const pc = new RTCPeerConnection(rtcConfig);
       pcRef.current = pc;
+
+      // Realtime Network Quality Monitor
+      const inspectStats = async () => {
+        if (!pc || pc.connectionState === 'closed') return;
+        try {
+          const stats = await pc.getStats();
+          let selectedPair = null;
+
+          stats.forEach(report => {
+            if (report.type === 'transport' && report.selectedCandidatePairId) {
+              selectedPair = stats.get(report.selectedCandidatePairId);
+            } else if (report.type === 'candidate-pair' && (report.selected || report.nominated)) {
+              selectedPair = report;
+            }
+          });
+
+          if (selectedPair) {
+            const localCandidate = stats.get(selectedPair.localCandidateId);
+            const remoteCandidate = stats.get(selectedPair.remoteCandidateId);
+            const isRelay = localCandidate?.candidateType === 'relay' || remoteCandidate?.candidateType === 'relay';
+            const rttMs = Math.round((selectedPair.currentRoundTripTime || 0) * 1000);
+
+            setNetworkStats({
+              rtt: rttMs > 0 ? rttMs : null,
+              routeType: isRelay ? 'Cloudflare Relay' : 'P2P Direct',
+              isRelay
+            });
+          }
+        } catch (e) {
+          // Ignore stats errors during renegotiation
+        }
+      };
 
       const updateState = () => {
         if (!active) return;
         const iceState = pc.iceConnectionState;
         const connState = pc.connectionState;
+
         if (iceState === 'connected' || iceState === 'completed' || connState === 'connected') {
           setConnectionStatus('Connected');
+          inspectStats();
+          if (!statsIntervalRef.current) {
+            statsIntervalRef.current = setInterval(inspectStats, 2500);
+          }
         } else if (iceState === 'disconnected' || iceState === 'failed' || connState === 'failed') {
           setConnectionStatus('Disconnected');
         }
@@ -81,28 +231,75 @@ export default function ChatRoom({
 
       pc.ontrack = (event) => {
         if (remoteVideoRef.current && event.streams[0]) {
-          remoteVideoRef.current.srcObject = event.streams[0];
+          const remoteStream = event.streams[0];
+          remoteVideoRef.current.srcObject = remoteStream;
+          remoteVideoRef.current.play().catch(() => {});
           setConnectionStatus('Connected');
+          playAudioCue('connect');
+
+          if (remoteAnalyserCleanup) remoteAnalyserCleanup();
+          remoteAnalyserCleanup = setupAudioAnalyser(remoteStream, false);
         }
       };
 
       pc.oniceconnectionstatechange = updateState;
       pc.onconnectionstatechange = updateState;
 
-      pc.onicecandidate = (event) => {
-        if (event.candidate && socket && partnerId) {
-          socket.emit('signal', { to: partnerId, type: 'candidate', candidate: event.candidate });
+      pc.onicecandidateerror = (event) => {
+        if (event.errorCode !== 701) {
+          console.debug("ICE Candidate Notice:", event.errorText || event.errorCode);
         }
       };
 
+      pc.onicecandidate = (event) => {
+        if (event.candidate) {
+          const candidateType = event.candidate.type || 'unknown';
+          const protocol = event.candidate.protocol || '';
+          console.debug(`📡 [ICE Candidate Gathered] Type: ${candidateType} (${protocol.toUpperCase()})`);
+          
+          if (socket && partnerId) {
+            socket.emit('signal', { to: partnerId, type: 'candidate', candidate: event.candidate });
+          }
+        }
+      };
+
+      // 4. Capture Local Media with HD & Echo Cancellation constraints
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 }, audio: true });
+        let stream;
+        try {
+          // Optimized high-definition audio & video constraints
+          stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+              width: { ideal: 1280, min: 640 },
+              height: { ideal: 720, min: 480 },
+              frameRate: { ideal: 30, max: 60 },
+              facingMode: 'user'
+            },
+            audio: {
+              echoCancellation: true,
+              noiseSuppression: true,
+              autoGainControl: true
+            }
+          });
+        } catch (initialErr) {
+          // Fallback to standard definition if high-spec constraint rejected
+          console.warn("Retrying media with baseline constraints:", initialErr.message);
+          stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        }
+
         localStreamRef.current = stream;
-        if (localVideoRef.current) localVideoRef.current.srcObject = stream;
+        if (localVideoRef.current) {
+          localVideoRef.current.srcObject = stream;
+          localVideoRef.current.play().catch(() => {});
+        }
+
         stream.getTracks().forEach((track) => pc.addTrack(track, stream));
+
+        // Start local speaking visualizer
+        localAnalyserCleanup = setupAudioAnalyser(stream, true);
       } catch (err) {
         console.error("Error accessing camera/mic:", err);
-        setMessages(prev => [...prev, { text: `Media error: ${err.message}. Text-only mode active.`, isSystem: true, timestamp: Date.now() }]);
+        setMessages(prev => [...prev, { text: `Media Notice: ${err.message}. Running in text-only mode.`, isSystem: true, timestamp: Date.now() }]);
         setConnectionStatus('Connected');
       }
 
@@ -111,7 +308,9 @@ export default function ChatRoom({
           const offer = await pc.createOffer();
           await pc.setLocalDescription(offer);
           socket.emit('signal', { to: partnerId, type: 'offer', sdp: offer });
-        } catch (err) { console.error("Error creating offer:", err); }
+        } catch (err) { 
+          console.error("Error creating offer:", err); 
+        }
       }
     }
 
@@ -133,12 +332,23 @@ export default function ChatRoom({
         } else if (type === 'candidate') {
           await pc.addIceCandidate(new RTCIceCandidate(candidate));
         }
-      } catch (err) { console.error("Signal error:", err); }
+      } catch (err) { 
+        console.error("Signal error:", err); 
+      }
     };
 
-    const handleReceiveMessage = (msg) => setMessages(prev => [...prev, { text: msg.text, sender: 'stranger', timestamp: msg.timestamp }]);
+    const handleReceiveMessage = (msg) => {
+      playAudioCue('message');
+      setMessages(prev => [...prev, { text: msg.text, sender: 'stranger', timestamp: msg.timestamp }]);
+      if (!sidebarOpen && chatMode === 'video') {
+        setUnreadCount(prev => prev + 1);
+      }
+    };
+
     const handleTyping = (isTyping) => setIsStrangerTyping(isTyping);
+
     const handlePartnerLeft = () => {
+      playAudioCue('leave');
       setConnectionStatus('Partner Left');
       setMessages(prev => [...prev, { text: "Stranger has disconnected. Finding next match...", isSystem: true, timestamp: Date.now() }]);
       onNext();
@@ -155,31 +365,66 @@ export default function ChatRoom({
       socket.off('receive-message', handleReceiveMessage);
       socket.off('typing', handleTyping);
       socket.off('partner-left', handlePartnerLeft);
-      if (pcRef.current) { pcRef.current.close(); pcRef.current = null; }
-      if (localStreamRef.current) { localStreamRef.current.getTracks().forEach(track => track.stop()); localStreamRef.current = null; }
-      if (screenStreamRef.current) { screenStreamRef.current.getTracks().forEach(track => track.stop()); screenStreamRef.current = null; }
+
+      if (statsIntervalRef.current) {
+        clearInterval(statsIntervalRef.current);
+        statsIntervalRef.current = null;
+      }
+      if (localAnalyserCleanup) localAnalyserCleanup();
+      if (remoteAnalyserCleanup) remoteAnalyserCleanup();
+      if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+
+      if (pcRef.current) { 
+        pcRef.current.close(); 
+        pcRef.current = null; 
+      }
+      if (localStreamRef.current) { 
+        localStreamRef.current.getTracks().forEach(track => track.stop()); 
+        localStreamRef.current = null; 
+      }
+      if (screenStreamRef.current) { 
+        screenStreamRef.current.getTracks().forEach(track => track.stop()); 
+        screenStreamRef.current = null; 
+      }
+      if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
+        audioContextRef.current.close().catch(() => {});
+        audioContextRef.current = null;
+      }
     };
-  }, [partnerId, initiator, chatMode, socket, onNext]);
+  }, [partnerId, initiator, chatMode, socket, iceServers, onNext, setupAudioAnalyser, sidebarOpen]);
 
-  useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
+  // 5. Auto Scroll Messages
+  useEffect(() => { 
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); 
+  }, [messages, isStrangerTyping]);
 
-  const toggleMute = () => {
+  // 6. Media Controls
+  const toggleMute = useCallback(() => {
     if (localStreamRef.current) {
       const t = localStreamRef.current.getAudioTracks()[0];
-      if (t) { t.enabled = !t.enabled; setIsMuted(!t.enabled); }
+      if (t) { 
+        t.enabled = !t.enabled; 
+        setIsMuted(!t.enabled); 
+      }
     }
-  };
+  }, []);
 
-  const toggleCam = () => {
+  const toggleCam = useCallback(() => {
     if (localStreamRef.current) {
       const t = localStreamRef.current.getVideoTracks()[0];
-      if (t) { t.enabled = !t.enabled; setIsCamOff(!t.enabled); }
+      if (t) { 
+        t.enabled = !t.enabled; 
+        setIsCamOff(!t.enabled); 
+      }
     }
-  };
+  }, []);
 
-  const toggleScreenShare = async () => {
+  const toggleScreenShare = useCallback(async () => {
     if (isSharing) {
-      if (screenStreamRef.current) { screenStreamRef.current.getTracks().forEach(t => t.stop()); screenStreamRef.current = null; }
+      if (screenStreamRef.current) { 
+        screenStreamRef.current.getTracks().forEach(t => t.stop()); 
+        screenStreamRef.current = null; 
+      }
       setIsSharing(false);
       if (localStreamRef.current && pcRef.current) {
         const vt = localStreamRef.current.getVideoTracks()[0];
@@ -192,30 +437,88 @@ export default function ChatRoom({
         screenStreamRef.current = stream;
         setIsSharing(true);
         const st = stream.getVideoTracks()[0];
-        const sender = pcRef.current.getSenders().find(s => s.track?.kind === 'video');
+        const sender = pcRef.current?.getSenders().find(s => s.track?.kind === 'video');
         if (sender && st) sender.replaceTrack(st);
         st.onended = () => toggleScreenShare();
-      } catch (err) { console.error("Screen share error:", err); }
+      } catch (err) { 
+        console.error("Screen share error:", err); 
+      }
     }
-  };
+  }, [isSharing]);
 
+  // 7. Keyboard Shortcuts (M: Mute, V: Cam, S: Screen, Esc: Sidebar/Exit)
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Avoid triggering hotkeys while actively typing in input
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+          e.preventDefault();
+          onNext();
+        }
+        return;
+      }
+
+      if (e.key === 'm' || e.key === 'M') {
+        e.preventDefault();
+        toggleMute();
+      } else if (e.key === 'v' || e.key === 'V') {
+        e.preventDefault();
+        toggleCam();
+      } else if (e.key === 's' || e.key === 'S') {
+        e.preventDefault();
+        toggleScreenShare();
+      } else if (e.key === 'Escape') {
+        setSidebarOpen(prev => !prev);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [toggleMute, toggleCam, toggleScreenShare, onNext]);
+
+  // 8. Message Handling with Typing Debouncing
   const handleSendMessage = (e) => {
-    e.preventDefault();
+    e?.preventDefault();
     if (!inputText.trim()) return;
     socket.emit('send-message', inputText);
     setMessages(prev => [...prev, { text: inputText, sender: 'you', timestamp: Date.now() }]);
     setInputText('');
     socket.emit('typing', false);
+    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
   };
 
   const handleInputChange = (e) => {
-    setInputText(e.target.value);
-    socket.emit('typing', e.target.value.length > 0);
+    const val = e.target.value;
+    setInputText(val);
+
+    if (val.length > 0) {
+      socket.emit('typing', true);
+      if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+      typingTimeoutRef.current = setTimeout(() => {
+        socket.emit('typing', false);
+      }, 1500);
+    } else {
+      socket.emit('typing', false);
+    }
   };
 
-  const statusColor = connectionStatus === 'Connected' ? 'bg-emerald-400' : connectionStatus === 'Partner Left' ? 'bg-red-400' : 'bg-amber-400';
-  const statusGlow = connectionStatus === 'Connected' ? 'shadow-[0_0_8px_rgba(52,211,153,0.5)]' : '';
+  const openChatSidebar = () => {
+    setSidebarOpen(true);
+    setUnreadCount(0);
+  };
 
+  const statusColor = connectionStatus === 'Connected' 
+    ? 'bg-emerald-400' 
+    : connectionStatus === 'Partner Left' 
+      ? 'bg-red-400' 
+      : 'bg-amber-400';
+  const statusGlow = connectionStatus === 'Connected' 
+    ? 'shadow-[0_0_8px_rgba(52,211,153,0.5)]' 
+    : '';
+
+  // ═══════════════════════════════════════════════════════════════
+  // TEXT CHAT MODE VIEW
+  // ═══════════════════════════════════════════════════════════════
   if (chatMode === 'text') {
     return (
       <div className="bg-ambient-gradient text-white h-screen w-full flex flex-col overflow-hidden font-body-md relative selection:bg-violet-500/30 noise-overlay">
@@ -249,7 +552,6 @@ export default function ChatRoom({
 
             {/* Right: Controls & Theme Toggle */}
             <div className="flex items-center gap-2">
-              {/* Theme Toggle Button */}
               <button 
                 onClick={toggleTheme}
                 className="w-9 h-9 rounded-xl flex items-center justify-center hover:bg-white/5 border border-white/[0.06] text-white/40 hover:text-white transition-all active:scale-95"
@@ -260,21 +562,19 @@ export default function ChatRoom({
                 </span>
               </button>
 
-              {/* End/Exit Button */}
               <button 
                 onClick={onEnd}
                 className="btn-outline h-9 px-4 rounded-xl text-red-400 border border-red-500/20 hover:bg-red-500/10 flex items-center gap-1.5 text-xs font-semibold"
-                title="End Conversation"
+                title="End Conversation (Esc)"
               >
                 <span className="material-symbols-outlined text-[16px]">call_end</span>
                 Exit
               </button>
 
-              {/* Next/Skip Button */}
               <button 
                 onClick={onNext}
                 className="btn-primary h-9 px-5 rounded-xl text-xs font-semibold flex items-center gap-1.5 relative z-10"
-                title="Skip to Next Match"
+                title="Skip to Next Match (Ctrl+Enter)"
               >
                 <span className="relative z-10 flex items-center gap-1.5">
                   Next
@@ -285,7 +585,7 @@ export default function ChatRoom({
           </div>
         </header>
 
-        {/* Main Work Area: Centered Chat Column */}
+        {/* Main Text Chat Workspace */}
         <main className="flex-grow flex flex-col items-center justify-center w-full max-w-[1000px] mx-auto px-4 md:px-6 py-6 overflow-hidden relative z-10">
           <div className="w-full h-full glass-panel rounded-3xl flex flex-col overflow-hidden glow-indigo">
             
@@ -348,7 +648,7 @@ export default function ChatRoom({
                   value={inputText}
                   onChange={handleInputChange}
                   className="flex-1 bg-transparent border-none text-sm text-white/80 focus:ring-0 placeholder:text-white/15 py-3 px-2 focus:outline-none"
-                  placeholder="Type a message to stranger..."
+                  placeholder="Type a message to stranger... (Press Enter)"
                 />
                 
                 <button 
@@ -366,27 +666,45 @@ export default function ChatRoom({
     );
   }
 
+  // ═══════════════════════════════════════════════════════════════
+  // HD VIDEO CHAT MODE VIEW
+  // ═══════════════════════════════════════════════════════════════
   return (
     <div className="bg-[#060606] text-white h-screen w-full flex overflow-hidden font-body-md relative selection:bg-violet-500/30 noise-overlay">
 
       {/* Top App Bar */}
-      <header className="fixed top-0 w-full z-50 bg-gradient-to-b from-black/90 via-black/50 to-transparent flex justify-between items-center px-5 md:px-10 py-4 pointer-events-none">
-        <div className="font-bold text-lg text-white/80 tracking-tight pointer-events-auto cursor-pointer hover:text-white transition-colors" onClick={onEnd}>
-          Mingzy
+      <header className="fixed top-0 w-full z-50 bg-gradient-to-b from-black/90 via-black/50 to-transparent flex justify-between items-center px-4 md:px-10 py-3.5 pointer-events-none">
+        <div className="font-bold text-lg text-white/80 tracking-tight pointer-events-auto cursor-pointer hover:text-white transition-colors flex items-center gap-2" onClick={onEnd}>
+          <span>Mingzy</span>
         </div>
         
-        {/* Status Pill */}
-        <div className="absolute left-1/2 -translate-x-1/2 top-4 pointer-events-auto">
-          <div className="glass-panel px-4 py-2 rounded-full flex items-center gap-2.5">
+        {/* Status & Network Quality Pill */}
+        <div className="absolute left-1/2 -translate-x-1/2 top-3.5 pointer-events-auto flex items-center gap-2">
+          <div className="glass-panel px-3.5 py-1.5 rounded-full flex items-center gap-2 border border-white/10 shadow-lg">
             <span className={`w-2 h-2 rounded-full ${statusColor} animate-pulse ${statusGlow}`}></span>
-            <span className="text-[11px] text-white/60 font-medium">{connectionStatus}</span>
+            <span className="text-[11px] text-white/70 font-medium">{connectionStatus}</span>
             <span className="w-px h-3 bg-white/10"></span>
             <span className="text-[11px] text-white/40 font-mono">{formatTime(callDuration)}</span>
+
+            {/* Live WebRTC Relay / RTT Diagnostics */}
+            {networkStats.routeType && connectionStatus === 'Connected' && (
+              <>
+                <span className="w-px h-3 bg-white/10 hidden sm:inline-block"></span>
+                <span className={`text-[10px] font-mono px-2 py-0.5 rounded-md hidden sm:inline-flex items-center gap-1 ${
+                  networkStats.isRelay ? 'bg-amber-500/10 text-amber-300 border border-amber-500/20' : 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/20'
+                }`}>
+                  <span className="material-symbols-outlined text-[12px]">
+                    {networkStats.isRelay ? 'cloud_sync' : 'bolt'}
+                  </span>
+                  {networkStats.rtt ? `${networkStats.rtt}ms • ` : ''}{networkStats.routeType}
+                </span>
+              </>
+            )}
           </div>
         </div>
 
-        {/* Theme Toggle Button */}
-        <div className="pointer-events-auto flex items-center gap-3">
+        {/* Top Right: Theme & Exit */}
+        <div className="pointer-events-auto flex items-center gap-2">
           <button 
             onClick={toggleTheme}
             className="w-9 h-9 rounded-xl flex items-center justify-center hover:bg-white/5 border border-white/[0.06] text-white/40 hover:text-white transition-all active:scale-95"
@@ -396,55 +714,76 @@ export default function ChatRoom({
               {theme === 'dark' ? 'light_mode' : 'dark_mode'}
             </span>
           </button>
+
+          <button 
+            onClick={onEnd}
+            className="btn-outline h-9 px-3.5 rounded-xl text-red-400 border border-red-500/20 hover:bg-red-500/10 flex items-center gap-1 text-xs font-semibold"
+            title="End Conversation"
+          >
+            <span className="material-symbols-outlined text-[16px]">call_end</span>
+            <span className="hidden sm:inline">Exit</span>
+          </button>
         </div>
       </header>
 
-      {/* Main Canvas */}
-      <main className={`flex-1 flex flex-col h-full relative p-3 pb-[110px] pt-[72px] transition-all duration-300 ${sidebarOpen ? 'md:pr-[356px]' : ''}`}>
+      {/* Main Video Canvas */}
+      <main className={`flex-1 flex flex-col h-full relative p-3 pb-[100px] pt-[68px] transition-all duration-300 ${sidebarOpen ? 'md:pr-[356px]' : ''}`}>
         
         {/* Video Grid */}
         <div className="flex-1 w-full max-w-[1280px] mx-auto flex flex-col md:flex-row gap-3 relative h-full">
           
           {/* Local User Panel */}
-          <div className="flex-1 relative rounded-2xl overflow-hidden bg-[#0E0E0E] border border-white/[0.04] flex items-center justify-center group">
-            {chatMode === 'video' ? (
-              <video ref={localVideoRef} autoPlay playsInline muted className="absolute inset-0 w-full h-full object-cover transform -scale-x-100" />
-            ) : (
-              <div className="absolute inset-0 bg-[#0A0A0A] flex flex-col items-center justify-center">
-                <div className="w-16 h-16 rounded-2xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center mb-3">
-                  <span className="material-symbols-outlined text-[28px] text-white/15">person</span>
-                </div>
-                <span className="text-[11px] text-white/20 uppercase tracking-[0.15em]">You</span>
-              </div>
-            )}
+          <div className={`flex-1 relative rounded-2xl overflow-hidden bg-[#0E0E0E] border transition-all duration-200 flex items-center justify-center group ${
+            isLocalSpeaking && !isMuted ? 'border-violet-500/60 shadow-[0_0_24px_rgba(139,92,246,0.25)]' : 'border-white/[0.06]'
+          }`}>
+            <video 
+              ref={localVideoRef} 
+              autoPlay 
+              playsInline 
+              muted 
+              className="absolute inset-0 w-full h-full object-cover transform -scale-x-100" 
+            />
             
-            {isCamOff && chatMode === 'video' && (
+            {isCamOff && (
               <div className="absolute inset-0 bg-[#0A0A0A] flex flex-col items-center justify-center z-20">
-                <span className="material-symbols-outlined text-3xl text-white/15 mb-2">videocam_off</span>
-                <span className="text-[10px] text-white/20 uppercase tracking-wider">Camera Off</span>
+                <span className="material-symbols-outlined text-3xl text-white/20 mb-2">videocam_off</span>
+                <span className="text-[10px] text-white/30 uppercase tracking-wider">Camera Off</span>
               </div>
             )}
             
             <div className="absolute inset-0 border border-white/[0.04] rounded-2xl pointer-events-none z-30"></div>
             
+            {/* Local User Tag */}
             <div className="absolute bottom-3 left-3 glass-panel px-3 py-1.5 rounded-lg flex items-center gap-2 z-30">
-              <span className="text-[11px] text-white/60 font-medium">You</span>
-              {isMuted && <span className="material-symbols-outlined text-[14px] text-red-400/70">mic_off</span>}
+              <span className="text-[11px] text-white/75 font-medium flex items-center gap-1.5">
+                You
+                {isLocalSpeaking && !isMuted && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-ping"></span>
+                )}
+              </span>
+              {isMuted && <span className="material-symbols-outlined text-[14px] text-red-400/80">mic_off</span>}
             </div>
           </div>
 
           {/* Remote User Panel */}
-          <div className="flex-1 relative rounded-2xl overflow-hidden bg-[#0E0E0E] border border-white/[0.04] flex items-center justify-center group">
-            {chatMode === 'video' && connectionStatus === 'Connected' ? (
-              <video ref={remoteVideoRef} autoPlay playsInline className="absolute inset-0 w-full h-full object-cover" />
+          <div className={`flex-1 relative rounded-2xl overflow-hidden bg-[#0E0E0E] border transition-all duration-200 flex items-center justify-center group ${
+            isRemoteSpeaking ? 'border-emerald-500/60 shadow-[0_0_24px_rgba(52,211,153,0.25)]' : 'border-white/[0.06]'
+          }`}>
+            {connectionStatus === 'Connected' ? (
+              <video 
+                ref={remoteVideoRef} 
+                autoPlay 
+                playsInline 
+                className="absolute inset-0 w-full h-full object-cover" 
+              />
             ) : (
               <div className="absolute inset-0 bg-[#0A0A0A] flex flex-col items-center justify-center">
                 <div className="w-16 h-16 rounded-2xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center mb-3 animate-breathing-glow">
-                  <span className="material-symbols-outlined text-[28px] text-white/15">question_mark</span>
+                  <span className="material-symbols-outlined text-[28px] text-white/20">question_mark</span>
                 </div>
-                <span className="text-[11px] text-white/20 uppercase tracking-[0.15em]">{partnerProfile?.name || 'Stranger'}</span>
+                <span className="text-[11px] text-white/30 uppercase tracking-[0.15em]">{partnerProfile?.name || 'Stranger'}</span>
                 {connectionStatus !== 'Connected' && (
-                  <span className="text-[10px] text-violet-400/60 animate-pulse mt-2">{connectionStatus}...</span>
+                  <span className="text-[10px] text-violet-400/70 animate-pulse mt-2">{connectionStatus}...</span>
                 )}
               </div>
             )}
@@ -452,78 +791,95 @@ export default function ChatRoom({
             <div className="absolute inset-0 border border-white/[0.04] rounded-2xl pointer-events-none z-30"></div>
             {connectionStatus === 'Connected' && <div className="absolute inset-0 shadow-[inset_0_0_40px_rgba(139,92,246,0.03)] rounded-2xl pointer-events-none z-30"></div>}
             
+            {/* Remote User Tag */}
             <div className="absolute bottom-3 left-3 glass-panel px-3 py-1.5 rounded-lg flex items-center gap-2 z-30">
-              <span className="text-[11px] text-white/60 font-medium">{partnerProfile?.name || 'Stranger'}</span>
+              <span className="text-[11px] text-white/75 font-medium flex items-center gap-1.5">
+                {partnerProfile?.name || 'Stranger'}
+                {isRemoteSpeaking && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                )}
+              </span>
             </div>
 
             <div className="absolute bottom-3 right-3 glass-panel px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 z-30">
               <span className={`w-1.5 h-1.5 rounded-full ${statusColor}`}></span>
-              <span className="text-[10px] text-white/40">{connectionStatus}</span>
+              <span className="text-[10px] text-white/50">{connectionStatus}</span>
             </div>
           </div>
         </div>
 
         {/* Safety Overlay */}
-        <div className="absolute bottom-[118px] left-1/2 -translate-x-1/2 text-center pointer-events-none">
-          <p className="glass-panel px-4 py-1.5 rounded-full text-[10px] text-white/25 flex items-center gap-1.5">
-            <span className="material-symbols-outlined text-[12px] text-violet-400/40">shield</span>
-            Stay anonymous. Don't share personal info.
+        <div className="absolute bottom-[108px] left-1/2 -translate-x-1/2 text-center pointer-events-none hidden sm:block">
+          <p className="glass-panel px-4 py-1.5 rounded-full text-[10px] text-white/30 flex items-center gap-1.5">
+            <span className="material-symbols-outlined text-[12px] text-violet-400/50">shield</span>
+            Stay anonymous. Don't share sensitive personal info.
           </p>
         </div>
       </main>
 
-      {/* Bottom Control Dock */}
-      <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 rounded-2xl w-fit glass-panel-strong flex gap-1 p-1.5 items-center z-50 glow-white-soft">
+      {/* Bottom Floating Control Dock */}
+      <nav className="fixed bottom-5 left-1/2 -translate-x-1/2 rounded-2xl w-fit glass-panel-strong flex gap-1 p-1.5 items-center z-50 glow-white-soft border border-white/10">
         
-        {/* Mic */}
+        {/* Mic Toggle (Hotkey: M) */}
         <button 
           onClick={toggleMute}
-          className={`rounded-xl w-11 h-11 flex items-center justify-center transition-all active:scale-90 group relative ${isMuted ? 'bg-red-500/15 text-red-400' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
+          className={`rounded-xl w-11 h-11 flex items-center justify-center transition-all active:scale-90 group relative ${
+            isMuted ? 'bg-red-500/15 text-red-400 border border-red-500/20' : 'text-white/70 hover:text-white hover:bg-white/5'
+          }`}
+          title="Toggle Mute (M)"
         >
           <span className="material-symbols-outlined text-[20px]">{isMuted ? 'mic_off' : 'mic'}</span>
           <div className="absolute -top-9 opacity-0 group-hover:opacity-100 transition-opacity glass-panel text-white text-[10px] px-2 py-1 rounded-md whitespace-nowrap pointer-events-none">
-            {isMuted ? 'Unmute' : 'Mute'}
+            {isMuted ? 'Unmute (M)' : 'Mute (M)'}
           </div>
         </button>
 
-        {/* Camera */}
+        {/* Camera Toggle (Hotkey: V) */}
         <button 
           onClick={toggleCam}
-          className={`rounded-xl w-11 h-11 flex items-center justify-center transition-all active:scale-90 group relative ${isCamOff ? 'bg-red-500/15 text-red-400' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
+          className={`rounded-xl w-11 h-11 flex items-center justify-center transition-all active:scale-90 group relative ${
+            isCamOff ? 'bg-red-500/15 text-red-400 border border-red-500/20' : 'text-white/70 hover:text-white hover:bg-white/5'
+          }`}
+          title="Toggle Camera (V)"
         >
           <span className="material-symbols-outlined text-[20px]">{isCamOff ? 'videocam_off' : 'videocam'}</span>
           <div className="absolute -top-9 opacity-0 group-hover:opacity-100 transition-opacity glass-panel text-white text-[10px] px-2 py-1 rounded-md whitespace-nowrap pointer-events-none">
-            {isCamOff ? 'Camera On' : 'Camera Off'}
+            {isCamOff ? 'Camera On (V)' : 'Camera Off (V)'}
           </div>
         </button>
 
-        <div className="w-px h-6 bg-white/[0.06] mx-1"></div>
+        <div className="w-px h-6 bg-white/[0.08] mx-1"></div>
 
-        {/* Screen Share */}
+        {/* Screen Share (Hotkey: S) */}
         <button 
           onClick={toggleScreenShare}
-          className={`rounded-xl w-11 h-11 flex items-center justify-center transition-all active:scale-90 group relative ${isSharing ? 'bg-violet-500/15 text-violet-300' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
+          className={`rounded-xl w-11 h-11 flex items-center justify-center transition-all active:scale-90 group relative ${
+            isSharing ? 'bg-violet-500/20 text-violet-300 border border-violet-500/30' : 'text-white/70 hover:text-white hover:bg-white/5'
+          }`}
+          title="Share Screen (S)"
         >
           <span className="material-symbols-outlined text-[20px]">present_to_all</span>
           <div className="absolute -top-9 opacity-0 group-hover:opacity-100 transition-opacity glass-panel text-white text-[10px] px-2 py-1 rounded-md whitespace-nowrap pointer-events-none">
-            {isSharing ? 'Stop Share' : 'Share Screen'}
+            {isSharing ? 'Stop Share (S)' : 'Share Screen (S)'}
           </div>
         </button>
 
         {/* End Call */}
         <button 
           onClick={onEnd}
-          className="rounded-xl w-11 h-11 flex items-center justify-center bg-red-500/15 text-red-400 hover:bg-red-500/25 transition-all active:scale-90 border border-red-500/10"
+          className="rounded-xl w-11 h-11 flex items-center justify-center bg-red-500/15 text-red-400 hover:bg-red-500/25 transition-all active:scale-90 border border-red-500/20"
+          title="End Call"
         >
           <span className="material-symbols-outlined text-[20px]">call_end</span>
         </button>
 
-        <div className="w-px h-6 bg-white/[0.06] mx-1"></div>
+        <div className="w-px h-6 bg-white/[0.08] mx-1"></div>
 
-        {/* Next Button */}
+        {/* Next Stranger Button */}
         <button 
           onClick={onNext}
-          className="btn-primary rounded-xl px-6 py-2.5 flex items-center justify-center text-[11px] uppercase tracking-[0.1em] font-semibold relative z-10 gap-1.5"
+          className="btn-primary rounded-xl px-5 sm:px-6 py-2.5 flex items-center justify-center text-[11px] uppercase tracking-[0.1em] font-semibold relative z-10 gap-1.5 shadow-lg shadow-violet-600/25"
+          title="Skip to Next Match (Ctrl+Enter)"
         >
           <span className="relative z-10 flex items-center gap-1.5">
             Next
@@ -531,40 +887,62 @@ export default function ChatRoom({
           </span>
         </button>
 
-        {/* Chat Toggle (Mobile) */}
+        {/* Chat Drawer Toggle Button */}
         <button 
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="md:hidden rounded-xl w-11 h-11 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/5 transition-all active:scale-95 ml-1"
+          onClick={() => {
+            if (sidebarOpen) {
+              setSidebarOpen(false);
+            } else {
+              openChatSidebar();
+            }
+          }}
+          className={`rounded-xl w-11 h-11 flex items-center justify-center transition-all active:scale-95 relative ml-0.5 ${
+            sidebarOpen ? 'bg-violet-600/20 text-violet-300' : 'text-white/70 hover:text-white hover:bg-white/5'
+          }`}
+          title="Toggle Chat Sidebar (Esc)"
         >
           <span className="material-symbols-outlined text-[20px]">chat</span>
+          {unreadCount > 0 && !sidebarOpen && (
+            <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-violet-500 text-white text-[9px] font-bold flex items-center justify-center animate-bounce">
+              {unreadCount}
+            </span>
+          )}
         </button>
       </nav>
 
-      {/* Side Chat Panel */}
-      <aside className={`fixed right-0 top-0 h-full w-[344px] z-[60] bg-[#0A0A0A]/95 backdrop-blur-xl border-l border-white/[0.04] shadow-2xl transition-transform duration-300 ease-out flex flex-col ${sidebarOpen ? 'translate-x-0' : 'translate-x-full'} hidden md:flex`}>
+      {/* Slide-out Chat Sidebar (Desktop: right dock, Mobile: full-screen drawer) */}
+      <aside className={`fixed right-0 top-0 h-full w-full sm:w-[360px] z-[60] bg-[#0A0A0A]/95 backdrop-blur-2xl border-l border-white/[0.08] shadow-2xl transition-transform duration-300 ease-out flex flex-col ${
+        sidebarOpen ? 'translate-x-0' : 'translate-x-full'
+      }`}>
         
         {/* Sidebar Header */}
-        <div className="p-5 border-b border-white/[0.04] flex justify-between items-center">
-          <div>
-            <h2 className="text-base font-semibold text-white tracking-tight">Live Chat</h2>
-            <p className="text-[10px] text-white/25 mt-0.5 uppercase tracking-[0.15em]">
-              {connectionStatus === 'Connected' ? 'Session active' : connectionStatus}
-            </p>
+        <div className="p-4 sm:p-5 border-b border-white/[0.06] flex justify-between items-center bg-white/[0.02]">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-full bg-violet-600/15 border border-violet-500/30 flex items-center justify-center font-bold text-violet-300 text-xs">
+              {partnerProfile?.name ? partnerProfile.name[0].toUpperCase() : 'S'}
+            </div>
+            <div>
+              <h2 className="text-sm font-semibold text-white tracking-tight">{partnerProfile?.name || 'Stranger'}</h2>
+              <p className="text-[10px] text-white/30 uppercase tracking-wider">
+                {connectionStatus === 'Connected' ? 'Live Chat Active' : connectionStatus}
+              </p>
+            </div>
           </div>
           <button 
             onClick={() => setSidebarOpen(false)}
-            className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-white/5 transition-colors text-white/30 hover:text-white"
+            className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-white/5 transition-colors text-white/40 hover:text-white"
+            title="Close Chat (Esc)"
           >
             <span className="material-symbols-outlined text-[18px]">close</span>
           </button>
         </div>
 
-        {/* Messages Area */}
-        <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-3">
+        {/* Messages Scroll Area */}
+        <div className="flex-1 overflow-y-auto p-4 sm:p-5 flex flex-col gap-3">
           {messages.map((msg, index) => {
             if (msg.isSystem) {
               return (
-                <div key={index} className="text-center text-[10px] text-white/20 my-3 flex items-center gap-2">
+                <div key={index} className="text-center text-[10px] text-white/25 my-2 flex items-center gap-2">
                   <div className="flex-1 h-px bg-white/[0.04]"></div>
                   <span>{msg.text}</span>
                   <div className="flex-1 h-px bg-white/[0.04]"></div>
@@ -577,12 +955,12 @@ export default function ChatRoom({
               <div key={index} className={`flex flex-col max-w-[85%] ${isYou ? 'self-end items-end' : 'items-start'} animate-fade-in-up opacity-0`} style={{ animationDelay: '0ms' }}>
                 <div className={`px-3.5 py-2.5 text-sm leading-relaxed ${
                   isYou 
-                    ? 'bg-violet-600/15 text-white/80 rounded-2xl rounded-br-md border border-violet-500/10' 
-                    : 'bg-white/[0.04] text-white/70 rounded-2xl rounded-bl-md border border-white/[0.04]'
+                    ? 'bg-violet-600/20 text-white/90 rounded-2xl rounded-br-md border border-violet-500/20' 
+                    : 'bg-white/[0.06] text-white/80 rounded-2xl rounded-bl-md border border-white/[0.04]'
                 }`}>
                   {msg.text}
                 </div>
-                <span className="text-[9px] text-white/15 mt-1 mx-1">
+                <span className="text-[9px] text-white/20 mt-1 mx-1">
                   {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </span>
               </div>
@@ -590,11 +968,11 @@ export default function ChatRoom({
           })}
 
           {isStrangerTyping && (
-            <div className="flex items-center gap-2 text-white/25 mt-1">
+            <div className="flex items-center gap-2 text-white/30 mt-1">
               <span className="text-[10px]">Stranger is typing</span>
               <div className="flex gap-0.5">
                 {[0, 150, 300].map(delay => (
-                  <div key={delay} className="w-1 h-1 bg-violet-400/50 rounded-full animate-bounce" style={{ animationDelay: `${delay}ms` }}></div>
+                  <div key={delay} className="w-1 h-1 bg-violet-400/60 rounded-full animate-bounce" style={{ animationDelay: `${delay}ms` }}></div>
                 ))}
               </div>
             </div>
@@ -602,13 +980,14 @@ export default function ChatRoom({
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Message Input */}
-        <div className="p-4 border-t border-white/[0.04]">
-          <form onSubmit={handleSendMessage} className="relative flex items-center bg-white/[0.03] border border-white/[0.06] rounded-xl focus-within:border-violet-500/30 transition-colors">
+        {/* Message Input Bar */}
+        <div className="p-3 sm:p-4 border-t border-white/[0.06] bg-white/[0.01]">
+          <form onSubmit={handleSendMessage} className="relative flex items-center bg-white/[0.04] border border-white/[0.08] rounded-xl focus-within:border-violet-500/40 transition-colors p-1">
             <button 
               type="button"
               onClick={() => setInputText(prev => prev + '👋')}
-              className="p-2.5 text-white/25 hover:text-white/50 transition-colors focus:outline-none"
+              className="p-2 text-white/30 hover:text-white/60 transition-colors focus:outline-none"
+              title="Add Wave"
             >
               <span className="material-symbols-outlined text-[18px]">sentiment_satisfied</span>
             </button>
@@ -617,15 +996,15 @@ export default function ChatRoom({
               type="text" 
               value={inputText}
               onChange={handleInputChange}
-              className="flex-1 bg-transparent border-none text-sm text-white/80 focus:ring-0 placeholder:text-white/15 py-2.5 px-1 focus:outline-none"
+              className="flex-1 bg-transparent border-none text-sm text-white/90 focus:ring-0 placeholder:text-white/20 py-2 px-1 focus:outline-none"
               placeholder="Type a message..."
             />
             
             <button 
               type="submit"
-              className="p-2.5 text-violet-400/60 hover:text-violet-300 transition-colors mr-0.5 focus:outline-none"
+              className="w-8 h-8 rounded-lg bg-violet-600/20 hover:bg-violet-600/30 text-violet-300 border border-violet-500/30 flex items-center justify-center transition-colors focus:outline-none"
             >
-              <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>send</span>
+              <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>send</span>
             </button>
           </form>
         </div>
