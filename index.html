@@ -7,20 +7,20 @@
 
     <!-- ══ Primary SEO ══════════════════════════════════════════════════ -->
     <title>Mingzy — Meet Someone New &amp; Make Real Connections</title>
-    <meta name="description" content="Mingzy is the stranger chat app built around real conversation. Pick your vibe, get instantly paired, and connect face-to-face with someone new from anywhere in the world. No registration required." />
+    <meta name="description" content="Meet strangers worldwide with free instant random video &amp; text chat on Mingzy. Connect face-to-face in your browser with zero registration required." />
     <meta name="keywords" content="mingzy, stranger chat, random video chat, meet new people, anonymous chat, video call strangers, make friends online, global chat, omegle alternative" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="author" content="Mingzy" />
-    <link rel="canonical" href="https://mingzy.space/" />
+    <link rel="canonical" href="https://www.mingzy.space/" />
     <link rel="alternate" type="text/plain" href="/llms.txt" />
 
     <!-- ══ Open Graph (Facebook / WhatsApp / LinkedIn) ══════════════════ -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Mingzy" />
     <meta property="og:title" content="Mingzy — Meet Someone New &amp; Make Real Connections" />
-    <meta property="og:description" content="Pick your vibe, get instantly paired, and connect face-to-face with someone new from anywhere in the world. No registration required." />
-    <meta property="og:url" content="https://mingzy.space/" />
-    <meta property="og:image" content="https://mingzy.space/images/mingzy-logo.jpg" />
+    <meta property="og:description" content="Meet strangers worldwide with free instant random video &amp; text chat on Mingzy. No registration required." />
+    <meta property="og:url" content="https://www.mingzy.space/" />
+    <meta property="og:image" content="https://www.mingzy.space/images/mingzy-logo.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:locale" content="en_US" />
@@ -28,8 +28,8 @@
     <!-- ══ Twitter / X Card ═════════════════════════════════════════════ -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Mingzy — Meet Someone New &amp; Make Real Connections" />
-    <meta name="twitter:description" content="Pick your vibe, get instantly paired, and connect face-to-face with someone new. No registration required." />
-    <meta name="twitter:image" content="https://mingzy.space/images/mingzy-logo.jpg" />
+    <meta name="twitter:description" content="Meet strangers worldwide with free instant random video &amp; text chat on Mingzy. No registration required." />
+    <meta name="twitter:image" content="https://www.mingzy.space/images/mingzy-logo.jpg" />
 
     <!-- ══ Favicon & App Icon Chain (Googlebot & Browser Compliant) ═════ -->
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
@@ -52,34 +52,36 @@
       "@graph": [
         {
           "@type": "Organization",
-          "@id": "https://mingzy.space/#organization",
+          "@id": "https://www.mingzy.space/#organization",
           "name": "Mingzy",
-          "url": "https://mingzy.space/",
+          "url": "https://www.mingzy.space/",
           "logo": {
             "@type": "ImageObject",
-            "url": "https://mingzy.space/images/mingzy-logo.jpg"
+            "url": "https://www.mingzy.space/images/mingzy-logo.jpg"
           },
           "contactPoint": {
             "@type": "ContactPoint",
             "contactType": "customer support",
-            "url": "https://mingzy.space/safety"
+            "url": "https://www.mingzy.space/safety"
           }
         },
         {
           "@type": "WebSite",
-          "@id": "https://mingzy.space/#website",
-          "url": "https://mingzy.space/",
+          "@id": "https://www.mingzy.space/#website",
+          "url": "https://www.mingzy.space/",
           "name": "Mingzy",
           "description": "Real-time anonymous stranger video and text chat platform.",
           "publisher": {
-            "@id": "https://mingzy.space/#organization"
+            "@id": "https://www.mingzy.space/#organization"
           }
         },
         {
           "@type": "SoftwareApplication",
-          "@id": "https://mingzy.space/#software",
+          "@id": "https://www.mingzy.space/#software",
           "name": "Mingzy",
-          "url": "https://mingzy.space/",
+          "url": "https://www.mingzy.space/",
+          "image": "https://www.mingzy.space/images/mingzy-logo.jpg",
+          "logo": "https://www.mingzy.space/images/mingzy-logo.jpg",
           "description": "Mingzy is a stranger chat app built around real conversation. Meet someone new through face-to-face video or text chat, filtered by language, country, and vibe.",
           "applicationCategory": "CommunicationApplication",
           "operatingSystem": "Web, Android, iOS, Windows, macOS, Linux",
@@ -103,84 +105,141 @@
   </head>
   <body class="bg-midnight-canvas text-[#f5ebfc] font-body-md antialiased min-h-screen flex flex-col bg-midnight-universe selection:bg-mingzy-pink/30">
 
-    <!-- ══ Crawler-visible content (shown when JS is disabled) ══════════
-         This gives search engines real text content, an H1, and internal
-         links so the page is not penalised for being "empty". The React
-         app mounts into #root and fully replaces this for real users.
+    <!-- ══ Crawler & Client Root Container ════════════════════════════════
+         Provides immediate semantic HTML for search engines and SEO audits.
+         Hydrated seamlessly by React upon client-side application load.
     ══════════════════════════════════════════════════════════════════════ -->
-    <noscript>
-      <style>
-        #noscript-seo { font-family: sans-serif; max-width: 900px; margin: 0 auto; padding: 2rem; color: #f5ebfc; background: #09060F; }
-        #noscript-seo h1 { font-size: 2rem; margin-bottom: 1rem; }
-        #noscript-seo h2 { font-size: 1.4rem; margin: 1.5rem 0 0.5rem; }
-        #noscript-seo p  { line-height: 1.7; margin-bottom: 1rem; color: #c4afd9; }
-        #noscript-seo a  { color: #FF2E93; }
-        #noscript-seo nav a { display: inline-block; margin-right: 1rem; }
-      </style>
-      <div id="noscript-seo">
-        <header>
-          <img src="/images/mingzy-logo.jpg" alt="Mingzy logo" width="60" height="60" />
-          <h1>Mingzy — Meet Someone New &amp; Make Real Connections</h1>
-          <nav aria-label="Main navigation">
-            <a href="/">Home</a>
-            <a href="/privacy.html">Privacy Policy</a>
-            <a href="/terms.html">Terms of Service</a>
-            <a href="https://www.dropbox.com/scl/fi/5q3hmh674wtdf3yxlogbu/app-release.apk?rlkey=174k5u1sinqnuguxvybxraeve&st=6e7b325k&dl=1">Download Android App</a>
+    <div id="root">
+      <div id="ssr-container" class="min-h-screen bg-[#09060F] text-white p-6 max-w-5xl mx-auto flex flex-col">
+        
+        <header class="border-b border-white/10 pb-6 mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div class="flex items-center gap-3">
+            <img src="/images/mingzy-logo.jpg" alt="Mingzy Logo" class="w-10 h-10 rounded-2xl object-cover ring-1 ring-white/20" width="40" height="40" />
+            <span class="text-2xl font-extrabold tracking-tight text-white">Mingzy</span>
+          </div>
+          <nav aria-label="Main Navigation" class="flex flex-wrap gap-2 text-xs text-white/70">
+            <a href="/random-video-chat" class="px-3 py-1.5 rounded-lg bg-white/5 hover:text-white hover:bg-white/10 transition-all">Random Video Chat</a>
+            <a href="/random-text-chat" class="px-3 py-1.5 rounded-lg bg-white/5 hover:text-white hover:bg-white/10 transition-all">Random Text Chat</a>
+            <a href="/omegle-alternative-no-login" class="px-3 py-1.5 rounded-lg bg-white/5 hover:text-white hover:bg-white/10 transition-all">No Login Chat</a>
+            <a href="/alternatives/omegle-alternative" class="px-3 py-1.5 rounded-lg bg-white/5 hover:text-white hover:bg-white/10 transition-all">Omegle Alternative</a>
+            <a href="/safety" class="px-3 py-1.5 rounded-lg bg-white/5 hover:text-white hover:bg-white/10 transition-all">Safety Center</a>
           </nav>
         </header>
 
-        <main>
-          <p>
-            <strong>Mingzy</strong> is a live stranger chat platform built around real conversation — not endless swiping.
-            Pick a vibe, get instantly paired, and connect face-to-face with someone new from anywhere in the world.
-            No registration, no profile required.
-          </p>
+        <main class="flex-grow space-y-12">
+          <!-- Hero Section -->
+          <section class="text-center py-6">
+            <span class="inline-block px-3.5 py-1 rounded-full text-xs font-semibold bg-violet-500/10 text-violet-300 border border-violet-500/20 mb-4">
+              Free • Anonymous • No Account Required
+            </span>
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight mb-4">
+              Mingzy — Meet Someone New &amp; Make Real Connections
+            </h1>
+            <p class="text-base sm:text-lg text-white/70 max-w-2xl mx-auto leading-relaxed mb-6">
+              Connect face-to-face with friendly people across 180+ countries. Filter by language, select your region, or explore globally with instant browser-based video and text chat.
+            </p>
+            <div class="flex flex-wrap justify-center gap-3">
+              <a href="/random-video-chat" class="px-6 py-3 rounded-xl bg-[#FF2E93] text-white font-semibold text-sm hover:opacity-90 transition-opacity">
+                Start Random Video Chat
+              </a>
+              <a href="/random-text-chat" class="px-6 py-3 rounded-xl bg-white/10 text-white font-semibold text-sm hover:bg-white/15 transition-all">
+                Try Text Chat Mode
+              </a>
+            </div>
+          </section>
 
-          <h2>How Mingzy Works</h2>
-          <p>
-            Choose your mood from vibes like <strong>Deep Talk</strong>, <strong>Just Laughs</strong>,
-            <strong>Cozy Night</strong>, <strong>Music &amp; Art</strong>, or <strong>Travel Stories</strong>.
-            Mingzy instantly pairs you with a stranger who matches your energy. You can chat by text or go live
-            on video — the choice is yours.
-          </p>
+          <!-- Core Value Proposition -->
+          <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.06]">
+              <h2 class="text-sm font-bold text-white mb-2">Zero Mandatory Sign-in</h2>
+              <p class="text-xs text-white/60 leading-relaxed">Jump straight into conversations without creating accounts, entering passwords, or linking social profiles.</p>
+            </div>
+            <div class="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.06]">
+              <h2 class="text-sm font-bold text-white mb-2">Browser-Based Access</h2>
+              <p class="text-xs text-white/60 leading-relaxed">Runs directly inside Chrome, Safari, Firefox, and Edge on desktop and mobile devices without app downloads.</p>
+            </div>
+            <div class="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.06]">
+              <h2 class="text-sm font-bold text-white mb-2">Smart Language Match</h2>
+              <p class="text-xs text-white/60 leading-relaxed">Match with native speakers in English, Spanish, Hindi, French, German, Japanese, and more.</p>
+            </div>
+            <div class="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.06]">
+              <h2 class="text-sm font-bold text-white mb-2">Encrypted &amp; Private</h2>
+              <p class="text-xs text-white/60 leading-relaxed">Media streams connect directly between browsers with peer encryption. Zero call recordings stored.</p>
+            </div>
+          </section>
 
-          <h2>Safe, Private &amp; Secure</h2>
-          <p>
-            All video streams run peer-to-peer with direct encryption — zero recordings stored, zero data sold.
-            Instant 1-click skip, 1-tap block, and zero-tolerance moderation keep every session safe.
-          </p>
+          <!-- How It Works Section -->
+          <section class="space-y-4">
+            <h2 class="text-2xl font-bold text-white">How Random Video Chat Works on Mingzy</h2>
+            <p class="text-sm text-white/70 leading-relaxed">
+              Mingzy pairs active participants through an intelligent, event-driven queue designed for spontaneous social discovery:
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+              <div class="p-4 rounded-xl bg-white/[0.02] border border-white/[0.05]">
+                <span class="text-xs font-semibold text-[#FF2E93]">Step 1</span>
+                <h3 class="text-sm font-bold text-white mt-1 mb-2">Choose Mode &amp; Language</h3>
+                <p class="text-xs text-white/60">Select Video or Text mode and choose your preferred language to connect with compatible partners.</p>
+              </div>
+              <div class="p-4 rounded-xl bg-white/[0.02] border border-white/[0.05]">
+                <span class="text-xs font-semibold text-[#FF2E93]">Step 2</span>
+                <h3 class="text-sm font-bold text-white mt-1 mb-2">Grant Device Permission</h3>
+                <p class="text-xs text-white/60">Allow standard one-time browser camera and microphone permissions to start streaming securely.</p>
+              </div>
+              <div class="p-4 rounded-xl bg-white/[0.02] border border-white/[0.05]">
+                <span class="text-xs font-semibold text-[#FF2E93]">Step 3</span>
+                <h3 class="text-sm font-bold text-white mt-1 mb-2">Instant Pairing &amp; Skip</h3>
+                <p class="text-xs text-white/60">Connect instantly face-to-face. Whenever a conversation concludes, press Spacebar or click Next to meet someone new.</p>
+              </div>
+            </div>
+          </section>
 
-          <h2>Available on Android</h2>
-          <p>
-            Download the Mingzy Android app and take real conversations wherever you go.
-            Clear video, gesture-based skips, and instant matching — right in your pocket.
-          </p>
-          <p>
-            <a href="https://www.dropbox.com/scl/fi/5q3hmh674wtdf3yxlogbu/app-release.apk?rlkey=174k5u1sinqnuguxvybxraeve&st=6e7b325k&dl=1">
-              Download the Mingzy APK for Android
-            </a>
-          </p>
-
-          <h2>Global Discovery</h2>
-          <p>
-            Mingzy connects you with people across languages, cultures, and timezones. Filter by region or jump
-            straight into worldwide matchmaking. Someone unexpected is always waiting.
-          </p>
-
-          <p><em>JavaScript is required for the full Mingzy experience. Please enable it in your browser.</em></p>
+          <!-- Exploration Hubs Directory -->
+          <section class="space-y-4 pt-4 border-t border-white/10">
+            <h2 class="text-2xl font-bold text-white">Popular Discovery Hubs &amp; Language Corridors</h2>
+            <p class="text-sm text-white/70 leading-relaxed">
+              Explore specialized discovery corridors tailored for language practice, alternative platforms, and security guides:
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 pt-2 text-xs">
+              <a href="/language-exchange/english-spanish" class="p-3 rounded-lg bg-white/[0.02] hover:bg-white/[0.06] border border-white/[0.04] text-white/80 hover:text-white transition-all">
+                <strong class="block text-white">English ↔ Spanish Exchange</strong>
+                Tandem conversation practice for Spanish &amp; English learners.
+              </a>
+              <a href="/language-exchange/hindi-english" class="p-3 rounded-lg bg-white/[0.02] hover:bg-white/[0.06] border border-white/[0.04] text-white/80 hover:text-white transition-all">
+                <strong class="block text-white">Hindi ↔ English Exchange</strong>
+                Conversational speaking practice and cultural exchange.
+              </a>
+              <a href="/browser-video-chat" class="p-3 rounded-lg bg-white/[0.02] hover:bg-white/[0.06] border border-white/[0.04] text-white/80 hover:text-white transition-all">
+                <strong class="block text-white">Browser Video Chat</strong>
+                Pure browser-based video calling with zero downloads.
+              </a>
+              <a href="/guides/omegle-alternatives-guide" class="p-3 rounded-lg bg-white/[0.02] hover:bg-white/[0.06] border border-white/[0.04] text-white/80 hover:text-white transition-all">
+                <strong class="block text-white">Omegle Alternatives Guide</strong>
+                Objective editorial evaluation of modern video chat sites.
+              </a>
+              <a href="/guides/anonymous-video-chat-guide" class="p-3 rounded-lg bg-white/[0.02] hover:bg-white/[0.06] border border-white/[0.04] text-white/80 hover:text-white transition-all">
+                <strong class="block text-white">Anonymous Video Chat Guide</strong>
+                Best practices for digital privacy and safe conversations.
+              </a>
+              <a href="/guides/random-video-chat-safety-guide" class="p-3 rounded-lg bg-white/[0.02] hover:bg-white/[0.06] border border-white/[0.04] text-white/80 hover:text-white transition-all">
+                <strong class="block text-white">Stranger Safety Guide</strong>
+                Community safety tips and moderation guidelines.
+              </a>
+            </div>
+          </section>
         </main>
 
-        <footer>
-          <p>
-            &copy; 2026 Mingzy &mdash;
-            <a href="/privacy.html">Privacy Policy</a> &middot;
-            <a href="/terms.html">Terms of Service</a>
-          </p>
+        <footer class="mt-12 pt-6 border-t border-white/10 text-xs text-white/40 flex flex-col sm:flex-row justify-between items-center gap-3">
+          <p>&copy; 2026 Mingzy. All rights reserved.</p>
+          <div class="flex gap-4">
+            <a href="/privacy.html" class="hover:text-white">Privacy Policy</a>
+            <a href="/terms.html" class="hover:text-white">Terms of Service</a>
+            <a href="/safety" class="hover:text-white">Safety Center</a>
+          </div>
         </footer>
-      </div>
-    </noscript>
 
-    <div id="root"></div>
+      </div>
+    </div>
+
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
