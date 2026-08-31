@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
+import { Analytics } from '@vercel/analytics/react';
 import { auth, onAuthStateChanged, rtdb, ref, onValue } from './firebase';
 import { getSEOPage } from './data/seoData';
 
@@ -322,6 +323,8 @@ export default function App() {
         isOpen={showAuthModal} 
         onClose={() => setShowAuthModal(false)} 
       />
+
+      <Analytics />
     </>
   );
 }

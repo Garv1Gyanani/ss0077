@@ -9,6 +9,7 @@ import {
   onAuthStateChanged
 } from "firebase/auth";
 import { getDatabase, ref, onValue } from "firebase/database";
+import { getAnalytics, isSupported, logEvent } from "firebase/analytics";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCw-O4hEmfKxzB13j4Al7tViVLUH_J6d-U",
@@ -26,6 +27,25 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const rtdb = getDatabase(app);
 export const googleProvider = new GoogleAuthProvider();
+
+let analyticsInstance = null;
+if (typeof window !== "undefined") {
+  isSupported().then((supported) => {
+    if (supported) {
+      analyticsInstance = getAnalytics(app);
+    }
+  }).catch(() => {});
+}
+
+export const logFirebaseEvent = (eventName, params = {}) => {
+  try {
+    if (analyticsInstance) {
+      logEvent(analyticsInstance, eventName, params);
+    }
+  } catch {
+    // Non-blocking fallback
+  }
+};
 
 export { 
   signInWithPopup, 

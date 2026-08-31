@@ -102,6 +102,8 @@ export function getFirstVisitSource() {
 /**
  * Generic non-blocking event dispatcher
  */
+import { logFirebaseEvent } from '../firebase';
+
 export function trackEvent(eventName, customPayload = {}) {
   try {
     const anonymousUserId = getAnonymousUserId();
@@ -114,24 +116,30 @@ export function trackEvent(eventName, customPayload = {}) {
     const language = navigator.language ? navigator.language.split('-')[0].toUpperCase() : 'EN';
     const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://ss0088-production.up.railway.app';
 
+    const eventData = {
+      anonymousUserId,
+      currentPath: window.location.pathname,
+      acquisitionChannel,
+      firstVisitSource,
+      referrer,
+      utmSource,
+      country,
+      language,
+      deviceType: window.innerWidth < 768 ? 'mobile' : 'desktop',
+      timestamp: new Date().toISOString(),
+      ...customPayload
+    };
+
+    // 1. Dual dispatch to Firebase Analytics
+    logFirebaseEvent(eventName, eventData);
+
+    // 2. Dispatch to custom backend telemetry endpoint
     fetch(`${backendUrl}/api/analytics/event`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         eventName,
-        payload: {
-          anonymousUserId,
-          currentPath: window.location.pathname,
-          acquisitionChannel,
-          firstVisitSource,
-          referrer,
-          utmSource,
-          country,
-          language,
-          deviceType: window.innerWidth < 768 ? 'mobile' : 'desktop',
-          timestamp: new Date().toISOString(),
-          ...customPayload
-        }
+        payload: eventData
       }),
       keepalive: true
     }).catch(() => {
