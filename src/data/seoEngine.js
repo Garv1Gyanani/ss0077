@@ -2592,8 +2592,10 @@ export function generateMainSchema(page, baseUrl = 'https://mingzy.space') {
       applicationCategory: 'CommunicationApplication',
       applicationSubCategory: 'VideoChatApplication',
       url,
+      image: `${baseUrl}/images/mingzy-logo.jpg`,
+      logo: `${baseUrl}/images/mingzy-logo.jpg`,
       description: page.metaDescription,
-      featureList: 'Live random video chat, WebRTC HD peer-to-peer encryption, zero registration required, language matching, country filters, instant skip',
+      featureList: 'Live random video chat, encrypted video calling, zero registration required, language matching, country filters, instant skip',
       offers: {
         '@type': 'Offer',
         price: '0.00',
