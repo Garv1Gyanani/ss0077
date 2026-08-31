@@ -68,6 +68,8 @@ export default function SEOHead({ pageData }) {
     setMetaTag('og:site_name', 'Mingzy', true);
     setMetaTag('og:type', openGraph.type || (schemaType === 'Article' ? 'article' : 'website'), true);
     setMetaTag('og:image', defaultImage, true);
+    setMetaTag('og:image:width', '1200', true);
+    setMetaTag('og:image:height', '630', true);
     if (openGraph.imageAlt) {
       setMetaTag('og:image:alt', openGraph.imageAlt, true);
     }

@@ -10,7 +10,7 @@ import ChatRoom from './components/ChatRoom';
 import AuthModal from './components/AuthModal';
 import SEOPageLayout from './components/seo/SEOPageLayout';
 import NotFoundPage from './components/seo/NotFoundPage';
-import { trackVisitorArrival } from './utils/telemetry';
+import { trackVisitorArrival, trackChatStart } from './utils/telemetry';
 
 // Connect to Node.js backend
 const SOCKET_URL = import.meta.env.VITE_BACKEND_URL || 'https://ss0088-production.up.railway.app';
@@ -25,7 +25,8 @@ export default function App() {
 
   const [preferences, setPreferences] = useState({
     language: 'Any',
-    region: 'Worldwide'
+    region: 'Worldwide',
+    vibe: 'All Vibes'
   });
   
   const [theme, setTheme] = useState(() => {
@@ -51,7 +52,7 @@ export default function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  // Track anonymous visitor arrival for real-time Telegram telemetry & acquisition metrics
+  // Track anonymous visitor arrival for real-time acquisition metrics
   useEffect(() => {
     trackVisitorArrival(currentPath);
   }, [currentPath]);
@@ -151,6 +152,9 @@ export default function App() {
       setPreferences(activePrefs);
     }
 
+    // Telemetry: track chat start in acquisition funnel
+    trackChatStart(modeToUse, activePrefs.language, activePrefs.region, activePrefs.vibe);
+
     setView('matching');
 
     const profile = user ? {
@@ -165,6 +169,7 @@ export default function App() {
       chatMode: modeToUse,
       language: activePrefs.language || 'Any',
       region: activePrefs.region || 'Worldwide',
+      vibe: activePrefs.vibe || 'All Vibes',
       profile: profile
     });
   };
@@ -194,6 +199,7 @@ export default function App() {
       chatMode: chatMode,
       language: preferences.language,
       region: preferences.region,
+      vibe: preferences.vibe,
       profile: profile
     });
   };
@@ -257,6 +263,7 @@ export default function App() {
           partnerId={matchDetails.partnerId}
           initiator={matchDetails.initiator}
           partnerProfile={matchDetails.partnerProfile}
+          vibe={matchDetails.vibe || preferences.vibe || 'All Vibes'}
           iceServers={matchDetails.iceServers}
           onNext={handleNext}
           onEnd={handleEnd}

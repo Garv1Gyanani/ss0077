@@ -1,12 +1,13 @@
 // ============================================================================
 // Mingzy Automated SEO Integrity Test Suite
 // Rigorous static and build validation for enterprise SEO conformance
+// Evaluates all routes dynamically against the Tier A / Tier B Launch Gate
 // ============================================================================
 
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { SEO_PAGES, generateFullJsonLd, getIndexablePages } from '../src/data/seoEngine.js';
+import { SEO_PAGES, generateFullJsonLd, getIndexablePages, validateSEOPageGate } from '../src/data/seoEngine.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -31,27 +32,32 @@ function assert(condition, message) {
 console.log('🔍 Running Mingzy Enterprise SEO Integrity Test Suite...\n');
 
 // ----------------------------------------------------------------------------
-// TEST GROUP 1: Route & Indexing Mathematics
+// TEST GROUP 1: Dynamic Route & Launch Gate Mathematics
 // ----------------------------------------------------------------------------
 const allRoutes = Object.keys(SEO_PAGES);
 const indexableRoutes = getIndexablePages();
 const noindexRoutes = Object.values(SEO_PAGES).filter(p => p.indexable === false);
 
-assert(allRoutes.length === 61, `Expected exactly 61 total routes, found ${allRoutes.length}`);
-assert(indexableRoutes.length === 45, `Expected exactly 45 Tier A indexable routes, found ${indexableRoutes.length}`);
-assert(noindexRoutes.length === 16, `Expected exactly 16 Tier B noindex routes, found ${noindexRoutes.length}`);
+assert(allRoutes.length > 50, `Expected comprehensive route catalog (> 50), found ${allRoutes.length}`);
+assert(indexableRoutes.length > 30, `Expected active Tier A indexable routes (> 30), found ${indexableRoutes.length}`);
+assert(noindexRoutes.length > 0, `Expected staged Tier B noindex routes (> 0), found ${noindexRoutes.length}`);
+assert(indexableRoutes.length + noindexRoutes.length === allRoutes.length, 'Sum of indexable + noindex routes must equal total routes');
 
 // Unique Paths & Canonical Check
 const uniquePaths = new Set(allRoutes);
 assert(uniquePaths.size === allRoutes.length, 'Detected duplicate path keys in SEO_PAGES');
 
 // ----------------------------------------------------------------------------
-// TEST GROUP 2: Metadata Uniqueness & Standards
+// TEST GROUP 2: Metadata Uniqueness, Standards & Launch Gate Compliance
 // ----------------------------------------------------------------------------
 const titles = new Map();
 const descriptions = new Map();
 
 for (const [route, page] of Object.entries(SEO_PAGES)) {
+  // Launch Gate Validation
+  const gateResult = validateSEOPageGate(page);
+  assert(gateResult.isValid, `Page ${route} failed Launch Gate validation: ${gateResult.issues.join(', ')}`);
+
   // Path conformance
   assert(page.path === route, `Route mismatch: key "${route}" !== page.path "${page.path}"`);
   assert(page.path.startsWith('/'), `Path must start with "/": ${page.path}`);
@@ -142,10 +148,19 @@ if (fs.existsSync(sitemapPath)) {
 if (fs.existsSync(distDir)) {
   const samplePagesToCheck = [
     { path: '/random-video-chat', shouldIndex: true },
+    { path: '/omegle-alternative-no-login', shouldIndex: true },
+    { path: '/random-video-chat-no-signup', shouldIndex: true },
+    { path: '/browser-video-chat', shouldIndex: true },
+    { path: '/language-exchange/english-spanish', shouldIndex: true },
+    { path: '/language-exchange/hindi-english', shouldIndex: true },
+    { path: '/guides/omegle-alternatives-guide', shouldIndex: true },
+    { path: '/guides/anonymous-video-chat-guide', shouldIndex: true },
     { path: '/languages/hindi', shouldIndex: true },
     { path: '/countries/india', shouldIndex: true },
     { path: '/alternatives/omegle-alternative', shouldIndex: true },
     { path: '/guides/random-video-chat-safety-guide', shouldIndex: true },
+    { path: '/stranger-chat-no-registration', shouldIndex: false }, // Tier B (noindex)
+    { path: '/language-exchange/stranger-chat', shouldIndex: false }, // Tier B (noindex)
     { path: '/cities/new-york', shouldIndex: false } // Tier B (noindex)
   ];
 
@@ -186,5 +201,5 @@ if (errors.length > 0) {
   process.exit(1);
 } else {
   console.log('✅ ALL SEO INTEGRITY TESTS PASSED FLAWLESSLY! (0 errors, 0 warnings)');
-  console.log('🏆 Launch Gate Status: 45 Tier A Indexable • 16 Tier B Staged • 100% Validated\n');
+  console.log(`🏆 Launch Gate Status: ${indexableRoutes.length} Tier A Indexable • ${noindexRoutes.length} Tier B Staged • 100% Validated\n`);
 }

@@ -41,6 +41,7 @@ async function prerender() {
   <meta name="description" content="${escapeHtml(page.metaDescription)}" />
   <meta name="robots" content="${robotsDirective}" />
   <link rel="canonical" href="${fullUrl}" />
+  <link rel="alternate" type="text/plain" href="${baseUrl}/llms.txt" />
   <meta name="google-site-verification" content="GSC_VERIFICATION_TOKEN_PLACEHOLDER" />
   
   <!-- OpenGraph Meta Tags -->
@@ -50,6 +51,8 @@ async function prerender() {
   <meta property="og:site_name" content="Mingzy" />
   <meta property="og:type" content="${page.openGraph?.type || (page.schemaType === 'Article' ? 'article' : 'website')}" />
   <meta property="og:image" content="${defaultImage}" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
   ${page.openGraph?.imageAlt ? `<meta property="og:image:alt" content="${escapeHtml(page.openGraph.imageAlt)}" />` : ''}
 
   <!-- Twitter Card Tags -->
@@ -65,6 +68,15 @@ async function prerender() {
     // 3. Build Semantic Pre-Rendered Body
     const preRenderedBody = `
     <div id="ssr-container" class="min-h-screen bg-[#0a0a0a] text-white p-6 max-w-4xl mx-auto">
+      ${page.breadcrumbs && page.breadcrumbs.length > 0 ? `
+      <nav aria-label="Breadcrumb" class="mb-4 text-xs text-white/50 flex items-center gap-2">
+        ${page.breadcrumbs.map((b, i) => `
+          <a href="${b.path}" class="hover:text-white">${escapeHtml(b.label)}</a>
+          ${i < page.breadcrumbs.length - 1 ? '<span>/</span>' : ''}
+        `).join('')}
+      </nav>
+      ` : ''}
+
       <header class="mb-8">
         <span class="text-xs uppercase tracking-widest text-violet-400 font-semibold">${escapeHtml(page.badgeText || 'Instant Match • Free')}</span>
         <h1 class="text-4xl md:text-5xl font-extrabold mt-2 text-white">${escapeHtml(page.h1)}</h1>
@@ -106,6 +118,19 @@ async function prerender() {
           `).join('')}
         </div>
       </section>
+      ` : ''}
+
+      ${page.relatedLinks && page.relatedLinks.length > 0 ? `
+      <nav aria-label="Related Topics" class="my-8 pt-6 border-t border-white/10">
+        <h3 class="text-sm font-semibold text-white/80 mb-3">Explore Related Conversations</h3>
+        <div class="flex flex-wrap gap-2">
+          ${page.relatedLinks.map(rel => `
+            <a href="${rel.path}" class="text-xs px-3 py-1.5 rounded-lg border border-white/10 hover:border-violet-500/40 text-white/70 hover:text-white transition-colors">
+              ${escapeHtml(rel.label)}
+            </a>
+          `).join('')}
+        </div>
+      </nav>
       ` : ''}
     </div>
 `;

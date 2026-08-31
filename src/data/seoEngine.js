@@ -28,7 +28,7 @@ export const SEO_PAGES = {
     ],
     metaTitle: 'Random Video Chat with Strangers | Instant HD Match | Mingzy',
     metaDescription:
-      'Start free random video chat with strangers worldwide. Smart language & region filters, sub-2s WebRTC connections, no registration required. 100% anonymous.',
+      'Start free random video chat with strangers worldwide. Smart language & region filters, low-latency WebRTC connections, no registration required. 100% anonymous.',
     h1: 'Random Video Chat with Strangers Online',
     heroSubtitle:
       'Connect face-to-face with friendly people across 180+ countries. Filter by language, select your region, or explore globally in crystal-clear WebRTC HD.',
@@ -36,7 +36,7 @@ export const SEO_PAGES = {
     presetPreferences: { language: 'Any', region: 'Worldwide', mode: 'video', safeMode: true },
     schemaType: 'SoftwareApplication',
     capabilities: [
-      { label: 'Latency', value: 'Sub-2s Handshake' },
+      { label: 'Latency', value: 'Low-Latency P2P' },
       { label: 'Protocol', value: 'P2P WebRTC' },
       { label: 'Privacy', value: 'Zero Logs / Ephemeral' },
       { label: 'Access', value: '100% Free Guest Mode' }
@@ -152,7 +152,7 @@ export const SEO_PAGES = {
     ],
     highlights: [
       { icon: 'forum', title: 'Video or Text Options', desc: 'Choose face-to-face video or private, typing-only text chat.' },
-      { icon: 'speed', title: 'Sub-2s Pairing Queue', desc: 'Instant matchmaking ensures you never stare at a loading screen.' },
+      { icon: 'speed', title: 'Fast Pairing Queue', desc: 'Instant matchmaking ensures you never stare at a loading screen.' },
       { icon: 'lock', title: 'No Account Required', desc: '100% ephemeral guest sessions with zero data footprints.' }
     ],
     contentSections: [
@@ -421,7 +421,7 @@ export const SEO_PAGES = {
       { label: 'Stranger Chat', path: '/stranger-chat' }
     ],
     highlights: [
-      { icon: 'bolt', title: 'Sub-2-Second Queue', desc: 'High throughput matchmaking clusters connect you instantaneously.' },
+      { icon: 'bolt', title: 'Fast Matchmaking Queue', desc: 'High throughput matchmaking clusters connect you instantaneously.' },
       { icon: 'shield_moon', title: 'Dark Glassmorphic UI', desc: 'Engineered for sleek aesthetics and comfortable viewing.' }
     ],
     contentSections: [
@@ -478,8 +478,8 @@ export const SEO_PAGES = {
       buttonPath: '/random-video-chat'
     },
     openGraph: {
-      title: 'Top Omegle Alternative 2026 – Mingzy Video & Text Chat',
-      description: 'Why Mingzy is the fastest growing modern replacement for Omegle.',
+      title: 'Omegle Alternative 2026 – Mingzy',
+      description: 'Why Mingzy is a modern browser-based replacement for Omegle.',
       type: 'website',
       image: '/hero-mockup.svg',
       imageAlt: 'Omegle Alternative Comparison'
@@ -1575,11 +1575,11 @@ export const SEO_PAGES = {
     intent: 'informational',
     indexable: true, // TIER A
     primaryKeyword: 'instant matchmaking system',
-    metaTitle: 'Instant Matchmaking System | Sub-2s Queue | Mingzy',
-    metaDescription: 'How Mingzy connects thousands of users in under 2 seconds. Explore our real-time queue algorithm, smart pairing, and room cleanup architecture.',
-    h1: 'Sub-2-Second Instant Matchmaking Engine',
+    metaTitle: 'Instant Matchmaking System | Fast Queue Pairing | Mingzy',
+    metaDescription: 'How Mingzy connects users in real time. Explore our real-time queue algorithm, smart pairing, and room cleanup architecture.',
+    h1: 'Real-Time Instant Matchmaking Engine',
     heroSubtitle: 'No waiting rooms, no queues that stall. Discover how Mingzy pairs active users in real time with minimal latency.',
-    badgeText: 'Sub-2s Average • Queue Optimized • Real-time Node.js',
+    badgeText: 'Real-Time Match • Queue Optimized • Low Latency',
     presetPreferences: { language: 'Any', region: 'Worldwide', mode: 'video', safeMode: true },
     schemaType: 'Article',
     breadcrumbs: [{ label: 'Home', path: '/' }, { label: 'Features', path: '/features/instant-matching' }, { label: 'Instant Matching', path: '/features/instant-matching' }],
@@ -1849,6 +1849,542 @@ export const SEO_PAGES = {
     breadcrumbs: [{ label: 'Home', path: '/' }, { label: 'Guides', path: '/guides/how-to-spot-scams-and-bots-on-video-chat' }, { label: 'Spotting Scams Guide', path: '/guides/how-to-spot-scams-and-bots-on-video-chat' }],
     contentSections: [{ title: '3 Common Signs of a Pre-Recorded Video Loop', paragraphs: ['1. Zero reaction to audio or waving.', '2. Visible loop cuts repeating every few seconds.', '3. Immediate off-platform contact demands.'] }],
     faqs: [{ question: 'What should I do if I see a bot loop?', answer: 'Click Report -> Bot/Recorded Loop and skip to the next user.' }]
+  },
+
+  // ===========================================================================
+  // 8. LONG-TAIL ACQUISITION & AUTHORITY WEDGE (TIER A)
+  // ===========================================================================
+  '/omegle-alternative-no-login': {
+    path: '/omegle-alternative-no-login',
+    cluster: 'alternatives',
+    intent: 'commercial',
+    indexable: true,
+    primaryKeyword: 'omegle alternative no login',
+    secondaryKeywords: ['omegle alternative without signup', 'free stranger chat no account', 'talk to strangers no registration', 'anonymous video chat no login'],
+    metaTitle: 'Omegle Alternative No Login | Free Instant Video Chat | Mingzy',
+    metaDescription: 'Looking for an Omegle alternative with no login or account required? Mingzy connects you directly to strangers in your browser without mandatory registration.',
+    h1: 'Omegle Alternative with No Login or Registration Required',
+    heroSubtitle: 'Experience frictionless stranger video and text chat. Connect with real people worldwide instantly through your browser with zero mandatory account creation.',
+    badgeText: 'Zero Sign-up • Pure Guest Access • Free WebRTC',
+    presetPreferences: { language: 'Any', region: 'Worldwide', mode: 'video', safeMode: true },
+    schemaType: 'SoftwareApplication',
+    capabilities: [
+      { label: 'Login Required', value: 'None (Guest Mode Default)' },
+      { label: 'Media Protocol', value: 'Encrypted WebRTC P2P' },
+      { label: 'Device Support', value: 'Desktop & Mobile Web' },
+      { label: 'Cost', value: '100% Free / No Paywalls' }
+    ],
+    cta: {
+      headline: 'Start Chatting Without Creating an Account',
+      subtext: 'No email, no phone number, no passwords. Just instant peer connection.',
+      buttonText: 'Start Instant Video Chat',
+      buttonPath: '/omegle-alternative-no-login',
+      secondaryButtonText: 'Try Text Chat',
+      secondaryButtonPath: '/random-text-chat'
+    },
+    openGraph: {
+      title: 'Omegle Alternative No Login – Mingzy',
+      description: 'Connect instantly via encrypted video with strangers without creating an account.',
+      type: 'website',
+      image: '/hero-mockup.svg',
+      imageAlt: 'Mingzy No Login Video Chat'
+    },
+    breadcrumbs: [
+      { label: 'Home', path: '/' },
+      { label: 'Alternatives', path: '/alternatives/omegle-alternative' },
+      { label: 'No Login Alternative', path: '/omegle-alternative-no-login' }
+    ],
+    highlights: [
+      { icon: 'lock_open', title: 'Zero Mandatory Sign-in', desc: 'Jump straight into live video conversations without giving away personal credentials.' },
+      { icon: 'videocam', title: 'Browser-Based WebRTC', desc: 'Direct media stream transmission without server intermediaries or plugin installs.' },
+      { icon: 'translate', title: 'Language Match Options', desc: 'Filter matching by language preference to find partners on the same wavelength.' },
+      { icon: 'skip_next', title: 'Instant Skip Control', desc: 'Seamlessly advance to the next person whenever a conversation concludes.' }
+    ],
+    contentSections: [
+      {
+        title: 'Why Many Modern Chat Sites Fail by Forcing Social Logins',
+        paragraphs: [
+          'After Omegle ceased operations in November 2023, several replacement platforms emerged that required social logins (Google, Apple, Facebook) or telephone number verification before granting access to matchmaking queues.',
+          'For many users seeking genuine spontaneous conversation, mandatory authentication undermines the core appeal of stranger chat: effortless, ephemeral connection without attaching an online profile or personal identity.',
+          'Mingzy was built with guest access as the default experience. You open your browser, allow standard webcam permissions, and immediately join the matching pool without filling out profile forms.'
+        ]
+      },
+      {
+        title: 'Comparison: Guest Mode vs Authenticated Chat Platforms',
+        paragraphs: [
+          'While optional accounts allow users to save display preferences and themes, the video matchmaking pipeline itself never requires an active account.',
+          'Media packets are negotiated directly between peer browsers via WebRTC with DTLS-SRTP encryption, ensuring that conversations remain private and ephemeral.'
+        ],
+        callout: 'Security Tip: Even on guest-access platforms, never share sensitive personal details such as real names, addresses, or financial data with strangers.'
+      }
+    ],
+    faqs: [
+      { question: 'Do I really not need an account to use Mingzy?', answer: 'Yes. Mingzy is accessible immediately as a guest. No registration, email address, or social login is required to start video or text chatting.' },
+      { question: 'Is my IP address or video stream recorded?', answer: 'No. Video streams connect peer-to-peer using standard WebRTC encryption and are never recorded or stored on central servers.' },
+      { question: 'Can I use Mingzy on my phone without downloading an app?', answer: 'Yes. Mingzy is fully responsive and runs in mobile Safari, Chrome, Edge, and Firefox without requiring app installations.' },
+      { question: 'How is inappropriate behavior handled if users are anonymous?', answer: 'Mingzy provides 1-click reporting and immediate user blocking tools to keep sessions secure and report abusive behavior directly to moderators.' }
+    ],
+    relatedLinks: [
+      { title: 'Random Video Chat', path: '/random-video-chat', desc: 'Explore the core video matchmaking hub.' },
+      { title: 'Random Video Chat No Signup', path: '/random-video-chat-no-signup', desc: 'Zero signup product landing page.' },
+      { title: 'Browser Video Chat', path: '/browser-video-chat', desc: 'Pure browser-based WebRTC chat.' },
+      { title: 'Omegle Alternative', path: '/alternatives/omegle-alternative', desc: 'Overview of Omegle alternatives.' }
+    ]
+  },
+
+  '/random-video-chat-no-signup': {
+    path: '/random-video-chat-no-signup',
+    cluster: 'core',
+    intent: 'transactional',
+    indexable: true,
+    primaryKeyword: 'random video chat no signup',
+    secondaryKeywords: ['random cam chat no account', 'instant free video chat no sign up', 'guest video roulette', 'video chat with strangers no signup'],
+    metaTitle: 'Random Video Chat No Signup | Instant 1-Click Match | Mingzy',
+    metaDescription: 'Start instant random video chat with no signup or registration. Connect with verified browser peers in real time without emails, passwords, or paywalls.',
+    h1: 'Random Video Chat with No Signup or Account Needed',
+    heroSubtitle: 'Jump straight into live peer-to-peer video conversations. One click pairs you with strangers across the globe with zero sign-up friction.',
+    badgeText: 'Instant Match • No Signup • Free WebRTC',
+    presetPreferences: { language: 'Any', region: 'Worldwide', mode: 'video', safeMode: true },
+    schemaType: 'SoftwareApplication',
+    capabilities: [
+      { label: 'Signup Requirement', value: 'Zero (Instant Access)' },
+      { label: 'Signaling Engine', value: 'WebSocket Queue Relay' },
+      { label: 'Match Latency', value: 'Low Latency P2P' },
+      { label: 'Privacy Standard', value: 'Encrypted DTLS-SRTP' }
+    ],
+    cta: {
+      headline: 'Meet Someone New in One Tap',
+      subtext: 'No credit cards. No passwords. Instant video matching.',
+      buttonText: 'Launch Video Chat',
+      buttonPath: '/random-video-chat-no-signup',
+      secondaryButtonText: 'Try Text Mode',
+      secondaryButtonPath: '/random-text-chat'
+    },
+    openGraph: {
+      title: 'Random Video Chat No Signup – Mingzy',
+      description: 'Connect instantly via live video without signup or registration.',
+      type: 'website',
+      image: '/hero-mockup.svg',
+      imageAlt: 'Mingzy Random Video Chat No Signup'
+    },
+    breadcrumbs: [
+      { label: 'Home', path: '/' },
+      { label: 'Random Video Chat', path: '/random-video-chat' },
+      { label: 'No Signup', path: '/random-video-chat-no-signup' }
+    ],
+    highlights: [
+      { icon: 'bolt', title: '1-Tap Matchmaking', desc: 'Enter the matchmaking queue immediately with zero introductory forms.' },
+      { icon: 'videocam', title: 'HD Video Quality', desc: 'Adaptive bitrate video streaming adjusted to your current network bandwidth.' },
+      { icon: 'public', title: 'Worldwide Discovery', desc: 'Connect across continents or filter by shared conversation language.' },
+      { icon: 'shield', title: 'Safety Controls', desc: 'Instant skip and 1-tap blocking keep you in total control of every session.' }
+    ],
+    contentSections: [
+      {
+        title: 'Instant Video Chat Built for Convenience',
+        paragraphs: [
+          'When you want to meet new people online, navigating multi-step verification flows or account confirmations creates unnecessary friction.',
+          'Mingzy eliminates barriers by letting you enter the queue directly. Your session uses ephemeral browser identifiers that reset automatically when you leave or refresh the page.',
+          'Whether you have five minutes between tasks or want an engaging evening conversation, you can connect face-to-face instantly.'
+        ]
+      },
+      {
+        title: 'How to Get Started in 3 Steps',
+        listItems: [
+          'Choose your conversation mode (Video or Text) and language preference.',
+          'Allow standard browser camera and microphone permissions.',
+          'Click "Launch Video Chat" to be paired with an active conversation partner.'
+        ]
+      }
+    ],
+    faqs: [
+      { question: 'Is there a limit on how many people I can talk to?', answer: 'No. You can chat with as many people as you like and skip whenever you wish.' },
+      { question: 'Do I need to install browser extensions or plugins?', answer: 'No. Mingzy relies on native browser WebRTC technology supported in all major browsers.' },
+      { question: 'Can I chat via text if I do not want to use video?', answer: 'Yes. Mingzy offers a dedicated Text Chat mode as well as a text sidebar within video calls.' }
+    ],
+    relatedLinks: [
+      { title: 'Random Video Chat', path: '/random-video-chat', desc: 'Core video chat portal.' },
+      { title: 'Omegle Alternative No Login', path: '/omegle-alternative-no-login', desc: 'No-login Omegle alternative.' },
+      { title: 'Browser Video Chat', path: '/browser-video-chat', desc: 'Pure browser-based video chat.' },
+      { title: 'Safety Center', path: '/safety', desc: 'Read our community safety rules.' }
+    ]
+  },
+
+  '/browser-video-chat': {
+    path: '/browser-video-chat',
+    cluster: 'features',
+    intent: 'transactional',
+    indexable: true,
+    primaryKeyword: 'browser video chat',
+    secondaryKeywords: ['web video chat no download', 'webrtc stranger chat online', 'instant browser cam chat', 'online video call in browser'],
+    metaTitle: 'Browser Video Chat | 100% Web-Based Stranger Calls | Mingzy',
+    metaDescription: 'Talk to strangers via instant browser video chat. Works directly in Chrome, Safari, and Firefox using WebRTC without downloading any apps or extensions.',
+    h1: 'Browser Video Chat with Zero Downloads or App Installs',
+    heroSubtitle: 'High-performance WebRTC video chat operating entirely in your browser. Compatible across mobile and desktop devices without downloading software.',
+    badgeText: 'WebRTC Native • Zero App Install • Universal Browser Support',
+    presetPreferences: { language: 'Any', region: 'Worldwide', mode: 'video', safeMode: true },
+    schemaType: 'SoftwareApplication',
+    capabilities: [
+      { label: 'Installation', value: 'Zero (Runs 100% in Browser)' },
+      { label: 'Supported Browsers', value: 'Chrome, Safari, Firefox, Edge' },
+      { label: 'Protocol', value: 'WebRTC Peer-to-Peer' },
+      { label: 'Mobile Compatibility', value: 'iOS Safari & Android Chrome' }
+    ],
+    cta: {
+      headline: 'Start Browser Video Chat in Seconds',
+      subtext: 'No downloads. No extensions. Open and talk immediately.',
+      buttonText: 'Open Browser Video Chat',
+      buttonPath: '/browser-video-chat',
+      secondaryButtonText: 'Try Text Mode',
+      secondaryButtonPath: '/random-text-chat'
+    },
+    openGraph: {
+      title: 'Browser Video Chat – Mingzy',
+      description: 'WebRTC video chat in your browser with zero downloads required.',
+      type: 'website',
+      image: '/hero-mockup.svg',
+      imageAlt: 'Mingzy Browser Video Chat'
+    },
+    breadcrumbs: [
+      { label: 'Home', path: '/' },
+      { label: 'Features', path: '/features/video-chat' },
+      { label: 'Browser Video Chat', path: '/browser-video-chat' }
+    ],
+    highlights: [
+      { icon: 'web', title: 'Native WebRTC Engine', desc: 'Leverages standard HTML5 and WebRTC APIs for crystal-clear video with zero plugins.' },
+      { icon: 'devices', title: 'Cross-Device Parity', desc: 'Seamlessly works across laptops, Chromebooks, iPhones, iPads, and Android devices.' },
+      { icon: 'speed', title: 'Low Latency P2P', desc: 'Direct peer-to-peer data transport minimizes streaming delay and packet overhead.' },
+      { icon: 'shield', title: 'Built-in Sandbox Security', desc: 'Runs within your browser sandbox with standard permission controls.' }
+    ],
+    contentSections: [
+      {
+        title: 'The Advantage of Native WebRTC Over Downloadable Clients',
+        paragraphs: [
+          'Many video calling applications require downloading bulky desktop installers or mobile apps that consume storage and request extensive device permissions.',
+          'Mingzy operates strictly through native browser capabilities. By leveraging modern WebRTC standards, audio and video streams travel directly between clients with end-to-end encryption.',
+          'This means instant loading times, zero installation steps, and the security benefits of modern browser sandboxing.'
+        ]
+      },
+      {
+        title: 'Optimizing Your Browser for the Best Video Chat Experience',
+        paragraphs: [
+          'To ensure optimal audio and video clarity during browser calls:',
+          '1. Ensure your browser is updated to the latest stable release of Chrome, Safari, Firefox, or Edge.',
+          '2. Check that your webcam and microphone permissions are enabled for the site.',
+          '3. Connect to a stable Wi-Fi or cellular data connection to minimize video buffering.'
+        ]
+      }
+    ],
+    faqs: [
+      { question: 'Does browser video chat work on iPhone and Android?', answer: 'Yes. You can open Mingzy directly in mobile Safari on iOS or Chrome on Android and use video chat without installing an app.' },
+      { question: 'Will browser video chat work behind firewalls or university networks?', answer: 'Mingzy uses standard STUN servers to resolve peer connectivity across most consumer and institutional network environments.' },
+      { question: 'How do I change camera or microphone permissions in my browser?', answer: 'Click the padlock or settings icon next to the URL in your browser address bar to adjust camera and microphone permissions anytime.' }
+    ],
+    relatedLinks: [
+      { title: 'Random Video Chat', path: '/random-video-chat', desc: 'Main video chat gateway.' },
+      { title: 'Omegle Alternative No Login', path: '/omegle-alternative-no-login', desc: 'No-login stranger chat alternative.' },
+      { title: 'How Video Chat Works', path: '/guides/how-random-video-chat-works', desc: 'Technical WebRTC guide.' }
+    ]
+  },
+
+  '/language-exchange/english-spanish': {
+    path: '/language-exchange/english-spanish',
+    cluster: 'languages',
+    intent: 'informational',
+    indexable: true,
+    primaryKeyword: 'english spanish language exchange',
+    secondaryKeywords: ['practice spanish with native speakers', 'spanish english tandem chat', 'talk to spanish strangers', 'learn spanish video chat'],
+    metaTitle: 'English-Spanish Language Exchange Video Chat | Mingzy',
+    metaDescription: 'Practice speaking Spanish and English with native speakers. Mingzy pairs language learners for spontaneous, real-time tandem conversation practice.',
+    h1: 'English-Spanish Language Exchange via Live Video Chat',
+    heroSubtitle: 'Bridge fluency through spontaneous conversation. Pair directly with native Spanish and English speakers for natural tandem language practice.',
+    badgeText: 'Language Exchange • English & Spanish • Native Practice',
+    presetPreferences: { language: 'Spanish', region: 'Worldwide', mode: 'video', safeMode: true },
+    schemaType: 'SoftwareApplication',
+    capabilities: [
+      { label: 'Language Corridor', value: 'English ↔ Spanish Tandem' },
+      { label: 'Format', value: '1-on-1 Real-Time Video/Text' },
+      { label: 'Matching Pool', value: 'Spain, Latin America, USA & Global' },
+      { label: 'Access Level', value: '100% Free Conversational Practice' }
+    ],
+    cta: {
+      headline: 'Start Practicing Spanish or English Today',
+      subtext: 'No tutor fees. No rigid scheduling. Connect with conversation partners on demand.',
+      buttonText: 'Find a Language Partner',
+      buttonPath: '/language-exchange/english-spanish',
+      secondaryButtonText: 'Try Text Exchange',
+      secondaryButtonPath: '/random-text-chat'
+    },
+    openGraph: {
+      title: 'English-Spanish Language Exchange – Mingzy',
+      description: 'Practice conversational English and Spanish with native speakers.',
+      type: 'website',
+      image: '/hero-mockup.svg',
+      imageAlt: 'English-Spanish Language Exchange on Mingzy'
+    },
+    breadcrumbs: [
+      { label: 'Home', path: '/' },
+      { label: 'Languages', path: '/languages/spanish' },
+      { label: 'English-Spanish Exchange', path: '/language-exchange/english-spanish' }
+    ],
+    highlights: [
+      { icon: 'translate', title: 'Bilingual Matching', desc: 'Target Spanish or English queues to match with speakers across Spain, Latin America, and North America.' },
+      { icon: 'forum', title: 'Spontaneous Speaking', desc: 'Overcome language hesitation through friendly, low-pressure conversational practice.' },
+      { icon: 'schedule', title: 'On-Demand Availability', desc: 'Practice whenever you have free time without scheduling formal tutoring sessions.' },
+      { icon: 'lock', title: 'Private & Anonymous', desc: 'No personal details required; practice at your own comfort level.' }
+    ],
+    contentSections: [
+      {
+        title: 'Why Real-Time Conversation Is the Fastest Route to Fluency',
+        paragraphs: [
+          'Grammar drills and vocabulary apps build foundational knowledge, but true language fluency requires active speaking and listening practice with real speakers.',
+          'Mingzy offers an informal tandem space where Spanish speakers looking to improve their English and English speakers learning Spanish can connect organically.',
+          'You can agree to speak 10 minutes in Spanish and 10 minutes in English, discuss cultural topics, or ask for pronunciation feedback in a relaxed, friendly environment.'
+        ]
+      },
+      {
+        title: '5 Conversation Starters for English-Spanish Practice',
+        listItems: [
+          '"¿De qué parte de España o Latinoamérica eres?" (Where in Spain or Latin America are you from?)',
+          '"What is your favorite local food or dish that travelers should try?"',
+          '"¿Cuál es la palabra o frase más difícil de traducir en tu idioma?"',
+          '"What movies or music do you recommend for learning your language?"',
+          '"¿Qué lugares turísticos en tu país recomiendas visitar?"'
+        ]
+      }
+    ],
+    faqs: [
+      { question: 'Is Mingzy suitable for beginner Spanish or English learners?', answer: 'Yes. You can use the built-in text chat sidebar alongside video to clarify spelling or unfamiliar words during the call.' },
+      { question: 'How do I ensure I match with Spanish speakers?', answer: 'Set your language preference dropdown to "Spanish" before joining the queue to prioritize matches from Spanish-speaking regions.' },
+      { question: 'Are there any fees or subscription requirements for language practice?', answer: 'No. Mingzy is completely free to use with no session limits or paywalls.' }
+    ],
+    relatedLinks: [
+      { title: 'Spanish Stranger Chat', path: '/languages/spanish', desc: 'Spanish language matchmaking hub.' },
+      { title: 'English Stranger Chat', path: '/languages/english', desc: 'English language matchmaking hub.' },
+      { title: 'Language Matching Guide', path: '/guides/language-matching-explained', desc: 'How language matching works.' },
+      { title: 'Conversation Starters Guide', path: '/guides/best-conversation-starters-stranger-chat', desc: '50 icebreaker ideas.' }
+    ]
+  },
+
+  '/language-exchange/hindi-english': {
+    path: '/language-exchange/hindi-english',
+    cluster: 'languages',
+    intent: 'informational',
+    indexable: true,
+    primaryKeyword: 'hindi english language exchange',
+    secondaryKeywords: ['practice english with hindi speakers', 'hindi english conversation practice', 'indian language chat', 'learn hindi online'],
+    metaTitle: 'Hindi-English Language Exchange Video Chat | Mingzy',
+    metaDescription: 'Connect with bilingual Hindi and English speakers worldwide. Practice conversational English and Hindi in friendly 1-on-1 video chats.',
+    h1: 'Hindi-English Language Exchange & Conversational Chat',
+    heroSubtitle: 'Build speaking confidence and cultural connection. Pair with bilingual English and Hindi speakers across India and the global diaspora.',
+    badgeText: 'Language Exchange • Hindi & English • Live Video',
+    presetPreferences: { language: 'Hindi', region: 'Asia', mode: 'video', safeMode: true },
+    schemaType: 'SoftwareApplication',
+    capabilities: [
+      { label: 'Language Corridor', value: 'Hindi ↔ English Practice' },
+      { label: 'Matching Pool', value: 'India & Global Diaspora' },
+      { label: 'Format', value: 'Live 1-on-1 Video & Text' },
+      { label: 'Cost', value: '100% Free / No Subscriptions' }
+    ],
+    cta: {
+      headline: 'Practice English or Hindi with Real People',
+      subtext: 'Friendly conversation partners available 24/7 across all regions.',
+      buttonText: 'Start Hindi-English Chat',
+      buttonPath: '/language-exchange/hindi-english',
+      secondaryButtonText: 'Try Text Mode',
+      secondaryButtonPath: '/random-text-chat'
+    },
+    openGraph: {
+      title: 'Hindi-English Language Exchange – Mingzy',
+      description: 'Connect with bilingual Hindi and English speakers for conversation practice.',
+      type: 'website',
+      image: '/hero-mockup.svg',
+      imageAlt: 'Hindi-English Language Exchange on Mingzy'
+    },
+    breadcrumbs: [
+      { label: 'Home', path: '/' },
+      { label: 'Languages', path: '/languages/hindi' },
+      { label: 'Hindi-English Exchange', path: '/language-exchange/hindi-english' }
+    ],
+    highlights: [
+      { icon: 'translate', title: 'Bilingual Focus', desc: 'Target Hindi or English queues to match with speakers across Indian states and international communities.' },
+      { icon: 'forum', title: 'Confidence Building', desc: 'Practice spoken English in a non-judgmental, friendly peer environment.' },
+      { icon: 'public', title: 'Cultural Exchange', desc: 'Discuss local culture, regional traditions, favorite films, and daily life.' },
+      { icon: 'shield', title: 'Zero Log Privacy', desc: 'No personal phone numbers or social profiles required to connect.' }
+    ],
+    contentSections: [
+      {
+        title: 'Practical Conversational Practice for English & Hindi Learners',
+        paragraphs: [
+          'For millions of learners across India and abroad, building confidence in spoken English is a major personal and professional goal.',
+          'Mingzy provides a welcoming environment where you can practice casual conversation without the pressure of a classroom or examination.',
+          'Whether you want to improve your conversational English fluency or practice Hindi with native speakers, Mingzy connects you directly in seconds.'
+        ]
+      },
+      {
+        title: 'Popular Discussion Topics for Hindi-English Language Sessions',
+        listItems: [
+          'Sharing regional travel recommendations and culinary specialties across different Indian states.',
+          'Discussing favorite books, cinema, cricket tournaments, and technological trends.',
+          'Practicing common interview introductions and workplace communication scenarios.',
+          'Exploring idiomatic expressions and colloquial slang in English and Hindi.'
+        ]
+      }
+    ],
+    faqs: [
+      { question: 'Can I practice English even if my speaking skills are basic?', answer: 'Absolutely. Many users on Mingzy are also practicing their language skills and welcome friendly, patient conversation.' },
+      { question: 'How do I connect with speakers in India?', answer: 'Select "Hindi" as your language filter or choose "Asia" as your region filter before joining the queue.' },
+      { question: 'Is my camera required for language practice?', answer: 'You can use video chat or switch to text chat mode depending on your personal comfort level.' }
+    ],
+    relatedLinks: [
+      { title: 'Hindi Stranger Chat', path: '/languages/hindi', desc: 'Hindi language matching portal.' },
+      { title: 'India Video Chat', path: '/countries/india', desc: 'India country regional hub.' },
+      { title: 'English Stranger Chat', path: '/languages/english', desc: 'English language matching portal.' },
+      { title: 'Overcoming Chat Anxiety', path: '/guides/overcoming-stranger-chat-anxiety', desc: 'Tips for building social confidence.' }
+    ]
+  },
+
+  '/guides/omegle-alternatives-guide': {
+    path: '/guides/omegle-alternatives-guide',
+    cluster: 'guides',
+    intent: 'informational',
+    indexable: true,
+    primaryKeyword: 'omegle alternatives guide',
+    secondaryKeywords: ['best sites like omegle 2026', 'how to choose a safe video chat', 'random video chat comparison', 'history of omegle shutdown'],
+    metaTitle: 'The 2026 Guide to Omegle Alternatives & Stranger Chat | Mingzy',
+    metaDescription: 'Comprehensive, objective evaluation of modern stranger video chat platforms in 2026. Compare privacy, moderation models, and connection architectures.',
+    h1: 'The Objective Guide to Omegle Alternatives & Video Chat in 2026',
+    heroSubtitle: 'An in-depth analysis of the stranger chat ecosystem post-Omegle, covering peer-to-peer security, moderation approaches, and user privacy.',
+    badgeText: 'Industry Analysis • Security & Moderation • 2026 Overview',
+    presetPreferences: { language: 'Any', region: 'Worldwide', mode: 'video', safeMode: true },
+    schemaType: 'Article',
+    breadcrumbs: [
+      { label: 'Home', path: '/' },
+      { label: 'Guides', path: '/guides/how-random-video-chat-works' },
+      { label: 'Omegle Alternatives Guide', path: '/guides/omegle-alternatives-guide' }
+    ],
+    highlights: [
+      { icon: 'menu_book', title: 'Comprehensive Breakdown', desc: 'Understand how video chat evolved from 2009 Flash plugins to modern WebRTC.' },
+      { icon: 'security', title: 'Privacy Comparisons', desc: 'Evaluate differences between P2P architectures and cloud media relay systems.' },
+      { icon: 'policy', title: 'Moderation Models', desc: 'Review how platforms handle automated safety, reporting, and community enforcement.' },
+      { icon: 'lightbulb', title: 'Choosing the Right Platform', desc: 'Identify which platform matches your specific goals (casual talk, language practice, gaming).' }
+    ],
+    contentSections: [
+      {
+        title: 'The Evolution of Random Video Chat: From 2009 to 2026',
+        paragraphs: [
+          'When Omegle launched in 2009, it introduced the world to text-based stranger matchmaking, followed soon after by Flash-based webcam roulette. For over a decade, it served as the benchmark for spontaneous online connection.',
+          'However, legacy architectures faced severe challenges: unencrypted connections that exposed IP addresses, rudimentary moderation tools, and vulnerability to automated recording bots. Omegle officially shut down in November 2023.',
+          'The modern generation of video chat platforms uses HTML5 and WebRTC to deliver encrypted, low-latency streams while integrating modern moderation tools and granular language filtering.'
+        ]
+      },
+      {
+        title: 'Key Criteria for Evaluating a Modern Stranger Chat Platform',
+        listItems: [
+          'Privacy & Data Retention: Verify whether the platform stores video recordings or retains chat logs on central servers.',
+          'Authentication Policy: Decide whether you prefer guest anonymity or platforms that mandate social profile logins.',
+          'Matchmaking Flexibility: Look for language and regional filters that reduce skip fatigue and improve conversation relevance.',
+          'Safety & Enforcement: Ensure the presence of immediate 1-tap reporting and blocking mechanisms.'
+        ]
+      }
+    ],
+    faqs: [
+      { question: 'Why did the original Omegle shut down?', answer: 'Omegle shut down in November 2023 due to rising operational costs, legal challenges, and the complexities of moderating a legacy unauthenticated platform.' },
+      { question: 'Are modern Omegle alternatives safer than the original site?', answer: 'Many modern platforms employ improved WebRTC encryption, faster peer blocking, and active moderation to provide a more secure user experience.' },
+      { question: 'What makes Mingzy distinct in the alternatives space?', answer: 'Mingzy combines zero-login guest access with intelligent language filtering, clean browser performance, and a strict privacy policy.' }
+    ],
+    relatedLinks: [
+      { title: 'Omegle Alternative', path: '/alternatives/omegle-alternative', desc: 'Direct comparison with Omegle.' },
+      { title: 'Safety Guide 2026', path: '/guides/random-video-chat-safety-guide', desc: 'Essential video chat safety rules.' },
+      { title: 'How Video Chat Works', path: '/guides/how-random-video-chat-works', desc: 'Technical WebRTC architecture guide.' },
+      { title: 'Spotting Scams & Bots', path: '/guides/how-to-spot-scams-and-bots-on-video-chat', desc: 'How to detect recording loops.' }
+    ]
+  },
+
+  '/guides/anonymous-video-chat-guide': {
+    path: '/guides/anonymous-video-chat-guide',
+    cluster: 'guides',
+    intent: 'informational',
+    indexable: true,
+    primaryKeyword: 'anonymous video chat guide',
+    secondaryKeywords: ['how to stay anonymous on video chat', 'webrtc privacy tips', 'stranger chat security', 'digital footprint protection'],
+    metaTitle: 'The Complete Guide to Anonymous Video Chat & Privacy | Mingzy',
+    metaDescription: 'Learn how WebRTC peer-to-peer video chat works, how to protect your privacy when talking to strangers, and how to spot digital safety risks.',
+    h1: 'The Complete Guide to Anonymous Video Chat and Digital Privacy',
+    heroSubtitle: 'Master the essential privacy practices, network fundamentals, and safety heuristics for anonymous stranger video conversations.',
+    badgeText: 'Privacy Guide • Digital Security • WebRTC Architecture',
+    presetPreferences: { language: 'Any', region: 'Worldwide', mode: 'video', safeMode: true },
+    schemaType: 'Article',
+    breadcrumbs: [
+      { label: 'Home', path: '/' },
+      { label: 'Guides', path: '/guides/how-random-video-chat-works' },
+      { label: 'Anonymous Video Chat Guide', path: '/guides/anonymous-video-chat-guide' }
+    ],
+    highlights: [
+      { icon: 'lock', title: 'Network Security', desc: 'Learn how WebRTC DTLS-SRTP encryption safeguards audio and video packets.' },
+      { icon: 'visibility_off', title: 'Background Privacy', desc: 'Simple environmental adjustments to avoid inadvertently sharing location cues.' },
+      { icon: 'shield', title: 'Identity Protection', desc: 'Why keeping real names, social handles, and personal data private is essential.' },
+      { icon: 'phonelink_erase', title: 'Ephemeral Sessions', desc: 'Understanding browser sandbox isolation and volatile memory signaling.' }
+    ],
+    contentSections: [
+      {
+        title: 'How Privacy Works in WebRTC Peer-to-Peer Video Chat',
+        paragraphs: [
+          'In modern WebRTC video chat applications, the server only facilitates the initial handshake (signaling) to exchange network parameters and encryption keys. Once connected, media streams travel directly between peers using DTLS-SRTP encryption.',
+          'Because media streams do not route through central video recording servers, conversations remain strictly ephemeral between the two active participants.',
+          'However, true anonymity also depends on user behavior and environmental awareness during the call.'
+        ]
+      },
+      {
+        title: '4 Best Practices for Safeguarding Your Privacy on Video Chat',
+        listItems: [
+          'Audit Your Background: Ensure family photos, school diplomas, mail, and recognizable street views are not visible in your camera frame.',
+          'Keep Personal Details Confidential: Never share your full name, workplace, neighborhood, phone number, or social media handles.',
+          'Use Built-in Controls Promptly: If a stranger makes you uncomfortable, hit "Skip" or "Block" immediately rather than engaging.',
+          'Check Browser Permissions: Only grant camera and microphone access to trusted domains, and adjust permissions in browser settings anytime.'
+        ]
+      }
+    ],
+    faqs: [
+      { question: 'Can strangers see my IP address during a WebRTC video chat?', answer: 'Modern browsers and STUN configurations handle ICE candidate negotiation to minimize direct IP exposure where possible.' },
+      { question: 'Is it safe to video chat with strangers if I do not share my name?', answer: 'Yes, as long as you maintain general digital safety practices and keep personal information confidential.' },
+      { question: 'What should I do if someone tries to record or extort me?', answer: 'Disconnect immediately, block the user, and report the incident using the in-app report tool.' }
+    ],
+    relatedLinks: [
+      { title: 'Anonymous Video Chat', path: '/anonymous-video-chat', desc: 'Private video chat gateway.' },
+      { title: 'Safety Center', path: '/safety', desc: 'Community safety and reporting portal.' },
+      { title: 'Spotting Scams & Bots', path: '/guides/how-to-spot-scams-and-bots-on-video-chat', desc: 'Identify virtual cameras and loops.' }
+    ]
+  },
+
+  // ===========================================================================
+  // 9. STAGED EXPERIMENTAL ROUTES (TIER B — NOINDEX)
+  // ===========================================================================
+  '/stranger-chat-no-registration': {
+    path: '/stranger-chat-no-registration',
+    cluster: 'core',
+    intent: 'transactional',
+    indexable: false, // Tier B: Staged to prevent overlap with /random-video-chat-no-signup
+    primaryKeyword: 'stranger chat no registration',
+    metaTitle: 'Stranger Chat No Registration | Mingzy',
+    metaDescription: 'Instant stranger chat without registration or accounts. Connect via video and text.',
+    h1: 'Stranger Chat with No Registration Required',
+    heroSubtitle: 'Chat with strangers online with zero registration.',
+    contentSections: [{ title: 'Instant Guest Stranger Chat', paragraphs: ['Connect with strangers online without creating an account.'] }],
+    faqs: [{ question: 'Is registration required?', answer: 'No, guest access is enabled by default.' }]
+  },
+
+  '/language-exchange/stranger-chat': {
+    path: '/language-exchange/stranger-chat',
+    cluster: 'languages',
+    intent: 'informational',
+    indexable: false, // Tier B: Staged to prioritize specific language pairs
+    primaryKeyword: 'language exchange stranger chat',
+    metaTitle: 'Global Language Exchange Stranger Chat | Mingzy',
+    metaDescription: 'Practice languages with native speakers worldwide through random stranger chat.',
+    h1: 'Global Language Exchange with Strangers',
+    heroSubtitle: 'Connect with native speakers around the world for conversational practice.',
+    contentSections: [{ title: 'Tandem Language Learning Online', paragraphs: ['Connect with global speakers to practice languages organically.'] }],
+    faqs: [{ question: 'Which languages are supported?', answer: 'English, Spanish, Hindi, French, German, Japanese, Portuguese, and more.' }]
   }
 };
 
@@ -2013,7 +2549,26 @@ export function generateFAQSchema(page) {
 }
 
 /**
- * Generates SoftwareApplication or Article Schema based on schemaType (NO FAKE RATINGS)
+ * Generates valid JSON-LD Speakable Schema for Google AI Overviews and Voice Search
+ */
+export function generateSpeakableSchema(page, baseUrl = 'https://mingzy.space') {
+  if (!page.h1) return null;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': `${baseUrl}${page.path}#webpage`,
+    url: `${baseUrl}${page.path}`,
+    name: page.h1,
+    description: page.metaDescription,
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', 'p']
+    }
+  };
+}
+
+/**
+ * Generates SoftwareApplication, HowTo, or Article Schema based on schemaType
  */
 export function generateMainSchema(page, baseUrl = 'https://mingzy.space') {
   const url = `${baseUrl}${page.path}`;
@@ -2022,11 +2577,14 @@ export function generateMainSchema(page, baseUrl = 'https://mingzy.space') {
     return {
       '@context': 'https://schema.org',
       '@type': 'SoftwareApplication',
+      '@id': `${url}#software`,
       name: 'Mingzy',
       operatingSystem: 'Any (Web Browser, iOS, Android, macOS, Windows, Linux)',
       applicationCategory: 'CommunicationApplication',
+      applicationSubCategory: 'VideoChatApplication',
       url,
       description: page.metaDescription,
+      featureList: 'Live random video chat, WebRTC HD peer-to-peer encryption, zero registration required, language matching, country filters, instant skip',
       offers: {
         '@type': 'Offer',
         price: '0.00',
@@ -2036,9 +2594,29 @@ export function generateMainSchema(page, baseUrl = 'https://mingzy.space') {
     };
   }
 
+  if (page.schemaType === 'HowTo') {
+    const stepSection = page.contentSections?.find(s => s.listItems && s.listItems.length > 0);
+    if (stepSection) {
+      return {
+        '@context': 'https://schema.org',
+        '@type': 'HowTo',
+        '@id': `${url}#howto`,
+        name: page.h1,
+        description: page.metaDescription,
+        step: stepSection.listItems.map((item, idx) => ({
+          '@type': 'HowToStep',
+          position: idx + 1,
+          name: `Step ${idx + 1}`,
+          text: item
+        }))
+      };
+    }
+  }
+
   return {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    '@id': `${url}#article`,
     headline: page.h1,
     description: page.metaDescription,
     mainEntityOfPage: {
@@ -2055,11 +2633,11 @@ export function generateMainSchema(page, baseUrl = 'https://mingzy.space') {
       name: 'Mingzy',
       logo: {
         '@type': 'ImageObject',
-        url: `${baseUrl}/logo.svg`
+        url: `${baseUrl}/images/mingzy-logo.jpg`
       }
     },
     datePublished: '2026-01-15T00:00:00.000Z',
-    dateModified: new Date().toISOString()
+    dateModified: '2026-08-31T00:00:00.000Z'
   };
 }
 
@@ -2071,6 +2649,9 @@ export function generateFullJsonLd(page, baseUrl = 'https://mingzy.space') {
 
   const mainSchema = generateMainSchema(page, baseUrl);
   if (mainSchema) schemas.push(mainSchema);
+
+  const speakableSchema = generateSpeakableSchema(page, baseUrl);
+  if (speakableSchema) schemas.push(speakableSchema);
 
   const breadcrumbSchema = generateBreadcrumbSchema(page, baseUrl);
   if (breadcrumbSchema) schemas.push(breadcrumbSchema);

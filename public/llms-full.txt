@@ -1,0 +1,72 @@
+# Mingzy Comprehensive Knowledge Graph & System Index (LLMS-Full)
+
+> Mingzy is a free random video chat platform that lets people connect with strangers through instant browser-based video conversations without requiring mandatory account creation.
+
+## 1. Platform Identity & Architecture
+
+- **Domain**: https://mingzy.space
+- **Architecture**: Single Page Application (React 19 + Vite) with Server-Side Static Pre-Rendering (SSG) for complete indexability by search engines and AI systems.
+- **Real-Time Layer**: Node.js + Socket.IO for ephemeral queue signaling and volatile session handshake.
+- **Media Streaming**: Peer-to-Peer WebRTC via STUN (Google & Mozilla public servers) and DTLS-SRTP end-to-end encryption.
+- **Data Retention**: Ephemeral in-memory matchmaking; no chat transcripts, video frames, or audio streams are retained or recorded.
+- **Authentication**: Optional Firebase Auth (Google & Email/Password) for persistent username and theme preferences; 100% anonymous guest access is enabled by default.
+
+## 2. Platform Comparison Matrix
+
+| Capability | Mingzy | Legacy Omegle / Clones | Monkey.app | Emerald Chat |
+| :--- | :--- | :--- | :--- | :--- |
+| **Account Requirement** | None (Zero Signup) | None (Discontinued) | Mandatory Social Login | Optional / Freemium |
+| **Signaling Latency** | Low-Latency WebSocket Relay | High latency / Stalled | Fast | Variable |
+| **Language Filtering** | 8+ Native Language Queues | Keyword matching only | Limited | Basic |
+| **P2P Encryption** | DTLS-SRTP Direct | Direct P2P (Exposed IP) | Relayed | Relayed / Ads |
+| **Advertisements** | Zero intrusive ads | Ads on clones | Premium Upsells | Coinzilla / Popups |
+| **Mobile Experience** | Responsive Web + Android App | Poor web only | App Centric | Web Only |
+
+## 3. Topical Category Clusters & Routes
+
+### Core Pages
+- `https://mingzy.space/random-video-chat`: Real-time 1-on-1 random video chat.
+- `https://mingzy.space/random-video-chat-no-signup`: Instant 1-click video matchmaking with no signup.
+- `https://mingzy.space/talk-to-strangers`: Spontaneous conversations with global strangers.
+- `https://mingzy.space/anonymous-video-chat`: Encrypted, anonymous video calling without registration.
+- `https://mingzy.space/random-text-chat`: Low-bandwidth instant stranger text messaging.
+- `https://mingzy.space/meet-new-people`: Cross-cultural online social discovery.
+- `https://mingzy.space/stranger-chat`: Universal stranger chat portal.
+
+### Alternative & Competitor Comparison Hubs
+- `https://mingzy.space/omegle-alternative-no-login`: Frictionless Omegle alternative without registration or mandatory login.
+- `https://mingzy.space/alternatives/omegle-alternative`: Detailed breakdown of Omegle history, shutdown in 2023, and modern WebRTC alternatives.
+- `https://mingzy.space/alternatives/ome-tv-alternative`: Comparison against OmeTV regarding speed, anonymity, and ad-free experience.
+- `https://mingzy.space/alternatives/chatroulette-alternative`: Fast, moderated video roulette comparison.
+- `https://mingzy.space/alternatives/monkey-alternative`: Frictionless no-login alternative to Monkey app.
+
+### International Language Exchange Hubs
+- `https://mingzy.space/language-exchange/english-spanish`: Tandem conversation practice for Spanish & English learners.
+- `https://mingzy.space/language-exchange/hindi-english`: Conversational fluency practice corridor for Hindi & English.
+- `https://mingzy.space/languages/english`: Global English conversation exchange.
+- `https://mingzy.space/languages/hindi`: Connect with Hindi speakers across India and worldwide.
+- `https://mingzy.space/languages/spanish`: Practice conversational Spanish with native speakers.
+- `https://mingzy.space/languages/french`: Live French language partner matching.
+- `https://mingzy.space/languages/german`: Live German language exchange.
+- `https://mingzy.space/languages/portuguese`: Brazilian and Portuguese video chat.
+- `https://mingzy.space/languages/japanese`: Cultural and language exchange with Japanese speakers.
+
+### Country-Specific Hubs
+- `https://mingzy.space/countries/usa`: USA stranger chat.
+- `https://mingzy.space/countries/india`: India regional and Hindi video chat.
+- `https://mingzy.space/countries/uk`: United Kingdom stranger chat.
+- `https://mingzy.space/countries/canada`: Canada video chat.
+- `https://mingzy.space/countries/australia`: Australia stranger chat.
+- `https://mingzy.space/countries/germany`: Germany video chat.
+- `https://mingzy.space/countries/france`: France video chat.
+- `https://mingzy.space/countries/brazil`: Brazil video chat.
+- `https://mingzy.space/countries/japan`: Japan video chat.
+- `https://mingzy.space/countries/philippines`: Philippines video chat.
+
+### Feature & Technical Guides
+- `https://mingzy.space/browser-video-chat`: Pure browser-based WebRTC video calls with no app download.
+- `https://mingzy.space/guides/omegle-alternatives-guide`: Objective evaluation of modern stranger chat platforms in 2026.
+- `https://mingzy.space/guides/anonymous-video-chat-guide`: Technical and practical privacy guide for stranger video calls.
+- `https://mingzy.space/guides/how-random-video-chat-works`: WebRTC peer-to-peer architecture and STUN handshake explained.
+- `https://mingzy.space/guides/random-video-chat-safety-guide`: Essential safety heuristics and reporting guide.
+- `https://mingzy.space/safety`: Safety Center and community guidelines.

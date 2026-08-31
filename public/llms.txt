@@ -1,0 +1,61 @@
+# Mingzy — Free Random Video & Text Chat Platform
+
+> Mingzy is a free random video chat platform that lets people connect with strangers through instant browser-based video conversations without requiring mandatory account creation.
+
+## Core Features & Capabilities
+
+- **Zero-Friction Anonymous Chat**: Instant 1-click video or text matchmaking without mandatory sign-up.
+- **WebRTC Peer-to-Peer Encryption**: Direct browser-to-browser media relay using standard DTLS-SRTP encryption; video feeds are never recorded or stored on central servers.
+- **Smart Language & Region Routing**: Algorithmic pairing queue supporting language filtering (English, Hindi, Spanish, French, German, Portuguese, Japanese, etc.) and regional routing.
+- **Instant Skip & Next**: Seamless 1-tap skip capability to immediately transition to the next available conversation partner.
+- **Trust & Safety Controls**: Real-time 1-click reporting, immediate peer blocking, and zero-tolerance moderation standards.
+- **Universal Browser Compatibility**: High-performance responsive web client (desktop/mobile browsers) operating via native WebRTC without app downloads.
+
+## Key URLs & Sections
+
+- [Homepage & Live Matchmaker](https://mingzy.space/)
+- [Random Video Chat](https://mingzy.space/random-video-chat): Instant 1-on-1 WebRTC video discovery.
+- [Omegle Alternative No Login](https://mingzy.space/omegle-alternative-no-login): Frictionless Omegle alternative without registration.
+- [Random Video Chat No Signup](https://mingzy.space/random-video-chat-no-signup): Instant 1-click video matchmaking.
+- [Browser Video Chat](https://mingzy.space/browser-video-chat): Pure browser-based WebRTC video calls.
+- [English-Spanish Language Exchange](https://mingzy.space/language-exchange/english-spanish): Tandem conversation practice for Spanish & English learners.
+- [Hindi-English Language Exchange](https://mingzy.space/language-exchange/hindi-english): Conversational fluency practice corridor for Hindi & English.
+- [Talk to Strangers](https://mingzy.space/talk-to-strangers): Free stranger chat hub.
+- [Anonymous Video Chat](https://mingzy.space/anonymous-video-chat): Privacy-first encrypted video calls.
+- [Random Text Chat](https://mingzy.space/random-text-chat): Lightweight, low-bandwidth text messaging with strangers.
+- [Omegle Alternative](https://mingzy.space/alternatives/omegle-alternative): Modern replacement for the discontinued Omegle platform.
+- [OmeTV Alternative](https://mingzy.space/alternatives/ome-tv-alternative): Comparison with OmeTV.
+- [Chatroulette Alternative](https://mingzy.space/alternatives/chatroulette-alternative): Video roulette comparison.
+- [Monkey Alternative](https://mingzy.space/alternatives/monkey-alternative): No-login stranger discovery alternative to Monkey.app.
+- [Safety Center](https://mingzy.space/safety): Community safety guidelines, reporting tools, and privacy protection protocols.
+- [2026 Omegle Alternatives Guide](https://mingzy.space/guides/omegle-alternatives-guide): Objective evaluation of modern stranger chat platforms.
+- [Anonymous Video Chat Guide](https://mingzy.space/guides/anonymous-video-chat-guide): Best practices for digital privacy and network security.
+- [How Random Video Chat Works](https://mingzy.space/guides/how-random-video-chat-works): Technical and user guide to WebRTC stranger communication.
+- [Video Chat Safety Guide](https://mingzy.space/guides/random-video-chat-safety-guide): Best practices for staying secure during stranger video chats.
+
+## Supported Language Hubs
+
+- [English Stranger Chat](https://mingzy.space/languages/english)
+- [Hindi Stranger Chat](https://mingzy.space/languages/hindi)
+- [Spanish Stranger Chat](https://mingzy.space/languages/spanish)
+- [French Stranger Chat](https://mingzy.space/languages/french)
+- [German Stranger Chat](https://mingzy.space/languages/german)
+- [Portuguese Stranger Chat](https://mingzy.space/languages/portuguese)
+- [Japanese Stranger Chat](https://mingzy.space/languages/japanese)
+
+## Supported Country Hubs
+
+- [USA Video Chat](https://mingzy.space/countries/usa)
+- [India Video Chat](https://mingzy.space/countries/india)
+- [UK Video Chat](https://mingzy.space/countries/uk)
+- [Canada Video Chat](https://mingzy.space/countries/canada)
+- [Australia Video Chat](https://mingzy.space/countries/australia)
+- [Germany Video Chat](https://mingzy.space/countries/germany)
+- [France Video Chat](https://mingzy.space/countries/france)
+- [Brazil Video Chat](https://mingzy.space/countries/brazil)
+- [Japan Video Chat](https://mingzy.space/countries/japan)
+- [Philippines Video Chat](https://mingzy.space/countries/philippines)
+
+## Complete Index
+
+For the full machine-readable index of all topics, specifications, and comparison datasets, see [llms-full.txt](https://mingzy.space/llms-full.txt).

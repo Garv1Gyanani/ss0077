@@ -1,22 +1,42 @@
-# https://www.robotstxt.org/robotstxt.html
+# ============================================================================
+# Mingzy Production Robots.txt
+# Optimized for Google, Bing, Perplexity, OpenAI, Anthropic & Global Search Engines
+# ============================================================================
+
 User-agent: *
 Allow: /
-Allow: /random-video-chat
-Allow: /talk-to-strangers
-Allow: /anonymous-video-chat
-Allow: /random-text-chat
-Allow: /meet-new-people
-Allow: /stranger-chat
-Allow: /alternatives/
-Allow: /languages/
-Allow: /countries/
-Allow: /features/
-Allow: /safety/
-Allow: /safety
-Allow: /community-guidelines
-Allow: /privacy
-Allow: /terms
-Allow: /guides/
+Allow: /llms.txt
+Allow: /llms-full.txt
+Allow: /sitemap.xml
 
-# Sitemap Location
+# Block internal socket & API telemetry endpoints
+Disallow: /api/
+Disallow: /socket.io/
+
+# Search Engine & AI Crawler Directives
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+# Sitemap Index Reference
 Sitemap: https://mingzy.space/sitemap.xml

@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450" width="100%" height="100%">
+  <defs>
+    <radialGradient id="chatBg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#280C36" stop-opacity="0.9" />
+      <stop offset="70%" stop-color="#14071B" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#09060F" stop-opacity="1" />
+    </radialGradient>
+    <linearGradient id="bubbleYou" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF2E93" />
+      <stop offset="50%" stop-color="#D946EF" />
+      <stop offset="100%" stop-color="#8B5CF6" />
+    </linearGradient>
+    <filter id="chatGlow">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <rect width="600" height="450" rx="32" fill="url(#chatBg)" stroke="rgba(255,255,255,0.08)" stroke-width="1.5" />
+
+  <!-- Chat Container -->
+  <g transform="translate(60, 45)">
+    <!-- Header -->
+    <g transform="translate(0, 0)">
+      <circle cx="20" cy="20" r="18" fill="#FF2E93" opacity="0.2" />
+      <circle cx="20" cy="20" r="12" fill="#D946EF" />
+      <text x="20" y="24" fill="#ffffff" font-size="10" font-weight="bold" text-anchor="middle">S</text>
+      <text x="50" y="18" fill="#ffffff" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="700">Stranger</text>
+      <text x="50" y="32" fill="rgba(255,255,255,0.4)" font-family="'Plus Jakarta Sans', sans-serif" font-size="10">Connected from Berlin</text>
+    </g>
+
+    <!-- Message 1 (Stranger) -->
+    <g transform="translate(0, 75)">
+      <rect width="320" height="52" rx="20" fill="#1B0A26" stroke="rgba(255,255,255,0.08)" stroke-width="1" />
+      <text x="20" y="24" fill="rgba(255,255,255,0.9)" font-family="'Plus Jakarta Sans', sans-serif" font-size="12">"Hey! What's the time over there?"</text>
+      <text x="20" y="42" fill="rgba(255,255,255,0.3)" font-family="'Plus Jakarta Sans', sans-serif" font-size="9">02:14 AM</text>
+    </g>
+
+    <!-- Message 2 (You) -->
+    <g transform="translate(160, 145)">
+      <rect width="320" height="60" rx="20" fill="url(#bubbleYou)" filter="url(#chatGlow)" opacity="0.95" />
+      <text x="20" y="26" fill="#ffffff" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="500">"2:14 AM here too! Can't sleep 😂"</text>
+      <text x="20" y="46" fill="rgba(255,255,255,0.7)" font-family="'Plus Jakarta Sans', sans-serif" font-size="9">02:14 AM • Sent</text>
+    </g>
+
+    <!-- Floating Reactions -->
+    <g transform="translate(420, 220)">
+      <rect width="40" height="40" rx="20" fill="#1B0A26" stroke="#FF2E93" stroke-width="1" filter="url(#chatGlow)" />
+      <text x="20" y="26" fill="#ffffff" font-size="16" text-anchor="middle">♡</text>
+    </g>
+
+    <!-- Typing Indicator -->
+    <g transform="translate(0, 240)">
+      <rect width="80" height="34" rx="17" fill="#1B0A26" stroke="rgba(255,255,255,0.06)" stroke-width="1" />
+      <circle cx="28" cy="17" r="3" fill="#D946EF" />
+      <circle cx="40" cy="17" r="3" fill="#FF2E93" />
+      <circle cx="52" cy="17" r="3" fill="#FF6B6B" />
+    </g>
+
+    <!-- Input Bar Preview -->
+    <g transform="translate(0, 300)">
+      <rect width="480" height="46" rx="23" fill="#16081E" stroke="rgba(255,255,255,0.1)" stroke-width="1" />
+      <text x="24" y="28" fill="rgba(255,255,255,0.3)" font-family="'Plus Jakarta Sans', sans-serif" font-size="12">Type your message...</text>
+      <circle cx="450" cy="23" r="16" fill="url(#bubbleYou)" />
+      <text x="450" y="28" fill="#ffffff" font-size="12" text-anchor="middle">→</text>
+    </g>
+  </g>
+</svg>

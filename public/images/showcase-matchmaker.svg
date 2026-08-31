@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450" width="100%" height="100%">
+  <defs>
+    <radialGradient id="radarBg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#2D103E" stop-opacity="0.9" />
+      <stop offset="70%" stop-color="#14071B" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#09060F" stop-opacity="1" />
+    </radialGradient>
+    <linearGradient id="mGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF2E93" />
+      <stop offset="50%" stop-color="#D946EF" />
+      <stop offset="100%" stop-color="#FF6B6B" />
+    </linearGradient>
+    <filter id="glowF">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <rect width="600" height="450" rx="32" fill="url(#radarBg)" stroke="rgba(255,255,255,0.08)" stroke-width="1.5" />
+  
+  <!-- Concentric Sonar Rings -->
+  <g transform="translate(300, 225)" opacity="0.6">
+    <circle r="40" fill="none" stroke="#FF2E93" stroke-width="1.5" opacity="0.8" />
+    <circle r="90" fill="none" stroke="#D946EF" stroke-width="1.2" stroke-dasharray="4 6" opacity="0.6" />
+    <circle r="145" fill="none" stroke="#8B5CF6" stroke-width="1" opacity="0.4" />
+    <circle r="195" fill="none" stroke="#FF6B6B" stroke-width="0.8" stroke-dasharray="8 12" opacity="0.3" />
+    
+    <!-- Crosshairs -->
+    <line x1="-200" y1="0" x2="200" y2="0" stroke="rgba(255,255,255,0.06)" stroke-width="1" />
+    <line x1="0" y1="-200" x2="0" y2="200" stroke="rgba(255,255,255,0.06)" stroke-width="1" />
+
+    <!-- Radar Sweep Beam -->
+    <path d="M 0 0 L 138 -138 A 195 195 0 0 0 0 -195 Z" fill="url(#mGrad)" opacity="0.15" />
+    <line x1="0" y1="0" x2="138" y2="-138" stroke="#FF2E93" stroke-width="2" filter="url(#glowF)" />
+  </g>
+
+  <!-- Floating Stranger Nodes -->
+  <g transform="translate(300, 225)">
+    <!-- Node 1 -->
+    <g transform="translate(-75, -50)">
+      <circle r="16" fill="#1C0924" stroke="url(#mGrad)" stroke-width="1.5" filter="url(#glowF)" />
+      <circle r="12" fill="#D946EF" opacity="0.4" />
+      <text x="0" y="4" fill="#ffffff" font-size="9" font-weight="bold" text-anchor="middle">M</text>
+    </g>
+    <!-- Node 2 (Active Match) -->
+    <g transform="translate(95, -70)">
+      <circle r="22" fill="#2A0B37" stroke="#FF2E93" stroke-width="2" filter="url(#glowF)" />
+      <circle r="16" fill="#FF2E93" opacity="0.6" />
+      <text x="0" y="5" fill="#ffffff" font-size="11" font-weight="bold" text-anchor="middle">♡</text>
+    </g>
+    <!-- Node 3 -->
+    <g transform="translate(60, 110)">
+      <circle r="14" fill="#1C0924" stroke="#8B5CF6" stroke-width="1" />
+      <circle r="10" fill="#8B5CF6" opacity="0.4" />
+      <text x="0" y="3.5" fill="#ffffff" font-size="8" font-weight="bold" text-anchor="middle">K</text>
+    </g>
+    <!-- Node 4 -->
+    <g transform="translate(-120, 80)">
+      <circle r="14" fill="#1C0924" stroke="#FF6B6B" stroke-width="1" />
+      <circle r="10" fill="#FF6B6B" opacity="0.4" />
+      <text x="0" y="3.5" fill="#ffffff" font-size="8" font-weight="bold" text-anchor="middle">Z</text>
+    </g>
+    
+    <!-- Central Pulse -->
+    <circle r="10" fill="#FF2E93" filter="url(#glowF)" />
+    <circle r="5" fill="#ffffff" />
+  </g>
+
+  <!-- Bottom Info Badge -->
+  <g transform="translate(300, 395)">
+    <rect x="-110" y="-16" width="220" height="32" rx="16" fill="#180722" stroke="rgba(255,255,255,0.1)" stroke-width="1" />
+    <circle cx="-85" cy="0" r="3.5" fill="#10B981" />
+    <text x="0" y="4" fill="#ffffff" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="600" text-anchor="middle">Instant 0.8s Matchmaking</text>
+  </g>
+</svg>

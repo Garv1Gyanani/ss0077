@@ -3,6 +3,7 @@ import SEOHead from './SEOHead';
 import SEOProductCapabilities from './SEOProductCapabilities';
 import SEOBreadcrumbs from './SEOBreadcrumbs';
 import SEORelatedGrid from './SEORelatedGrid';
+import { trackSEOCTAClick } from '../../utils/telemetry';
 
 export default function SEOPageLayout({ 
   pageData, 
@@ -14,6 +15,7 @@ export default function SEOPageLayout({
   toggleTheme 
 }) {
   const [openFaq, setOpenFaq] = useState(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   if (!pageData) return null;
 
@@ -33,11 +35,13 @@ export default function SEOPageLayout({
   } = pageData;
 
   const handleStartWithPreset = (mode) => {
+    const targetMode = mode || presetPreferences.mode || 'video';
+    trackSEOCTAClick('seo_page_cta', targetMode, pageData.path);
     const prefs = {
       ...presetPreferences,
-      mode: mode || presetPreferences.mode || 'video'
+      mode: targetMode
     };
-    onStartChat(mode || 'video', prefs);
+    onStartChat(targetMode, prefs);
   };
 
   return (
@@ -61,12 +65,12 @@ export default function SEOPageLayout({
             <div className="relative">
               <img 
                 alt="Mingzy Logo" 
-                className="w-9 h-9 rounded-xl object-cover ring-1 ring-white/10 group-hover:ring-violet-500/30 transition-all duration-300" 
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSqhTmsH8QdDGueXPgSZzO2UoBA5BkL3dfgiVDIF5lKy2IRtZKNlulTQnxuhPzg7hZFdBR7zKmhfZ1vbsueu8Gi2YSRDcdtrP0SN_PrUTV_PgJ8vpK4x0yLJ8dznlYjgCZwnxmOTqtYnZORGf-32J9iDRoJUO9wYds33nWC0Ji_ZqOP1JeHry0Q5cGC5YTKkPRMLmVeQkQhbWU25jtIIaH3Mwjh4jtiqtIO3nI5TplQYUqfMZ4Nn-B"
+                className="w-9 h-9 rounded-2xl object-cover ring-1 ring-white/10 group-hover:ring-mingzy-pink/40 transition-all duration-300 shadow-[0_0_12px_rgba(255,46,147,0.3)]" 
+                src="/images/mingzy-logo.jpg"
               />
-              <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-[#0a0a0a] animate-pulse"></div>
+              <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-mingzy-pink rounded-full border border-[#09060F] shadow-[0_0_8px_#FF2E93] animate-pulse"></div>
             </div>
-            <span className="text-xl md:text-2xl font-bold text-white tracking-tight group-hover:text-violet-200 transition-colors">
+            <span className="text-xl md:text-2xl font-bold text-white tracking-tight group-hover:text-mingzy-pink transition-colors">
               Mingzy
             </span>
           </div>
@@ -76,9 +80,9 @@ export default function SEOPageLayout({
             {[
               { label: 'Video Chat', path: '/random-video-chat' },
               { label: 'Text Chat', path: '/random-text-chat' },
+              { label: 'No Login', path: '/omegle-alternative-no-login' },
               { label: 'Languages', path: '/languages/english' },
               { label: 'Countries', path: '/countries/usa' },
-              { label: 'Cities', path: '/cities/new-york' },
               { label: 'Alternatives', path: '/alternatives/omegle-alternative' },
               { label: 'Safety', path: '/safety' },
               { label: 'Guides', path: '/guides/how-random-video-chat-works' }
@@ -94,7 +98,7 @@ export default function SEOPageLayout({
           </nav>
 
           {/* Right Controls */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 md:gap-3">
             {user ? (
               <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10">
                 <span className="text-xs text-white/70 font-medium">
@@ -135,16 +139,106 @@ export default function SEOPageLayout({
             {/* Primary Action Button */}
             <button 
               onClick={() => handleStartWithPreset('video')}
-              className="btn-primary px-4 py-2 rounded-xl text-xs font-semibold relative z-10"
+              className="btn-primary px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold relative z-10"
             >
               <span className="relative z-10 flex items-center gap-1.5">
                 <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>videocam</span>
                 Start Chat
               </span>
             </button>
+
+            {/* Mobile Menu Hamburger Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden w-9 h-9 rounded-xl flex items-center justify-center hover:bg-white/5 border border-white/[0.08] text-white/70 hover:text-white transition-all active:scale-95"
+              aria-label="Toggle navigation menu"
+            >
+              <span className="material-symbols-outlined text-[20px]">
+                {mobileMenuOpen ? 'close' : 'menu'}
+              </span>
+            </button>
           </div>
 
         </div>
+
+        {/* Collapsible Mobile Navigation Drawer */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden w-full border-t border-white/[0.08] bg-[#0d0714]/95 backdrop-blur-xl px-5 py-4 flex flex-col gap-3 animate-fade-in">
+            <div className="flex flex-col gap-1 text-sm font-medium">
+              <button 
+                onClick={() => { setMobileMenuOpen(false); handleStartWithPreset('video'); }} 
+                className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-mingzy-pink/15 text-mingzy-pink hover:bg-mingzy-pink/20 transition-all font-semibold text-left mb-1"
+              >
+                <span className="material-symbols-outlined text-[18px]">videocam</span>
+                Start Video Chat Now
+              </button>
+              <button 
+                onClick={() => { setMobileMenuOpen(false); onNavigate('/random-video-chat'); }} 
+                className="flex items-center gap-2 px-3 py-2 rounded-lg text-white/80 hover:text-white hover:bg-white/5 transition-all text-left"
+              >
+                Random Video Chat
+              </button>
+              <button 
+                onClick={() => { setMobileMenuOpen(false); onNavigate('/alternatives/omegle-alternative'); }} 
+                className="flex items-center gap-2 px-3 py-2 rounded-lg text-white/80 hover:text-white hover:bg-white/5 transition-all text-left"
+              >
+                Omegle Alternatives
+              </button>
+              <button 
+                onClick={() => { setMobileMenuOpen(false); onNavigate('/omegle-alternative-no-login'); }} 
+                className="flex items-center gap-2 px-3 py-2 rounded-lg text-white/80 hover:text-white hover:bg-white/5 transition-all text-left"
+              >
+                No Login Chat
+              </button>
+              
+              <div className="pt-2 pb-1 px-3 text-[11px] font-semibold uppercase tracking-wider text-white/40">
+                Language Exchange
+              </div>
+              <button 
+                onClick={() => { setMobileMenuOpen(false); onNavigate('/language-exchange/english-spanish'); }} 
+                className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-all text-left pl-5"
+              >
+                English ↔ Spanish
+              </button>
+              <button 
+                onClick={() => { setMobileMenuOpen(false); onNavigate('/language-exchange/hindi-english'); }} 
+                className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-all text-left pl-5"
+              >
+                Hindi ↔ English
+              </button>
+
+              <div className="pt-2 pb-1 px-3 text-[11px] font-semibold uppercase tracking-wider text-white/40">
+                Guides & Safety
+              </div>
+              <button 
+                onClick={() => { setMobileMenuOpen(false); onNavigate('/guides/omegle-alternatives-guide'); }} 
+                className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-all text-left pl-5"
+              >
+                Omegle Alternatives Guide
+              </button>
+              <button 
+                onClick={() => { setMobileMenuOpen(false); onNavigate('/guides/anonymous-video-chat-guide'); }} 
+                className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-all text-left pl-5"
+              >
+                Anonymous Video Chat Guide
+              </button>
+              <button 
+                onClick={() => { setMobileMenuOpen(false); onNavigate('/safety'); }} 
+                className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-all text-left pl-5"
+              >
+                Safety Center
+              </button>
+              
+              <div className="pt-3 mt-1 border-t border-white/[0.06] flex items-center justify-between px-3 text-xs text-white/40">
+                <button onClick={() => { setMobileMenuOpen(false); onNavigate('/privacy'); }} className="hover:text-white">Privacy</button>
+                <span>•</span>
+                <button onClick={() => { setMobileMenuOpen(false); onNavigate('/terms'); }} className="hover:text-white">Terms</button>
+                <span>•</span>
+                <button onClick={() => { setMobileMenuOpen(false); onNavigate('/community-guidelines'); }} className="hover:text-white">Guidelines</button>
+              </div>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* 3. Main Content Container */}
@@ -161,7 +255,7 @@ export default function SEOPageLayout({
           {/* Badge */}
           <div className="mb-6 inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel text-xs text-violet-300 font-semibold border border-violet-500/20">
             <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></div>
-            <span>{badgeText || 'Sub-2s WebRTC • 100% Free • No Account'}</span>
+            <span>{badgeText || 'Encrypted WebRTC • 100% Free • No Account'}</span>
           </div>
 
           {/* Dynamic H1 Headline */}

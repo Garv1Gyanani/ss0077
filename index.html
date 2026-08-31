@@ -3,12 +3,176 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mingzy - Meet Someone New</title>
-    <!-- Fonts & Icons -->
+    <meta name="theme-color" content="#09060F" />
+
+    <!-- ══ Primary SEO ══════════════════════════════════════════════════ -->
+    <title>Mingzy — Meet Someone New &amp; Make Real Connections</title>
+    <meta name="description" content="Mingzy is the stranger chat app built around real conversation. Pick your vibe, get instantly paired, and connect face-to-face with someone new from anywhere in the world. No registration required." />
+    <meta name="keywords" content="mingzy, stranger chat, random video chat, meet new people, anonymous chat, video call strangers, make friends online, global chat, omegle alternative" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="author" content="Mingzy" />
+    <link rel="canonical" href="https://mingzy.space/" />
+    <link rel="alternate" type="text/plain" href="/llms.txt" />
+
+    <!-- ══ Open Graph (Facebook / WhatsApp / LinkedIn) ══════════════════ -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Mingzy" />
+    <meta property="og:title" content="Mingzy — Meet Someone New &amp; Make Real Connections" />
+    <meta property="og:description" content="Pick your vibe, get instantly paired, and connect face-to-face with someone new from anywhere in the world. No registration required." />
+    <meta property="og:url" content="https://mingzy.space/" />
+    <meta property="og:image" content="https://mingzy.space/images/mingzy-logo.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- ══ Twitter / X Card ═════════════════════════════════════════════ -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Mingzy — Meet Someone New &amp; Make Real Connections" />
+    <meta name="twitter:description" content="Pick your vibe, get instantly paired, and connect face-to-face with someone new. No registration required." />
+    <meta name="twitter:image" content="https://mingzy.space/images/mingzy-logo.jpg" />
+
+    <!-- ══ Favicon Chain ════════════════════════════════════════════════ -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/jpeg" href="/images/mingzy-logo.jpg" sizes="any" />
+    <link rel="apple-touch-icon" href="/images/mingzy-logo.jpg" />
+    <link rel="shortcut icon" href="/favicon.svg" />
+    <meta name="msapplication-TileColor" content="#09060F" />
+
+    <!-- ══ Structured Data (JSON-LD) ════════════════════════════════════ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://mingzy.space/#organization",
+          "name": "Mingzy",
+          "url": "https://mingzy.space/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://mingzy.space/images/mingzy-logo.jpg"
+          },
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "customer support",
+            "url": "https://mingzy.space/safety"
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://mingzy.space/#website",
+          "url": "https://mingzy.space/",
+          "name": "Mingzy",
+          "description": "Real-time anonymous stranger video and text chat platform.",
+          "publisher": {
+            "@id": "https://mingzy.space/#organization"
+          }
+        },
+        {
+          "@type": "SoftwareApplication",
+          "@id": "https://mingzy.space/#software",
+          "name": "Mingzy",
+          "url": "https://mingzy.space/",
+          "description": "Mingzy is a stranger chat app built around real conversation. Meet someone new through face-to-face video or text chat, filtered by language, country, and vibe.",
+          "applicationCategory": "CommunicationApplication",
+          "operatingSystem": "Web, Android, iOS, Windows, macOS, Linux",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock"
+          },
+          "featureList": "Live random video chat, WebRTC HD peer-to-peer encryption, zero registration required, language matching, country filters, 1-click skip"
+        }
+      ]
+    }
+    </script>
+
+    <!-- ══ Fonts &amp; Icons ═════════════════════════════════════════════════ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   </head>
-  <body class="bg-background text-on-surface font-body-md text-body-md antialiased min-h-screen flex flex-col bg-ambient-gradient">
+  <body class="bg-midnight-canvas text-[#f5ebfc] font-body-md antialiased min-h-screen flex flex-col bg-midnight-universe selection:bg-mingzy-pink/30">
+
+    <!-- ══ Crawler-visible content (shown when JS is disabled) ══════════
+         This gives search engines real text content, an H1, and internal
+         links so the page is not penalised for being "empty". The React
+         app mounts into #root and fully replaces this for real users.
+    ══════════════════════════════════════════════════════════════════════ -->
+    <noscript>
+      <style>
+        #noscript-seo { font-family: sans-serif; max-width: 900px; margin: 0 auto; padding: 2rem; color: #f5ebfc; background: #09060F; }
+        #noscript-seo h1 { font-size: 2rem; margin-bottom: 1rem; }
+        #noscript-seo h2 { font-size: 1.4rem; margin: 1.5rem 0 0.5rem; }
+        #noscript-seo p  { line-height: 1.7; margin-bottom: 1rem; color: #c4afd9; }
+        #noscript-seo a  { color: #FF2E93; }
+        #noscript-seo nav a { display: inline-block; margin-right: 1rem; }
+      </style>
+      <div id="noscript-seo">
+        <header>
+          <img src="/images/mingzy-logo.jpg" alt="Mingzy logo" width="60" height="60" />
+          <h1>Mingzy — Meet Someone New &amp; Make Real Connections</h1>
+          <nav aria-label="Main navigation">
+            <a href="/">Home</a>
+            <a href="/privacy.html">Privacy Policy</a>
+            <a href="/terms.html">Terms of Service</a>
+            <a href="https://www.dropbox.com/scl/fi/5q3hmh674wtdf3yxlogbu/app-release.apk?rlkey=174k5u1sinqnuguxvybxraeve&st=6e7b325k&dl=1">Download Android App</a>
+          </nav>
+        </header>
+
+        <main>
+          <p>
+            <strong>Mingzy</strong> is a live stranger chat platform built around real conversation — not endless swiping.
+            Pick a vibe, get instantly paired, and connect face-to-face with someone new from anywhere in the world.
+            No registration, no profile required.
+          </p>
+
+          <h2>How Mingzy Works</h2>
+          <p>
+            Choose your mood from vibes like <strong>Deep Talk</strong>, <strong>Just Laughs</strong>,
+            <strong>Cozy Night</strong>, <strong>Music &amp; Art</strong>, or <strong>Travel Stories</strong>.
+            Mingzy instantly pairs you with a stranger who matches your energy. You can chat by text or go live
+            on video — the choice is yours.
+          </p>
+
+          <h2>Safe, Private &amp; Secure</h2>
+          <p>
+            All video streams run peer-to-peer via WebRTC — zero recordings stored, zero data sold.
+            Instant 1-click skip, 1-tap block, and zero-tolerance moderation keep every session safe.
+          </p>
+
+          <h2>Available on Android</h2>
+          <p>
+            Download the Mingzy Android app and take real conversations wherever you go.
+            HD video, gesture-based skips, and instant push connection signals — right in your pocket.
+          </p>
+          <p>
+            <a href="https://www.dropbox.com/scl/fi/5q3hmh674wtdf3yxlogbu/app-release.apk?rlkey=174k5u1sinqnuguxvybxraeve&st=6e7b325k&dl=1">
+              Download the Mingzy APK for Android
+            </a>
+          </p>
+
+          <h2>Global Discovery</h2>
+          <p>
+            Mingzy connects you with people across languages, cultures, and timezones. Filter by region or jump
+            straight into worldwide matchmaking. Someone unexpected is always waiting.
+          </p>
+
+          <p><em>JavaScript is required for the full Mingzy experience. Please enable it in your browser.</em></p>
+        </main>
+
+        <footer>
+          <p>
+            &copy; 2026 Mingzy &mdash;
+            <a href="/privacy.html">Privacy Policy</a> &middot;
+            <a href="/terms.html">Terms of Service</a>
+          </p>
+        </footer>
+      </div>
+    </noscript>
+
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

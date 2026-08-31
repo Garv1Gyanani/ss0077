@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450" width="100%" height="100%">
+  <defs>
+    <radialGradient id="mobileBg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#2D103E" stop-opacity="0.9" />
+      <stop offset="70%" stop-color="#14071B" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#09060F" stop-opacity="1" />
+    </radialGradient>
+    <linearGradient id="phoneGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF2E93" />
+      <stop offset="50%" stop-color="#D946EF" />
+      <stop offset="100%" stop-color="#FF6B6B" />
+    </linearGradient>
+    <filter id="phoneShadow">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#FF2E93" flood-opacity="0.25" />
+    </filter>
+  </defs>
+
+  <rect width="600" height="450" rx="32" fill="url(#mobileBg)" stroke="rgba(255,255,255,0.08)" stroke-width="1.5" />
+
+  <!-- Phone Frame Center -->
+  <g transform="translate(300, 225)" filter="url(#phoneShadow)">
+    <!-- Device Body -->
+    <rect x="-110" y="-170" width="220" height="340" rx="38" fill="#0F0516" stroke="rgba(255,255,255,0.15)" stroke-width="2" />
+    <rect x="-110" y="-170" width="220" height="340" rx="38" fill="none" stroke="url(#phoneGlow)" stroke-width="1.2" opacity="0.6" />
+    
+    <!-- Screen Glass -->
+    <rect x="-98" y="-158" width="196" height="316" rx="28" fill="#16091D" />
+
+    <!-- Island / Camera Pill -->
+    <rect x="-24" y="-150" width="48" height="12" rx="6" fill="#09060F" />
+
+    <!-- Screen Content: Mingzy Live Call -->
+    <!-- Top Bar inside app -->
+    <g transform="translate(0, -125)">
+      <circle cx="-70" cy="0" r="10" fill="#FF2E93" opacity="0.3" />
+      <text x="-70" y="3" fill="#ffffff" font-size="8" font-weight="bold" text-anchor="middle">♡</text>
+      <text x="0" y="3" fill="#ffffff" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="700" text-anchor="middle">Mingzy Live</text>
+      <rect x="52" y="-7" width="26" height="14" rx="7" fill="#10B981" />
+      <text x="65" y="3" fill="#09060F" font-size="7" font-weight="bold" text-anchor="middle">HD</text>
+    </g>
+
+    <!-- Top Video Feed (Stranger) -->
+    <g transform="translate(0, -50)">
+      <rect x="-85" y="-55" width="170" height="110" rx="18" fill="#200B2E" stroke="rgba(255,255,255,0.08)" stroke-width="1" />
+      <circle cx="0" cy="-5" r="22" fill="#D946EF" opacity="0.3" />
+      <text x="0" y="-1" fill="#ffffff" font-size="14" text-anchor="middle">✨</text>
+      <!-- Tag -->
+      <rect x="-75" y="30" width="65" height="16" rx="8" fill="#09060F" opacity="0.8" />
+      <text x="-42" y="41" fill="#ffffff" font-size="7" font-weight="bold" text-anchor="middle">Maya • 21</text>
+    </g>
+
+    <!-- Bottom Video Feed (Self) -->
+    <g transform="translate(0, 75)">
+      <rect x="-85" y="-55" width="170" height="90" rx="18" fill="#1A0826" stroke="#FF2E93" stroke-width="1" opacity="0.9" />
+      <circle cx="0" cy="-12" r="18" fill="#FF2E93" opacity="0.3" />
+      <text x="0" y="-8" fill="#ffffff" font-size="12" text-anchor="middle">👤</text>
+      <!-- Tag -->
+      <rect x="-75" y="14" width="40" height="14" rx="7" fill="#09060F" opacity="0.8" />
+      <text x="-55" y="24" fill="#ffffff" font-size="7" font-weight="bold" text-anchor="middle">You</text>
+    </g>
+
+    <!-- Bottom Action Pill inside phone -->
+    <g transform="translate(0, 130)">
+      <rect x="-55" y="-12" width="110" height="24" rx="12" fill="url(#phoneGlow)" />
+      <text x="0" y="3" fill="#ffffff" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" font-weight="bold" text-anchor="middle">Next Stranger →</text>
+    </g>
+  </g>
+
+  <!-- Left Feature Callout -->
+  <g transform="translate(80, 210)">
+    <rect width="130" height="50" rx="16" fill="#180722" stroke="rgba(255,255,255,0.08)" stroke-width="1" />
+    <text x="16" y="22" fill="#ffffff" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="bold">Android Native</text>
+    <text x="16" y="38" fill="rgba(255,255,255,0.4)" font-family="'Plus Jakarta Sans', sans-serif" font-size="9">Low Latency APK</text>
+  </g>
+
+  <!-- Right Feature Callout -->
+  <g transform="translate(390, 210)">
+    <rect width="130" height="50" rx="16" fill="#180722" stroke="rgba(255,255,255,0.08)" stroke-width="1" />
+    <text x="16" y="22" fill="#ffffff" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="bold">Gesture Controls</text>
+    <text x="16" y="38" fill="rgba(255,255,255,0.4)" font-family="'Plus Jakarta Sans', sans-serif" font-size="9">Swipe for next match</text>
+  </g>
+</svg>

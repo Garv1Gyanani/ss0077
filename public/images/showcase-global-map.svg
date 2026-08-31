@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <radialGradient id="mapGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#2D0F3B" stop-opacity="0.9" />
+      <stop offset="60%" stop-color="#14061A" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#09060F" stop-opacity="1" />
+    </radialGradient>
+    <linearGradient id="arc1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FF2E93" />
+      <stop offset="50%" stop-color="#D946EF" />
+      <stop offset="100%" stop-color="#FF6B6B" />
+    </linearGradient>
+    <linearGradient id="arc2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8B5CF6" />
+      <stop offset="50%" stop-color="#D946EF" />
+      <stop offset="100%" stop-color="#FF2E93" />
+    </linearGradient>
+    <filter id="glowMap">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <rect width="800" height="500" rx="32" fill="url(#mapGlow)" stroke="rgba(255,255,255,0.08)" stroke-width="1.5" />
+
+  <!-- Constellation Grid Lines -->
+  <g opacity="0.15" stroke="#D946EF" stroke-width="0.8" stroke-dasharray="3 6">
+    <ellipse cx="400" cy="250" rx="340" ry="170" fill="none" />
+    <ellipse cx="400" cy="250" rx="240" ry="120" fill="none" />
+    <line x1="60" y1="250" x2="740" y2="250" />
+    <line x1="400" y1="80" x2="400" y2="420" />
+    <line x1="200" y1="120" x2="200" y2="380" />
+    <line x1="600" y1="120" x2="600" y2="380" />
+  </g>
+
+  <!-- Continents Simplified Dotted Mesh -->
+  <g fill="#ffffff" opacity="0.25">
+    <!-- North America -->
+    <circle cx="210" cy="180" r="2" /><circle cx="225" cy="175" r="2.5" /><circle cx="240" cy="190" r="2" />
+    <circle cx="200" cy="200" r="3" /><circle cx="220" cy="210" r="2.5" /><circle cx="245" cy="215" r="3" />
+    <circle cx="230" cy="235" r="2" /><circle cx="260" cy="225" r="2" />
+    <!-- South America -->
+    <circle cx="270" cy="300" r="2.5" /><circle cx="285" cy="320" r="3" /><circle cx="295" cy="345" r="2.5" />
+    <circle cx="280" cy="370" r="2" /><circle cx="275" cy="395" r="2" />
+    <!-- Europe -->
+    <circle cx="410" cy="175" r="2.5" /><circle cx="425" cy="165" r="3" /><circle cx="440" cy="180" r="2.5" />
+    <circle cx="415" cy="195" r="2.5" /><circle cx="435" cy="205" r="3" />
+    <!-- Africa -->
+    <circle cx="420" cy="260" r="3" /><circle cx="440" cy="275" r="2.5" /><circle cx="430" cy="310" r="3" />
+    <circle cx="450" cy="335" r="2" /><circle cx="445" cy="365" r="2.5" />
+    <!-- Asia -->
+    <circle cx="520" cy="170" r="2.5" /><circle cx="550" cy="165" r="3" /><circle cx="580" cy="180" r="2.5" />
+    <circle cx="540" cy="205" r="3" /><circle cx="570" cy="215" r="3" /><circle cx="610" cy="200" r="2.5" />
+    <circle cx="530" cy="245" r="2.5" /><circle cx="560" cy="255" r="2" /><circle cx="630" cy="220" r="3" />
+    <!-- Australia -->
+    <circle cx="640" cy="340" r="2.5" /><circle cx="660" cy="355" r="3" /><circle cx="650" cy="375" r="2" />
+  </g>
+
+  <!-- Glowing Curved Connection Arcs -->
+  <!-- NYC <-> London -->
+  <path d="M 245 215 Q 330 130 425 165" fill="none" stroke="url(#arc1)" stroke-width="2.5" filter="url(#glowMap)" />
+  <!-- London <-> Tokyo -->
+  <path d="M 425 165 Q 520 80 630 220" fill="none" stroke="url(#arc2)" stroke-width="2.5" filter="url(#glowMap)" />
+  <!-- Tokyo <-> Sydney -->
+  <path d="M 630 220 Q 670 280 660 355" fill="none" stroke="url(#arc1)" stroke-width="2" filter="url(#glowMap)" opacity="0.8" />
+  <!-- São Paulo <-> Berlin -->
+  <path d="M 285 320 Q 350 220 440 180" fill="none" stroke="url(#arc2)" stroke-width="2" filter="url(#glowMap)" opacity="0.8" />
+
+  <!-- Major City Nodes with Pulsing Auras -->
+  <!-- NYC -->
+  <g transform="translate(245, 215)">
+    <circle r="12" fill="#FF2E93" opacity="0.25" filter="url(#glowMap)" />
+    <circle r="4" fill="#FF2E93" />
+    <text x="-10" y="-10" fill="#ffffff" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="600" text-anchor="end">New York</text>
+  </g>
+
+  <!-- London -->
+  <g transform="translate(425, 165)">
+    <circle r="14" fill="#D946EF" opacity="0.3" filter="url(#glowMap)" />
+    <circle r="4" fill="#D946EF" />
+    <text x="0" y="-12" fill="#ffffff" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="600" text-anchor="middle">London</text>
+  </g>
+
+  <!-- Tokyo -->
+  <g transform="translate(630, 220)">
+    <circle r="16" fill="#FF2E93" opacity="0.35" filter="url(#glowMap)" />
+    <circle r="5" fill="#ffffff" stroke="#FF2E93" stroke-width="2" />
+    <text x="12" y="-10" fill="#ffffff" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="600">Tokyo</text>
+  </g>
+
+  <!-- São Paulo -->
+  <g transform="translate(285, 320)">
+    <circle r="10" fill="#FF6B6B" opacity="0.25" filter="url(#glowMap)" />
+    <circle r="3.5" fill="#FF6B6B" />
+    <text x="-8" y="18" fill="#ffffff" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="600" text-anchor="end">São Paulo</text>
+  </g>
+
+  <!-- Sydney -->
+  <g transform="translate(660, 355)">
+    <circle r="10" fill="#8B5CF6" opacity="0.25" filter="url(#glowMap)" />
+    <circle r="3.5" fill="#8B5CF6" />
+    <text x="10" y="16" fill="#ffffff" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="600">Sydney</text>
+  </g>
+
+  <!-- Active Global Counter Badge -->
+  <g transform="translate(400, 440)">
+    <rect x="-140" y="-18" width="280" height="36" rx="18" fill="#180722" stroke="rgba(255,255,255,0.1)" stroke-width="1" />
+    <circle cx="-115" cy="0" r="4" fill="#10B981" />
+    <text x="0" y="4" fill="#ffffff" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="600" text-anchor="middle">4,281 Midnight Connections Worldwide</text>
+  </g>
+</svg>
