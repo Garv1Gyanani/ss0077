@@ -184,7 +184,9 @@ export default function LandingPage({ user, onStartChat, onOpenAuth, onNavigate,
               <img 
                 alt="Mingzy" 
                 className="w-9 h-9 rounded-2xl object-cover ring-1 ring-white/10 group-hover:ring-mingzy-pink/40 transition-all duration-300 shadow-[0_0_16px_rgba(255,46,147,0.3)]" 
-                src="/images/mingzy-logo.jpg"
+                src="/images/mingzy-logo.webp"
+                width="36"
+                height="36"
               />
               <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-mingzy-pink rounded-full border border-[#09060F] shadow-[0_0_8px_#FF2E93] animate-pulse"></div>
             </div>
@@ -734,8 +736,11 @@ export default function LandingPage({ user, onStartChat, onOpenAuth, onNavigate,
 
             {/* Full-Bleed Background Image */}
             <img
-              src="/images/mingzy-mobile-app-showcase.png"
+              src="/images/mingzy-mobile-app-showcase.webp"
               alt="Mingzy Android Native App"
+              loading="lazy"
+              width="1024"
+              height="512"
               className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
             />
 

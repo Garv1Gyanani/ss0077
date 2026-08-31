@@ -335,8 +335,11 @@ export default function SEOPageLayout({
         <section className="w-full max-w-4xl mb-16 rounded-3xl overflow-hidden glass-panel border border-white/10 p-2 relative group">
           <div className="relative aspect-[21/9] sm:aspect-[24/9] rounded-2xl overflow-hidden bg-[#090909]">
             <img 
-              src={presetPreferences.mode === 'text' ? '/images/showcase-3.png' : '/images/showcase-1.png'} 
+              src={presetPreferences.mode === 'text' ? '/images/showcase-3.webp' : '/images/showcase-1.webp'} 
               alt={h1}
+              loading="lazy"
+              width="1200"
+              height="514"
               className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all duration-700" 
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent"></div>
