@@ -255,7 +255,7 @@ export default function SEOPageLayout({
           {/* Badge */}
           <div className="mb-6 inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel text-xs text-violet-300 font-semibold border border-violet-500/20">
             <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></div>
-            <span>{badgeText || 'Encrypted WebRTC • 100% Free • No Account'}</span>
+            <span>{badgeText || 'Encrypted Video • 100% Free • No Account'}</span>
           </div>
 
           {/* Dynamic H1 Headline */}

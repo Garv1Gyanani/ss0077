@@ -301,7 +301,7 @@ export default function Matchmaker({
         <div className="flex items-center gap-4 mb-2 sm:mb-0">
           <span>Finding compatible match</span>
           <span className="w-1 h-1 rounded-full bg-white/20"></span>
-          <span>Direct WebRTC Stream</span>
+          <span>Live Video Stream</span>
         </div>
         <div className="flex items-center gap-1.5">
           <span className="material-symbols-outlined text-[14px] text-mingzy-pink">favorite</span>

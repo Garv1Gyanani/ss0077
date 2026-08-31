@@ -394,7 +394,7 @@ export default function LandingPage({ user, onStartChat, onOpenAuth, onNavigate,
           <div className="animate-fade-in-up opacity-0 delay-400 flex flex-wrap items-center justify-center gap-3 text-white/40 text-xs mb-10">
             <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.02] border border-white/[0.05]">
               <span className="material-symbols-outlined text-[14px] text-mingzy-pink">bolt</span>
-              <span>Direct WebRTC Stream</span>
+              <span>Live Video Stream</span>
             </div>
             <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.02] border border-white/[0.05]">
               <span className="material-symbols-outlined text-[14px] text-mingzy-orchid">lock</span>
@@ -578,7 +578,7 @@ export default function LandingPage({ user, onStartChat, onOpenAuth, onNavigate,
               {
                 step: '02',
                 title: 'Instant Pairing',
-                desc: 'Get matched through direct WebRTC peer connections. No waiting rooms, no credit cards, no login required.',
+                desc: 'Get matched in real time. No waiting rooms, no credit cards, no login required.',
                 icon: 'bolt',
                 color: 'text-mingzy-orchid'
               },
