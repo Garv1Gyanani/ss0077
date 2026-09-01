@@ -2,337 +2,322 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Core Homepage -->
   <url>
-    <loc>https://mingzy.space/</loc>
-    <lastmod>2026-08-27</lastmod>
+    <loc>https://www.mingzy.space/</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
-  <!-- 1. Core Transactional Money Pages (Tier A: Indexable) -->
   <url>
-    <loc>https://mingzy.space/random-video-chat</loc>
-    <lastmod>2026-08-27</lastmod>
+    <loc>https://www.mingzy.space/random-video-chat</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>daily</changefreq>
-    <priority>1.0</priority>
+    <priority>1.00</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/talk-to-strangers</loc>
-    <lastmod>2026-08-27</lastmod>
+    <loc>https://www.mingzy.space/talk-to-strangers</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.95</priority>
+    <priority>1.00</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/anonymous-video-chat</loc>
-    <lastmod>2026-08-27</lastmod>
+    <loc>https://www.mingzy.space/anonymous-video-chat</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.95</priority>
+    <priority>1.00</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/random-text-chat</loc>
-    <lastmod>2026-08-27</lastmod>
+    <loc>https://www.mingzy.space/random-text-chat</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.95</priority>
+    <priority>1.00</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/meet-new-people</loc>
-    <lastmod>2026-08-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.90</priority>
-  </url>
-  <url>
-    <loc>https://mingzy.space/stranger-chat</loc>
-    <lastmod>2026-08-27</lastmod>
+    <loc>https://www.mingzy.space/meet-new-people</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.90</priority>
+    <priority>1.00</priority>
   </url>
-
-  <!-- 2. Primary Commercial Alternatives (Tier A: Indexable) -->
   <url>
-    <loc>https://mingzy.space/alternatives/omegle-alternative</loc>
-    <lastmod>2026-08-27</lastmod>
+    <loc>https://www.mingzy.space/stranger-chat</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.00</priority>
+  </url>
+  <url>
+    <loc>https://www.mingzy.space/alternatives/omegle-alternative</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/alternatives/ome-tv-alternative</loc>
-    <lastmod>2026-08-27</lastmod>
+    <loc>https://www.mingzy.space/alternatives/ome-tv-alternative</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.85</priority>
+    <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/alternatives/chatroulette-alternative</loc>
-    <lastmod>2026-08-27</lastmod>
+    <loc>https://www.mingzy.space/alternatives/chatroulette-alternative</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.85</priority>
+    <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/alternatives/monkey-alternative</loc>
-    <lastmod>2026-08-27</lastmod>
+    <loc>https://www.mingzy.space/alternatives/monkey-alternative</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.85</priority>
-  </url>
-
-  <!-- 3. Core Target Language Corridors (Tier A: Indexable) -->
-  <url>
-    <loc>https://mingzy.space/languages/english</loc>
-    <lastmod>2026-08-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/languages/hindi</loc>
-    <lastmod>2026-08-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://mingzy.space/languages/spanish</loc>
-    <lastmod>2026-08-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://mingzy.space/languages/french</loc>
-    <lastmod>2026-08-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://mingzy.space/languages/german</loc>
-    <lastmod>2026-08-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://mingzy.space/languages/portuguese</loc>
-    <lastmod>2026-08-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://mingzy.space/languages/japanese</loc>
-    <lastmod>2026-08-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-
-  <!-- 4. Core Country & Regional Hubs (Tier A: Indexable) -->
-  <url>
-    <loc>https://mingzy.space/countries/usa</loc>
-    <lastmod>2026-08-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://mingzy.space/countries/india</loc>
-    <lastmod>2026-08-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://mingzy.space/countries/uk</loc>
-    <lastmod>2026-08-27</lastmod>
+    <loc>https://www.mingzy.space/languages/english</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/countries/canada</loc>
-    <lastmod>2026-08-27</lastmod>
+    <loc>https://www.mingzy.space/languages/hindi</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/countries/australia</loc>
-    <lastmod>2026-08-27</lastmod>
+    <loc>https://www.mingzy.space/languages/spanish</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/countries/germany</loc>
-    <lastmod>2026-08-27</lastmod>
+    <loc>https://www.mingzy.space/languages/french</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/countries/france</loc>
-    <lastmod>2026-08-27</lastmod>
+    <loc>https://www.mingzy.space/languages/german</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/countries/brazil</loc>
-    <lastmod>2026-08-27</lastmod>
+    <loc>https://www.mingzy.space/languages/portuguese</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/countries/japan</loc>
-    <lastmod>2026-08-27</lastmod>
+    <loc>https://www.mingzy.space/languages/japanese</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/countries/philippines</loc>
-    <lastmod>2026-08-27</lastmod>
+    <loc>https://www.mingzy.space/countries/usa</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>
-
-  <!-- 5. Technical Feature Engines (Tier A: Indexable) -->
   <url>
-    <loc>https://mingzy.space/features/video-chat</loc>
-    <lastmod>2026-08-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
+    <loc>https://www.mingzy.space/countries/india</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/features/text-chat</loc>
-    <lastmod>2026-08-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
+    <loc>https://www.mingzy.space/countries/uk</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/features/language-matching</loc>
-    <lastmod>2026-08-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
+    <loc>https://www.mingzy.space/countries/canada</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/features/instant-matching</loc>
-    <lastmod>2026-08-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
+    <loc>https://www.mingzy.space/countries/australia</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/features/global-chat</loc>
-    <lastmod>2026-08-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
+    <loc>https://www.mingzy.space/countries/germany</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/features/skip-and-match</loc>
-    <lastmod>2026-08-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
+    <loc>https://www.mingzy.space/countries/france</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
   </url>
-
-  <!-- 6. Trust, Safety, & Regulatory (Tier A: Indexable) -->
   <url>
-    <loc>https://mingzy.space/safety</loc>
-    <lastmod>2026-08-27</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://www.mingzy.space/countries/brazil</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.mingzy.space/countries/japan</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.mingzy.space/countries/philippines</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.mingzy.space/features/video-chat</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/safety/reporting</loc>
-    <lastmod>2026-08-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.65</priority>
+    <loc>https://www.mingzy.space/features/text-chat</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/safety/blocking</loc>
-    <lastmod>2026-08-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.65</priority>
+    <loc>https://www.mingzy.space/features/language-matching</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/community-guidelines</loc>
-    <lastmod>2026-08-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.65</priority>
+    <loc>https://www.mingzy.space/features/instant-matching</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/privacy</loc>
-    <lastmod>2026-08-27</lastmod>
+    <loc>https://www.mingzy.space/features/global-chat</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.mingzy.space/features/skip-and-match</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.mingzy.space/safety</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.60</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/terms</loc>
-    <lastmod>2026-08-27</lastmod>
+    <loc>https://www.mingzy.space/safety/reporting</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.60</priority>
   </url>
-
-  <!-- 7. Educational Guides & Articles (Tier A: Indexable) -->
   <url>
-    <loc>https://mingzy.space/guides/how-random-video-chat-works</loc>
-    <lastmod>2026-08-27</lastmod>
+    <loc>https://www.mingzy.space/safety/blocking</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
+    <priority>0.60</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/guides/random-video-chat-safety-guide</loc>
-    <lastmod>2026-08-27</lastmod>
+    <loc>https://www.mingzy.space/community-guidelines</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
+    <priority>0.60</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/guides/best-conversation-starters-stranger-chat</loc>
-    <lastmod>2026-08-27</lastmod>
+    <loc>https://www.mingzy.space/privacy</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
+    <priority>0.60</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/guides/language-matching-explained</loc>
-    <lastmod>2026-08-27</lastmod>
+    <loc>https://www.mingzy.space/terms</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
+    <priority>0.60</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/guides/overcoming-stranger-chat-anxiety</loc>
-    <lastmod>2026-08-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
+    <loc>https://www.mingzy.space/guides/how-random-video-chat-works</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/guides/how-to-spot-scams-and-bots-on-video-chat</loc>
-    <lastmod>2026-08-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
+    <loc>https://www.mingzy.space/guides/random-video-chat-safety-guide</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.70</priority>
   </url>
-
-  <!-- 8. Long-Tail Acquisition & Authority Guides (Tier A: Indexable) -->
   <url>
-    <loc>https://mingzy.space/omegle-alternative-no-login</loc>
-    <lastmod>2026-08-31</lastmod>
+    <loc>https://www.mingzy.space/guides/best-conversation-starters-stranger-chat</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.mingzy.space/guides/language-matching-explained</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.mingzy.space/guides/overcoming-stranger-chat-anxiety</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.mingzy.space/guides/how-to-spot-scams-and-bots-on-video-chat</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.mingzy.space/omegle-alternative-no-login</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/random-video-chat-no-signup</loc>
-    <lastmod>2026-08-31</lastmod>
+    <loc>https://www.mingzy.space/random-video-chat-no-signup</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.95</priority>
+    <priority>1.00</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/browser-video-chat</loc>
-    <lastmod>2026-08-31</lastmod>
+    <loc>https://www.mingzy.space/browser-video-chat</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/language-exchange/english-spanish</loc>
-    <lastmod>2026-08-31</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
-  </url>
-  <url>
-    <loc>https://mingzy.space/language-exchange/hindi-english</loc>
-    <lastmod>2026-08-31</lastmod>
+    <loc>https://www.mingzy.space/language-exchange/english-spanish</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/guides/omegle-alternatives-guide</loc>
-    <lastmod>2026-08-31</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
+    <loc>https://www.mingzy.space/language-exchange/hindi-english</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://mingzy.space/guides/anonymous-video-chat-guide</loc>
-    <lastmod>2026-08-31</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
+    <loc>https://www.mingzy.space/guides/omegle-alternatives-guide</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.mingzy.space/guides/anonymous-video-chat-guide</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.70</priority>
   </url>
 </urlset>

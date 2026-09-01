@@ -2524,7 +2524,7 @@ export function getRelatedCrossLinks(currentPath, limit = 4) {
 /**
  * Generates valid JSON-LD BreadcrumbList Schema
  */
-export function generateBreadcrumbSchema(page, baseUrl = 'https://mingzy.space') {
+export function generateBreadcrumbSchema(page, baseUrl = 'https://www.mingzy.space') {
   if (!page.breadcrumbs || page.breadcrumbs.length === 0) return null;
   return {
     '@context': 'https://schema.org',
@@ -2560,7 +2560,7 @@ export function generateFAQSchema(page) {
 /**
  * Generates valid JSON-LD Speakable Schema for Google AI Overviews and Voice Search
  */
-export function generateSpeakableSchema(page, baseUrl = 'https://mingzy.space') {
+export function generateSpeakableSchema(page, baseUrl = 'https://www.mingzy.space') {
   if (!page.h1) return null;
   return {
     '@context': 'https://schema.org',
@@ -2579,7 +2579,7 @@ export function generateSpeakableSchema(page, baseUrl = 'https://mingzy.space') 
 /**
  * Generates SoftwareApplication, HowTo, or Article Schema based on schemaType
  */
-export function generateMainSchema(page, baseUrl = 'https://mingzy.space') {
+export function generateMainSchema(page, baseUrl = 'https://www.mingzy.space') {
   const url = `${baseUrl}${page.path}`;
 
   if (page.schemaType === 'SoftwareApplication') {
@@ -2655,7 +2655,7 @@ export function generateMainSchema(page, baseUrl = 'https://mingzy.space') {
 /**
  * Generates composite Schema payload array for direct script injection
  */
-export function generateFullJsonLd(page, baseUrl = 'https://mingzy.space') {
+export function generateFullJsonLd(page, baseUrl = 'https://www.mingzy.space') {
   const schemas = [];
 
   const mainSchema = generateMainSchema(page, baseUrl);
@@ -2676,7 +2676,7 @@ export function generateFullJsonLd(page, baseUrl = 'https://mingzy.space') {
 /**
  * Generates XML-compatible sitemap entry list ONLY for quality-gated indexable pages
  */
-export function generateSitemapEntries(baseUrl = 'https://mingzy.space') {
+export function generateSitemapEntries(baseUrl = 'https://www.mingzy.space') {
   return getIndexablePages().map((page) => {
     let priority = 0.7;
     let changeFrequency = 'weekly';

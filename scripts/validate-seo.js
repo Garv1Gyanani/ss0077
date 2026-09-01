@@ -14,7 +14,7 @@ const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 const distDir = path.join(rootDir, 'dist');
 const sitemapPath = path.join(rootDir, 'public/sitemap.xml');
-const baseUrl = 'https://mingzy.space';
+const baseUrl = 'https://www.mingzy.space';
 
 let totalTests = 0;
 let passedTests = 0;

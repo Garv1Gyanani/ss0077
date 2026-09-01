@@ -1,0 +1,15 @@
+{
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "mingzy.space"
+        }
+      ],
+      "destination": "https://www.mingzy.space/:path*",
+      "permanent": true
+    }
+  ]
+}

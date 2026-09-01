@@ -17,6 +17,9 @@ Disallow: /socket.io/
 User-agent: Googlebot
 Allow: /
 
+User-agent: Googlebot-Image
+Allow: /
+
 User-agent: Bingbot
 Allow: /
 
@@ -39,4 +42,4 @@ User-agent: CCBot
 Allow: /
 
 # Sitemap Index Reference
-Sitemap: https://mingzy.space/sitemap.xml
+Sitemap: https://www.mingzy.space/sitemap.xml

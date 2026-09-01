@@ -11,7 +11,7 @@ import { SEO_PAGES, generateFullJsonLd, getIndexablePages } from '../src/data/se
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const distDir = path.resolve(__dirname, '../dist');
-const baseUrl = 'https://mingzy.space';
+const baseUrl = 'https://www.mingzy.space';
 
 async function prerender() {
   console.log('🚀 Starting Mingzy Static Pre-Rendering (SSG)...');

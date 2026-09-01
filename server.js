@@ -20,15 +20,15 @@ const PORT = process.env.PORT || 3000;
 
 const app = express();
 
-// ── 1. Force HTTPS and Apex Domain on Production ──────────────────────────
+// ── 1. Force HTTPS and Canonical WWW Domain on Production ───────────────────
 app.use((req, res, next) => {
   const host = req.headers.host || '';
   const isWww = host.startsWith('www.');
   const isHttps = req.headers['x-forwarded-proto'] === 'https';
 
   if (process.env.NODE_ENV === 'production') {
-    if (isWww || (req.headers['x-forwarded-proto'] && !isHttps)) {
-      const cleanHost = isWww ? host.slice(4) : host;
+    if (!isWww || (req.headers['x-forwarded-proto'] && !isHttps)) {
+      const cleanHost = isWww ? host : `www.${host}`;
       return res.redirect(301, `https://${cleanHost}${req.url}`);
     }
   }

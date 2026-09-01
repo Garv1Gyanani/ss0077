@@ -18,7 +18,7 @@ export default function SEOHead({ pageData }) {
       indexable = true
     } = pageData;
 
-    const baseUrl = 'https://mingzy.space';
+    const baseUrl = 'https://www.mingzy.space';
     const fullUrl = `${baseUrl}${path || ''}`;
     const defaultImage = openGraph.image ? `${baseUrl}${openGraph.image}` : `${baseUrl}/icons.svg`;
 
